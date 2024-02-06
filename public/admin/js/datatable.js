@@ -9,4 +9,6 @@ $(document).ready(function () {
             {data: 'nomor_induk_mahasiswa', title: 'Nomor Induk Mahasiswa'}
         ]
     });
+
+    $("#mahasiswa-dataTable_filter label input").attr("placeholder", "Cari berdasarkan nama atau nim mahasiswa");
 });
