@@ -9,6 +9,7 @@ const {sendResponse} = require("./utils/responseUtil");
 const {HTTP_STATUS} = require("./constant/httpStatusConstant");
 const {defaultApiErrorhandler} = require("./middleware/authMiddleware");
 const app = express();
+
 require('dotenv').config()
 
 app.use(session({
