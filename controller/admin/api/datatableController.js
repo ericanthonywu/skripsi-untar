@@ -2,8 +2,8 @@ const datatableService = require("../../../services/admin/datatableServices")
 
 exports.mahasiswa = async (req, res, next) => {
     try {
-        const {draw, start: offset, length: limit, search} = req.query
-        const {data, total_data} = await datatableService.getMahasiswaDatatable(search.value, offset, limit)
+        const {draw, start: offset, length: limit, search, sort_column, sort_direction} = req.query
+        const {data, total_data} = await datatableService.getMahasiswaDatatable(search.value, offset, limit,sort_column, sort_direction)
 
         res.json({
             draw: parseInt(draw),
@@ -18,8 +18,8 @@ exports.mahasiswa = async (req, res, next) => {
 
 exports.dosen = async (req, res, next) => {
     try {
-        const {draw, start: offset, length: limit, search} = req.query
-        const {data, total_data} = await datatableService.getDosenDatatable(search.value, offset, limit)
+        const {draw, start: offset, length: limit, search, sort_column, sort_direction} = req.query
+        const {data, total_data} = await datatableService.getDosenDatatable(search.value, offset, limit, sort_column, sort_direction)
 
         res.json({
             draw: parseInt(draw),
