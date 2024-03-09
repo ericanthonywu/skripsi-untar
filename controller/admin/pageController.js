@@ -12,3 +12,7 @@ exports.mahasiswaPage = (req,res) => {
 exports.dosenPage = (req,res) => {
     res.render('admin/page/dosen')
 }
+
+exports.tambahDosenPage = (req,res) => {
+    res.render('admin/page/tambah_dosen')
+}

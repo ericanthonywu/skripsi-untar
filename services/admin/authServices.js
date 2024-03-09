@@ -10,13 +10,13 @@ exports.migrate = async () => {
 
 exports.login = async (username, password) => {
     if (!await adminRepository.checkAdminExists(username)) {
-        throw new ServiceError("username tidak tersedia atau password salah", HTTP_STATUS.FORBIDDEN)
+        throw new ServiceError("username tidak tersedia", HTTP_STATUS.FORBIDDEN)
     }
 
     const {id, password: dbPassword} = await adminRepository.findAdminByUsername(username)
 
     if (!await bcrypt.compare(password, dbPassword)) {
-        throw new ServiceError("username tidak tersedia atau password salah", HTTP_STATUS.FORBIDDEN)
+        throw new ServiceError("password salah", HTTP_STATUS.FORBIDDEN)
     }
 
     return {

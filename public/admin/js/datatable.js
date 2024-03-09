@@ -2,6 +2,7 @@ $(document).ready(function () {
     $('#mahasiswa-dataTable').DataTable({
         processing: true,
         serverSide: true,
+        order: [[ 1, "asc" ]],
         ajax: {
             url: `${base_table}mahasiswa`,
             data: function (d) {
@@ -26,9 +27,10 @@ $(document).ready(function () {
     $('#dosen-dataTable').DataTable({
         processing: true,
         serverSide: true,
+        order: [[ 1, "asc" ]],
         ajax: {
             url: `${base_table}dosen`,
-            data: function (d) {
+            data: d => {
                 if(d.order[0]){
                     d.sort_column = d.columns[d.order[0].column].data;
                     d.sort_direction = d.order[0].dir;
