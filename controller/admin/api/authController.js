@@ -1,7 +1,7 @@
-const authServices = require("../../../services/admin/authServices")
+const authServices = require("../../../services/authServices")
 const {ADMIN} = require("../../../constant/role")
 
-exports.login = async (req, res, next) => {
+exports.loginController = async (req, res, next) => {
     try {
         const {username, password} = req.body;
 
@@ -15,7 +15,7 @@ exports.login = async (req, res, next) => {
     }
 }
 
-exports.logout = async (req, res, next) => {
+exports.logoutController = async (req, res, next) => {
     try {
         req.session.destroy()
 
@@ -25,7 +25,7 @@ exports.logout = async (req, res, next) => {
     }
 }
 
-exports.migrate = async (req, res, next) => {
+exports.migrateController = async (req, res, next) => {
     try {
         await authServices.migrate()
 

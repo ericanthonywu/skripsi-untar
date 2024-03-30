@@ -1,7 +1,7 @@
-const adminRepository = require("../../repository/adminRepository")
+const adminRepository = require("../repository/adminRepository")
 const bcrypt = require("bcrypt")
-const ServiceError = require("../../exception/errorException");
-const {HTTP_STATUS} = require("../../constant/httpStatusConstant");
+const ServiceError = require("../exception/errorException");
+const {HTTP_STATUS} = require("../constant/httpStatusConstant");
 
 exports.migrate = async () => {
     const password = await bcrypt.hash("password", await bcrypt.genSalt())

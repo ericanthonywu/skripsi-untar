@@ -1,9 +1,31 @@
 $(document).ready(function () {
     $('.selectpicker').selectpicker();
-    // $('.summernote').summernote({
-    //     minHeight:"150px"
-    // });
+
+    $('.month-picker').datepicker({
+        format: "MM yyyy",
+        startView: "months",
+        minViewMode: "months",
+        autoclose: true,
+        language: "id"
+    })
+
+    $('.chosen-select').chosen({
+        width: '100%',
+        no_results_text: "Maaf, pencarian berikut tidak di temukan: "
+    });
+
+    $('input[type="file"]').on('change', function () {
+        const fileName = $(this).val().split('\\').pop();
+        $(this).parent().find('.custom-file-label').text(fileName)
+        const nextFileUpload = $(this).parent().parent().next()
+        if (nextFileUpload) {
+             nextFileUpload.find('input[type="file"]')
+                 .prop('disabled', false)
+            nextFileUpload.find('span').html('')
+        }
+    })
 });
+
 // Global Variable
 const base_url = `${window.location.origin}/admin/`;
 const base_api_url = `${base_url}api/`;
@@ -34,15 +56,17 @@ $.ajaxSetup({
     type: "POST",
     cache: false,
     error: xhr => {
-        console.log(xhr)
-        console.log(xhr.responseJSON.error.message);
-        toastr.error(xhr.responseJSON.error.message, 'Error');
-
-    },
-    complete: xhr => {
-        if (xhr.status === 419) {
-            sessionStorage.setItem('nextURL', window.location.href);
-            location.href = base_url;
+        console.log(xhr.responseJSON)
+        switch (xhr.status) {
+            case 404:
+                toastr.error('api not found', 'Error');
+                break
+            case 419:
+                sessionStorage.setItem('nextURL', window.location.href);
+                location.href = base_url;
+                break
+            default:
+                toastr.error(xhr.responseJSON?.error?.message || 'unknown error', 'Error');
         }
     }
 });

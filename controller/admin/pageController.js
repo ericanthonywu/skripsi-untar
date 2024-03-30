@@ -1,3 +1,6 @@
+const {getAllKategoriData} = require("../../services/kategoriPenelitianServices");
+const {getAllDosen} = require("../../services/dosenServices");
+const {getAllMahasiswa} = require("../../services/mahasiswaServices");
 exports.loginPage = (req,res) => {
     res.render('admin/page/login')
 }
@@ -6,13 +9,14 @@ exports.indexPage = (req,res) => {
     res.render('admin/page/dashboard')
 }
 
-exports.mahasiswaPage = (req,res) => {
-    res.render('admin/page/mahasiswa')
-}
-exports.dosenPage = (req,res) => {
-    res.render('admin/page/dosen')
+exports.penelitianPage = (req,res) => {
+    res.render('admin/page/penelitian/view_penelitian')
 }
 
-exports.tambahDosenPage = (req,res) => {
-    res.render('admin/page/tambah_dosen')
+exports.tambahPenelitianPage = async (req,res) => {
+    res.render('admin/page/penelitian/tambah_penelitian', {
+        kategori: await getAllKategoriData(),
+        dosen: await getAllDosen(),
+        mahasiswa: await getAllMahasiswa()
+    })
 }

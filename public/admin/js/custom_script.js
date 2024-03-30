@@ -112,4 +112,44 @@ $(document).ready(function () {
             }
         })
     });
+
+    $(document).on('change', 'select#kategori', function () {
+        const val = $(this).val()
+        const subkategoriSelector = $('select#subkategori')
+        if (!val) {
+            subkategoriSelector.html(`<option value="">- Pilih Sub Kategori -</option>`)
+            subkategoriSelector.selectpicker('destroy'); // temporary patch!
+            subkategoriSelector.selectpicker();
+            return
+        }
+
+        $.ajax({
+            url: `${base_api_url}subkategori/${val}`,
+            type: 'GET',
+            success: data => {
+                subkategoriSelector.empty()
+                subkategoriSelector.prop('disabled', false);
+                if (data.length === 0) {
+                    subkategoriSelector.prop('disabled', true);
+                    subkategoriSelector.html(`<option value="">- Pilihan Subkategori Tidak Tersedia -</option>`)
+                    subkategoriSelector.selectpicker('destroy'); // temporary patch!
+                    subkategoriSelector.selectpicker();
+                    return
+                }
+                for (const {id, nama} of data) {
+                    subkategoriSelector.append(`<option value="${id}">${nama}</option>`)
+                }
+                subkategoriSelector.selectpicker('destroy'); // temporary patch!
+                subkategoriSelector.selectpicker();
+            }
+        })
+    })
+
+    $('#periode_awal').on('change', function () {
+        const selector = $('#periode_akhir')
+        selector.prop('disabled', false)
+        selector.datepicker('setStartDate', $(this).val());
+    })
+
+
 });

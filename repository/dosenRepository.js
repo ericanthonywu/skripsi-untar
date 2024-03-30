@@ -1,6 +1,10 @@
 const db = require("../config/database/connection")
 
-exports.getDosen = async (search, offset, limit,sort_column, sort_direction) =>
+exports.getAllDosen = async () =>
+await db('dosen')
+    .select("id", "nama_dosen", "nomor_induk_dosen")
+
+exports.getDosen = async (search, offset, limit, sort_column, sort_direction) =>
     await db("dosen")
         .select("id", "nama_dosen", "nomor_induk_dosen")
         .offset(offset)

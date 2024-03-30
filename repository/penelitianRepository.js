@@ -2,8 +2,9 @@ const db = require("../config/database/connection")
 
 exports.getPenelitian = async (search, offset, limit, sort_column, sort_direction) =>
     await db("penelitian")
-        .select("id", "nama_proposal", "harga", 'periode_awal', 'periode_akhir')
-        .join('master_kategori_proposal', 'master_kategori_proposal.id', 'penelitian.id_kategori_penelitian')
+        .select("penelitian.id", "nama_proposal", "harga", 'periode_awal', 'periode_akhir', 'master_kategori_penelitian.nama as kategori_penelitian' ,'master_subkategori_penelitian.nama as subkategori_penelitian')
+        .join('master_kategori_penelitian', 'master_kategori_penelitian.id', 'penelitian.id_kategori_penelitian')
+        .join('master_subkategori_penelitian', 'master_kategori_penelitian.id', 'master_subkategori_penelitian.id_master_kategori_penelitian')
         .offset(offset)
         .limit(limit)
         .orderBy(sort_column, sort_direction)
@@ -25,7 +26,7 @@ exports.getTotalPenelitian = async (dosen_id, search) => {
         .count('penelitian.id as total')
         .first()
 
-    return data.total
+    return data.total || 0
 }
 
 exports.addPenelitian = async data => {
