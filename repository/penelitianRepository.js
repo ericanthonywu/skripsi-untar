@@ -1,7 +1,7 @@
 const db = require("../config/database/connection")
 
-exports.getPenelitian = async (search, offset, limit, sort_column, sort_direction) =>
-    await db("penelitian")
+exports.getPenelitian = (search, offset, limit, sort_column, sort_direction) =>
+     db("penelitian")
         .select("penelitian.id", "nama_proposal", "harga", 'periode_awal', 'periode_akhir', 'master_kategori_penelitian.nama as kategori_penelitian' ,'master_subkategori_penelitian.nama as subkategori_penelitian')
         .join('master_kategori_penelitian', 'master_kategori_penelitian.id', 'penelitian.id_kategori_penelitian')
         .join('master_subkategori_penelitian', 'master_kategori_penelitian.id', 'master_subkategori_penelitian.id_master_kategori_penelitian')
@@ -28,9 +28,35 @@ exports.getTotalPenelitian = async (dosen_id, search) => {
 
     return data.total || 0
 }
+exports.getAllTipePenelitianDokumen = () => db('master_tipe_penelitian_dokumen')
 
-exports.addPenelitian = async data => {
-    await db('penelitian').insert(data)
+exports.addPenelitian = async (data, anggota, dokumen) => {
+    const trx = await db.transaction()
+    try {
+        const [id] = await trx('penelitian').insert(data,'id')
+
+        for (const {id_dosen, id_mahasiswa, status_ketua_dosen} of anggota) {
+            await trx('anggota_penelitian').insert({
+                id_penelitian: id,
+                id_dosen,
+                id_mahasiswa,
+                status_ketua_dosen
+            })
+        }
+
+        for (const {tipe_dokumen, file} of dokumen) {
+            await trx('dokumen_penelitian').insert({
+                id_penelitian: id,
+                tipe_dokumen,
+                file
+            })
+        }
+
+        trx.commit()
+    } catch (e) {
+        trx.rollback()
+        throw e
+    }
 }
 
 exports.ubahPenelitian = async (data, id) => {

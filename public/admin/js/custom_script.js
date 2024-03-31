@@ -151,5 +151,21 @@ $(document).ready(function () {
         selector.datepicker('setStartDate', $(this).val());
     })
 
-
+    $('form#submit_proposal').on('submit', function(e) {
+        e.preventDefault();
+        const data = new FormData(this)
+        console.log(data)
+        $.ajax({
+            url: `${base_api_url}penelitian`,
+            method: 'POST',
+            data,
+            processData: false,
+            contentType: false,
+            enctype: 'multipart/form-data',
+            success: () => {
+                toastr.info('Data Penelitian Berhasil Di Tambah', 'Sukses')
+                setTimeout(() => location.href = "/admin/penelitian", 1500)
+            }
+        })
+    })
 });
