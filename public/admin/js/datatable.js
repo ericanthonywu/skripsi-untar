@@ -18,7 +18,7 @@ $(document).ready(function () {
         columns: [
             {data: 'id', title: 'Id', orderable: false, searchable: false},
             {data: 'nama_proposal', title: 'Nama Proposal', searchable: true, orderable: true},
-            {data: 'harga', title: 'Harga', searchable: true, orderable: true, render: data => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(data)},
+            {data: 'biaya', title: 'Biaya', searchable: true, orderable: true, render: data => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(data)},
             {
                 data: 'periode_awal',
                 title: 'Periode',
@@ -28,7 +28,11 @@ $(document).ready(function () {
                     return `${moment(row.periode_awal).format('MMM YYYY')} - ${moment(row.periode_akhir).format('MMM YYYY')}`
                 }
             },
-            {data: 'kategori_penelitian', title: 'Kategori Penelitian', searchable: true, orderable: true}
+            {data: 'kategori_penelitian', title: 'Kategori Penelitian', searchable: true, orderable: true},
+            {data: 'id', title: 'Aksi', orderable: false, searchable: false, render: (data, _type, row) => {
+                return `<a href="${base_url}penelitian/ubah/1" target="_blank" class="btn btn-primary"> Ubah </a> 
+                        <button href="${base_url}penelitian/hapus/1" target="_blank" class="btn btn-danger"> Hapus </button>`
+                }}
         ]
     });
 

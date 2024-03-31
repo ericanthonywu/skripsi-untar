@@ -1,8 +1,11 @@
 const {HTTP_STATUS} = require("../constant/httpStatusConstant");
-exports.authMiddleware = (req,res,next) => {
-    if (!req.session.user) {
-        return res.redirect("/admin/login?err=session_expired")
+const fs = require("fs");
+const moment = require("moment");
+exports.authMiddleware = (req, res, next) => {
+    if (!req.session) {
+        return res.redirect("/admin/login")
     }
+
     next()
 }
 
@@ -20,6 +23,13 @@ exports.defaultApiErrorhandler = (error, req, res) => {
 
     if (error.status === HTTP_STATUS.INTERNAL_SERVER_ERROR || error.status === undefined) {
         console.log("error occurred: ", error)
+    }
+
+    // delete file if error
+    if (req.files) {
+        for (const {path} of req.files) {
+            fs.unlinkSync(path)
+        }
     }
 
     return res.status(error.status || HTTP_STATUS.INTERNAL_SERVER_ERROR).json({

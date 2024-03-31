@@ -1,5 +1,5 @@
 const penelitianRepository = require('../repository/penelitianRepository')
 
-exports.addPenelitianServices = async (data, anggota, dokumen) => {
-    await penelitianRepository.addPenelitian(data, anggota, dokumen)
+exports.addPenelitianServices = async (data, anggota, file) => {
+    await penelitianRepository.addPenelitian(data, anggota, file)
 }
