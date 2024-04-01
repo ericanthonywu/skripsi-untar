@@ -49,3 +49,15 @@ exports.addPenelitianController = async (req, res, next) => {
         next(e)
     }
 }
+
+exports.deletePenelitianController = async (req, res, next) => {
+    try {
+        const {id} = req.params
+
+        await penelitianServices.deletePenelitianServices(id)
+
+        res.sendStatus(200)
+    } catch (e) {
+        next(e)
+    }
+}

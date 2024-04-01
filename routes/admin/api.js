@@ -3,7 +3,7 @@ const {loginController, migrateController, logoutController} = require("../../co
 const {penelitianDatatableController} = require("../../controller/admin/api/datatableController");
 const {
     getSubKategoriByKategoriIdController,
-    addPenelitianController
+    addPenelitianController, deletePenelitianController
 } = require("../../controller/admin/api/ajaxApiController");
 const {multerMultipleFieldHandler} = require("../../middleware/fileMiddleware");
 const {authMiddleware} = require("../../middleware/authMiddleware");
@@ -11,13 +11,13 @@ const router = express.Router();
 
 router.get("/auth/migrate", authMiddleware, migrateController)
 router.post("/auth/login", authMiddleware, loginController)
-router.get("/auth/logout", logoutController)
+router.get("/auth/logout", authMiddleware, logoutController)
 
-router.get("/table/penelitian", penelitianDatatableController)
+router.get("/table/penelitian", authMiddleware, penelitianDatatableController)
 
-router.get('/subkategori/:kategoriId', getSubKategoriByKategoriIdController)
+router.get('/subkategori/:kategoriId', authMiddleware, getSubKategoriByKategoriIdController)
 
-router.post('/penelitian', multerMultipleFieldHandler([
+router.post('/penelitian', authMiddleware, multerMultipleFieldHandler([
     {
         name: 'file_proposal',
         dest: 'file_proposal',
@@ -36,5 +36,7 @@ router.post('/penelitian', multerMultipleFieldHandler([
         maxCount: 1
     }
 ]), addPenelitianController)
+
+router.delete('/penelitian/:id', authMiddleware, deletePenelitianController)
 
 module.exports = router;

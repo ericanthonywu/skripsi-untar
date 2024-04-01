@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $('#penelitian-dataTable').DataTable({
+    const penelitianDataTable = $('#penelitian-dataTable').DataTable({
         processing: true,
         serverSide: true,
         order: [[1, "asc"]],
@@ -29,12 +29,28 @@ $(document).ready(function () {
                 }
             },
             {data: 'kategori_penelitian', title: 'Kategori Penelitian', searchable: true, orderable: true},
-            {data: 'id', title: 'Aksi', orderable: false, searchable: false, render: (data, _type, row) => {
-                return `<a href="${base_url}penelitian/ubah/1" target="_blank" class="btn btn-primary"> Ubah </a> 
-                        <button href="${base_url}penelitian/hapus/1" target="_blank" class="btn btn-danger"> Hapus </button>`
+            {data: 'id', title: 'Aksi', orderable: false, searchable: false, render: data => {
+                return `<a href="${base_url}penelitian/ubah/${data}" target="_blank" class="btn btn-primary"> Ubah </a> 
+                        <button data-id="${data}" class="btn btn-danger del" data-prefix-url="penelitian" data-datatable-id="penelitian-dataTable"> Hapus </button>`
                 }}
         ]
     });
 
     $("#penelitian-dataTable_filter label input").attr("placeholder", "Cari berdasarkan nama penelitian");
+
+    $(document).on('click', '.del', function () {
+        const datatableId = $(this).data('datatable-id')
+        const prefixUrl = $(this).data('prefix-url')
+        const id = $(this).data('id')
+
+        $.ajax({
+            url: `${base_api_url}${prefixUrl}/${id}`,
+            method: 'DELETE'
+        })
+
+        switch (datatableId){
+            case 'penelitian-dataTable':
+                penelitianDataTable.ajax.reload()
+        }
+    })
 });
