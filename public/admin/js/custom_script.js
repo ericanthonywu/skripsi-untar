@@ -168,4 +168,25 @@ $(document).ready(function () {
             }
         })
     })
+
+    $("#list_dosen").on('change', function() {
+        const selectedOptions = $(this).find('option:selected');
+
+        let selectedTexts = $.map(selectedOptions ,function(option) {
+            return option.text;
+        });
+
+        const val = $(this).val()
+
+        let i = 0
+        const selectorDosenKetua = $('#dosen_ketua')
+        selectorDosenKetua.empty()
+        selectorDosenKetua.append(`<option value="">- Pilih Ketua Dosen -</option>`)
+        for (const id of val) {
+            selectorDosenKetua.append(`<option value="${id}">${selectedTexts[i]}</option>`)
+            i++
+        }
+        selectorDosenKetua.selectpicker('destroy');
+        selectorDosenKetua.selectpicker();
+    });
 });
