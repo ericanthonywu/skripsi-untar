@@ -61,14 +61,43 @@ $(document).ready(function () {
                 }},
             {data: 'nama', title: 'Nama', searchable: true, orderable: true},
             {data: 'id', title: 'Aksi', orderable: false, searchable: false, render: data => {
-                    return `<a href="${base_url}kategori/ubah/${data}" target="_blank" class="btn btn-primary"> Ubah </a> 
-                        <button data-id="${data}" class="btn btn-danger del" data-prefix-url="kategori" data-datatable-id="kategori-dataTable"> Hapus </button>`
+                    return `
+                    <a href="${base_url}kategori/detail/${data}" target="_blank" class="btn btn-primary"> Detail Subkategori </a>
+                    <a href="${base_url}kategori/ubah/${data}" target="_blank" class="btn btn-primary"> Ubah </a> 
+                     <button data-id="${data}" class="btn btn-danger del" data-prefix-url="kategori" data-datatable-id="kategori-dataTable"> Hapus </button>`
+                }}
+        ]
+    });
+
+    const pathParts = window.location.pathname.split('/');
+    const lastPart = pathParts[pathParts.length - 1];
+
+    const subkategoriDatatable = $('#subkategori-dataTable').DataTable({
+        processing: true,
+        serverSide: false,
+        order: [[1, "asc"]],
+        ajax: {
+            url: `${base_table}subkategori/${lastPart}`,
+        },
+        language: {
+            emptyTable: "Data tidak tersedia",
+            zeroRecords: "Tidak ditemukan data yang cocok",
+            search: "Cari berdasarkan nama :"
+        },
+        columns: [
+            {data: 'id', title: 'No', orderable: false, searchable: false, render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }},
+            {data: 'nama', title: 'Nama', searchable: true, orderable: true},
+            {data: 'id', title: 'Aksi', orderable: false, searchable: false, render: data => {
+                    return `
+                    <a href="${base_url}kategori/ubah/${data}" target="_blank" class="btn btn-primary"> Ubah </a> 
+                     <button data-id="${data}" class="btn btn-danger del" data-prefix-url="subkategori" data-datatable-id="subkategori-dataTable"> Hapus </button>`
                 }}
         ]
     });
 
     $(document).on('click', '.del', async function () {
-
         const {isConfirmed} = await Swal.fire({
             title: "Apakah kamu yakin ingin menghapus?",
             text: "Jika sudah di hapus, data tidak bisa di kembalikan kembali",
@@ -86,7 +115,7 @@ $(document).ready(function () {
         const prefixUrl = $(this).data('prefix-url')
         const id = $(this).data('id')
 
-        $.ajax({
+        await $.ajax({
             url: `${base_api_url}${prefixUrl}/${id}`,
             method: 'DELETE'
         })
@@ -98,6 +127,10 @@ $(document).ready(function () {
             case 'kategori-dataTable':
                 kategoriDatatable.ajax.reload()
                 break
+            case 'subkategori-dataTable':
+                subkategoriDatatable.ajax.reload()
         }
+
+        toastr.success('Data berhasil di hapus', 'Sukses')
     })
 });

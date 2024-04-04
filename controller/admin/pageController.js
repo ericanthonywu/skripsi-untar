@@ -1,6 +1,7 @@
-const {getAllKategoriData} = require("../../services/kategoriPenelitianServices");
+const {getAllKategoriData, getSubKategoriByKategoriId, getKategoriById} = require("../../services/kategoriPenelitianServices");
 const {getAllDosen} = require("../../services/dosenServices");
 const {getAllMahasiswa} = require("../../services/mahasiswaServices");
+
 exports.loginPage = (req,res) => {
     res.render('admin/page/login')
 }
@@ -32,4 +33,22 @@ exports.kategoriPage = (req,res) => {
 
 exports.tambahKategoriPage = (req,res) => {
     res.render('admin/page/kategori/tambah_kategori')
+}
+
+exports.subkategoriPage = async (req, res) => {
+    const {id} = req.params
+
+    const {nama} = await getKategoriById(id)
+    res.render('admin/page/kategori/subkategori/view_subkategori', {
+        kategori: {
+            id, nama
+        }
+    })
+}
+
+exports.tambahSubkategoriPage = async (req, res) => {
+    const {id} = req.params
+    res.render('admin/page/kategori/subkategori/tambah_subkategori', {
+        id
+    })
 }

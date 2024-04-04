@@ -2,11 +2,12 @@ const express = require('express');
 const {loginController, migrateController, logoutController} = require("../../controller/admin/api/authController");
 const {
     penelitianDatatableController,
-    kategoriDatatableController
+    kategoriDatatableController, subkategoriDatatableController
 } = require("../../controller/admin/api/datatableController");
 const {
     getSubKategoriByKategoriIdController,
-    addPenelitianController, deletePenelitianController, addKategoriController, deleteKategoriController
+    addPenelitianController, deletePenelitianController, addKategoriController, deleteKategoriController,
+    addSubkategoriController, deleteSubkategoriController
 } = require("../../controller/admin/api/ajaxApiController");
 const {multerMultipleFieldHandler} = require("../../middleware/fileMiddleware");
 const {authMiddleware} = require("../../middleware/authMiddleware");
@@ -18,6 +19,7 @@ router.get("/auth/logout", authMiddleware, logoutController)
 
 router.get("/table/penelitian", authMiddleware, penelitianDatatableController)
 router.get("/table/kategori", authMiddleware, kategoriDatatableController)
+router.get("/table/subkategori/:id", authMiddleware, subkategoriDatatableController)
 
 router.get('/subkategori/:kategoriId', authMiddleware, getSubKategoriByKategoriIdController)
 
@@ -45,5 +47,8 @@ router.delete('/penelitian/:id', authMiddleware, deletePenelitianController)
 
 router.post('/kategori', authMiddleware, addKategoriController)
 router.delete('/kategori/:id', authMiddleware, deleteKategoriController)
+
+router.post('/subkategori', authMiddleware, addSubkategoriController)
+router.delete('/subkategori/:id', authMiddleware, deleteSubkategoriController)
 
 module.exports = router;

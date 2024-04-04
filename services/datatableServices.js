@@ -33,3 +33,6 @@ exports.getPenelitianDatatable = async (search, offset, limit, sort_column, sort
 
 exports.getKategoriDatatable = async () =>
     await kategoriPenelitianRepository.getAllKategori()
+
+exports.getSubkategoriDatatable = async (id) =>
+    await kategoriPenelitianRepository.getSubKategoriByKategoriId(id)

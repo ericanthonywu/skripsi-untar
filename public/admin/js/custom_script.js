@@ -68,6 +68,21 @@ $(document).ready(function () {
         })
     })
 
+    $('form#submit_subkategori').on('submit', function(e) {
+        e.preventDefault()
+        const data = $(this).serialize()
+        $.ajax({
+            url: `${base_api_url}subkategori`,
+            method: 'POST',
+            data,
+            success: () => {
+                toastr.info('Data Subkategori Berhasil Di Tambah', 'Sukses')
+                const id = $('input[name="id_master_kategori_penelitian"]').val()
+                setTimeout(() => location.href = `/admin/kategori/detail/${id}`, 1500)
+            }
+        })
+    })
+
     $("#list_dosen").on('change', function() {
         const selectedOptions = $(this).find('option:selected');
 

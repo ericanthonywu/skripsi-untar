@@ -24,3 +24,13 @@ exports.kategoriDatatableController = async (req, res, next) => {
         next(e)
     }
 }
+
+exports.subkategoriDatatableController = async (req, res, next) => {
+    try {
+        const {id} = req.params
+        const data = await datatableService.getSubkategoriDatatable(id)
+        res.json({data})
+    } catch (e) {
+        next(e)
+    }
+}
