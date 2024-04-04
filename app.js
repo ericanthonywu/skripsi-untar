@@ -23,8 +23,8 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
     cookie: {
-        secure: false, // set true if you are using https
-        maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
+        secure: false,
+        maxAge: 30 * 24 * 60 * 60 * 1000
     },
 }));
 
@@ -56,11 +56,10 @@ app.use('/admin', require('./routes/admin/page'));
 app.use('/admin/api', require('./routes/admin/api'));
 
 // error handler
+app.use(async (req, res, next) => {
+    res.status(HTTP_STATUS.NOT_FOUND).render('admin/page/notFound')
+});
 app.use(async (err, req, res, next) => {
-    if (err.status === HTTP_STATUS.NOT_FOUND) {
-        return res.status(HTTP_STATUS.NOT_FOUND).render('page/notFound')
-    }
-
     defaultApiErrorhandler(err, req, res)
 });
 

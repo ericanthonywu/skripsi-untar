@@ -4,6 +4,8 @@ exports.getAllKategori = async () => await db('master_kategori_penelitian')
 
 exports.getKategoriById = async id => await db('master_kategori_penelitian').where({id}).first('nama')
 
+exports.addKategori = async nama => await db('master_kategori_penelitian').insert({nama})
+
 exports.updateKategoriById = async (id, nama) => await db('master_kategori_penelitian').where({id}).update({nama})
 
 exports.deleteKategoriById = async id => await db('master_kategori_penelitian').where({id}).del()

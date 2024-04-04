@@ -1,7 +1,7 @@
 const dosenRepository = require('../repository/dosenRepository')
 const mahasiswaRepository = require('../repository/mahasiswaRepository')
 const penelitianRepository = require('../repository/penelitianRepository')
-const moment = require('moment')
+const kategoriPenelitianRepository = require("../repository/kategoriPenelitianRepository");
 
 exports.getMahasiswaDatatable = async (search, offset, limit, sort_column, sort_direction) => {
     const data = await mahasiswaRepository.getMahasiswa(search, offset, limit, sort_column, sort_direction)
@@ -30,3 +30,6 @@ exports.getPenelitianDatatable = async (search, offset, limit, sort_column, sort
         data, total_data
     }
 }
+
+exports.getKategoriDatatable = async () =>
+    await kategoriPenelitianRepository.getAllKategori()

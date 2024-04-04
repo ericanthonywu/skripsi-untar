@@ -61,3 +61,27 @@ exports.deletePenelitianController = async (req, res, next) => {
         next(e)
     }
 }
+
+exports.addKategoriController = async (req, res, next) => {
+    try {
+        const {nama} = req.body
+
+        await kategoriPenelitianServices.addKategori(nama)
+
+        res.sendStatus(200)
+    } catch (e) {
+        next(e)
+    }
+}
+
+exports.deleteKategoriController = async (req, res, next) => {
+    try {
+        const {id} = req.params
+
+        await kategoriPenelitianServices.deleteKategori(id)
+
+        res.sendStatus(200)
+    } catch (e) {
+        next(e)
+    }
+}

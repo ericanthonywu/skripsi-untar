@@ -3,3 +3,6 @@ const kategoriPenelitianRepository = require('../repository/kategoriPenelitianRe
 exports.getAllKategoriData = () => kategoriPenelitianRepository.getAllKategori()
 
 exports.getSubKategoriByKategoriId = kategoriId => kategoriPenelitianRepository.getSubKategoriByKategoriId(kategoriId)
+
+exports.addKategori = async nama => await kategoriPenelitianRepository.addKategori(nama)
+exports.deleteKategori = async id => await kategoriPenelitianRepository.deleteKategoriById(id)

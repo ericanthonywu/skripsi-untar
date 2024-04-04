@@ -15,3 +15,12 @@ exports.penelitianDatatableController = async (req, res, next) => {
         next(e)
     }
 }
+
+exports.kategoriDatatableController = async (req, res, next) => {
+    try {
+        const data = await datatableService.getKategoriDatatable()
+        res.json({data})
+    } catch (e) {
+        next(e)
+    }
+}

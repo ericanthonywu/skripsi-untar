@@ -12,30 +12,20 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
+    <li class="nav-item <%= path == "/admin/" ? "active" : "" %>">
         <a class="nav-link" href="<%= APP_URL %>">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
 
     <!-- Nav Item - Pages Collapse Menu -->
-<!--    <li class="nav-item">-->
-<!--        <a class="nav-link collapsed active" href="#" data-toggle="collapse" data-target="#collapseTwo"-->
-<!--           aria-expanded="true" aria-controls="collapseTwo">-->
-<!--            <i class="fas fa-fw fa-user"></i>-->
-<!--            <span>User</span>-->
-<!--        </a>-->
-<!--        <div id="collapseTwo" class="collapse <%= ["/admin/dosen", "/admin/mahasiswa"].includes(path) ? "show active" : ""%>" aria-labelledby="headingTwo" data-parent="#accordionSidebar">-->
-<!--            <div class="bg-white py-2 collapse-inner rounded">-->
-<!--                <a class="collapse-item <%= path == "/admin/dosen" ? "active" : "" %>" href="<%= APP_URL %>dosen">Dosen</a>-->
-<!--                <a class="collapse-item  <%= path == "/admin/mahasiswa" ? "active" : "" %>" href="<%= APP_URL %>mahasiswa">Mahasiswa</a>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </li>-->
-
-    <li class="nav-item">
-        <a class="nav-link <%= path == "/admin/penelitian" ? "active" : "" %>" href="<%= APP_URL %>penelitian">
-            <span>Penelitian</span></a>
+    <li class="nav-item <%= path == "/admin/penelitian" ? "active" : "" %>">
+        <a class="nav-link" href="<%= APP_URL %>penelitian">
+            <span>Penelitian </span></a>
+    </li>
+    <li class="nav-item <%= path == "/admin/kategori" ? "active" : "" %>">
+        <a class="nav-link" href="<%= APP_URL %>kategori">
+            <span>Kategori</span></a>
     </li>
 
     <!-- Divider -->

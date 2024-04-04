@@ -3,6 +3,11 @@ $(document).ready(function () {
         processing: true,
         serverSide: true,
         order: [[1, "asc"]],
+        language: {
+            emptyTable: "Data tidak tersedia",
+            zeroRecords: "Tidak ditemukan data yang cocok",
+            search: "Cari berdasarkan nama penelitian: "
+        },
         ajax: {
             url: `${base_table}penelitian`,
             data: d => {
@@ -16,7 +21,9 @@ $(document).ready(function () {
             }
         },
         columns: [
-            {data: 'id', title: 'Id', orderable: false, searchable: false},
+            {data: 'id', title: 'No', orderable: false, searchable: false, render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }},
             {data: 'nama_proposal', title: 'Nama Proposal', searchable: true, orderable: true},
             {data: 'biaya', title: 'Biaya', searchable: true, orderable: true, render: data => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(data)},
             {
@@ -36,9 +43,45 @@ $(document).ready(function () {
         ]
     });
 
-    $("#penelitian-dataTable_filter label input").attr("placeholder", "Cari berdasarkan nama penelitian");
+    const kategoriDatatable = $('#kategori-dataTable').DataTable({
+        processing: true,
+        serverSide: false,
+        order: [[1, "asc"]],
+        ajax: {
+            url: `${base_table}kategori`,
+        },
+        language: {
+            emptyTable: "Data tidak tersedia",
+            zeroRecords: "Tidak ditemukan data yang cocok",
+            search: "Cari berdasarkan nama kategori: "
+        },
+        columns: [
+            {data: 'id', title: 'No', orderable: false, searchable: false, render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }},
+            {data: 'nama', title: 'Nama', searchable: true, orderable: true},
+            {data: 'id', title: 'Aksi', orderable: false, searchable: false, render: data => {
+                    return `<a href="${base_url}kategori/ubah/${data}" target="_blank" class="btn btn-primary"> Ubah </a> 
+                        <button data-id="${data}" class="btn btn-danger del" data-prefix-url="kategori" data-datatable-id="kategori-dataTable"> Hapus </button>`
+                }}
+        ]
+    });
 
-    $(document).on('click', '.del', function () {
+    $(document).on('click', '.del', async function () {
+
+        const {isConfirmed} = await Swal.fire({
+            title: "Apakah kamu yakin ingin menghapus?",
+            text: "Jika sudah di hapus, data tidak bisa di kembalikan kembali",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Tidak'
+        })
+        if (!isConfirmed) {
+            return
+        }
         const datatableId = $(this).data('datatable-id')
         const prefixUrl = $(this).data('prefix-url')
         const id = $(this).data('id')
@@ -48,9 +91,13 @@ $(document).ready(function () {
             method: 'DELETE'
         })
 
-        switch (datatableId){
+        switch (datatableId) {
             case 'penelitian-dataTable':
                 penelitianDataTable.ajax.reload()
+                break
+            case 'kategori-dataTable':
+                kategoriDatatable.ajax.reload()
+                break
         }
     })
 });
