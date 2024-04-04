@@ -7,7 +7,7 @@ const {
 const {
     getSubKategoriByKategoriIdController,
     addPenelitianController, deletePenelitianController, addKategoriController, deleteKategoriController,
-    addSubkategoriController, deleteSubkategoriController
+    addSubkategoriController, deleteSubkategoriController, ubahKategoriController, updateSubkategoriController
 } = require("../../controller/admin/api/ajaxApiController");
 const {multerMultipleFieldHandler} = require("../../middleware/fileMiddleware");
 const {authMiddleware} = require("../../middleware/authMiddleware");
@@ -46,9 +46,11 @@ router.post('/penelitian', authMiddleware, multerMultipleFieldHandler([
 router.delete('/penelitian/:id', authMiddleware, deletePenelitianController)
 
 router.post('/kategori', authMiddleware, addKategoriController)
+router.patch('/kategori', authMiddleware, ubahKategoriController)
 router.delete('/kategori/:id', authMiddleware, deleteKategoriController)
 
 router.post('/subkategori', authMiddleware, addSubkategoriController)
+router.patch('/subkategori', authMiddleware, updateSubkategoriController)
 router.delete('/subkategori/:id', authMiddleware, deleteSubkategoriController)
 
 module.exports = router;

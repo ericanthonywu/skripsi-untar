@@ -74,6 +74,18 @@ exports.addKategoriController = async (req, res, next) => {
     }
 }
 
+exports.ubahKategoriController = async (req, res, next) => {
+    try {
+        const {id, nama} = req.body
+
+        await kategoriPenelitianServices.updateKategori(id, nama)
+
+        res.sendStatus(200)
+    } catch (e) {
+        next(e)
+    }
+}
+
 exports.deleteKategoriController = async (req, res, next) => {
     try {
         const {id} = req.params
@@ -91,6 +103,18 @@ exports.addSubkategoriController = async (req, res, next) => {
         const {nama, id_master_kategori_penelitian} = req.body
 
         await kategoriPenelitianServices.addSubkategori(nama, id_master_kategori_penelitian)
+
+        res.sendStatus(200)
+    } catch (e) {
+        next(e)
+    }
+}
+
+exports.updateSubkategoriController = async (req, res, next) => {
+    try {
+        const {nama, id} = req.body
+
+        await kategoriPenelitianServices.updateSubkategori(nama, id)
 
         res.sendStatus(200)
     } catch (e) {

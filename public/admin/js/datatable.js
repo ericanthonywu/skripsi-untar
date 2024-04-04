@@ -91,7 +91,7 @@ $(document).ready(function () {
             {data: 'nama', title: 'Nama', searchable: true, orderable: true},
             {data: 'id', title: 'Aksi', orderable: false, searchable: false, render: data => {
                     return `
-                    <a href="${base_url}kategori/ubah/${data}" target="_blank" class="btn btn-primary"> Ubah </a> 
+                    <a href="${base_url}kategori/detail/${lastPart}/ubah/${data}" target="_blank" class="btn btn-primary"> Ubah </a> 
                      <button data-id="${data}" class="btn btn-danger del" data-prefix-url="subkategori" data-datatable-id="subkategori-dataTable"> Hapus </button>`
                 }}
         ]

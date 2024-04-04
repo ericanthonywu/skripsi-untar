@@ -1,20 +1,24 @@
-const {getAllKategoriData, getSubKategoriByKategoriId, getKategoriById} = require("../../services/kategoriPenelitianServices");
+const {
+    getAllKategoriData,
+    getSubKategoriByKategoriId,
+    getKategoriById, getSubKategoriById
+} = require("../../services/kategoriPenelitianServices");
 const {getAllDosen} = require("../../services/dosenServices");
 const {getAllMahasiswa} = require("../../services/mahasiswaServices");
 
-exports.loginPage = (req,res) => {
+exports.loginPage = (req, res) => {
     res.render('admin/page/login')
 }
 
-exports.indexPage = (req,res) => {
+exports.indexPage = (req, res) => {
     res.render('admin/page/dashboard')
 }
 
-exports.penelitianPage = (req,res) => {
+exports.penelitianPage = (req, res) => {
     res.render('admin/page/penelitian/view_penelitian')
 }
 
-exports.tambahPenelitianPage = async (req,res, next) => {
+exports.tambahPenelitianPage = async (req, res, next) => {
     try {
         res.render('admin/page/penelitian/tambah_penelitian', {
             kategori: await getAllKategoriData(),
@@ -27,28 +31,45 @@ exports.tambahPenelitianPage = async (req,res, next) => {
     }
 }
 
-exports.kategoriPage = (req,res) => {
+exports.kategoriPage = (req, res) => {
     res.render('admin/page/kategori/view_kategori')
 }
 
-exports.tambahKategoriPage = (req,res) => {
+exports.tambahKategoriPage = (req, res) => {
     res.render('admin/page/kategori/tambah_kategori')
 }
 
-exports.subkategoriPage = async (req, res) => {
+exports.ubahKategoriPage = async (req, res) => {
     const {id} = req.params
+    res.render('admin/page/kategori/ubah_kategori', {
+        data: await getKategoriById(id)
+    })
+}
 
-    const {nama} = await getKategoriById(id)
+exports.subkategoriPage = async (req, res) => {
+    const {kategoriId} = req.params
+
+    const {nama} = await getKategoriById(kategoriId)
     res.render('admin/page/kategori/subkategori/view_subkategori', {
         kategori: {
-            id, nama
+            id: kategoriId, nama
         }
     })
 }
 
 exports.tambahSubkategoriPage = async (req, res) => {
-    const {id} = req.params
+    const {kategoriId} = req.params
     res.render('admin/page/kategori/subkategori/tambah_subkategori', {
-        id
+        id: kategoriId
+    })
+}
+
+exports.ubahSubkategoriPage = async (req, res) => {
+    const {id, kategoriId} = req.params
+    const data =  await getSubKategoriById(id)
+    console.log({data})
+    res.render('admin/page/kategori/subkategori/ubah_subkategori', {
+        data,
+        kategoriId
     })
 }

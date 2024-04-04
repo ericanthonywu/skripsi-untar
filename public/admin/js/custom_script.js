@@ -68,6 +68,20 @@ $(document).ready(function () {
         })
     })
 
+    $('form#ubah_kategori').on('submit', function(e) {
+        e.preventDefault()
+        const data = $(this).serialize()
+        $.ajax({
+            url: `${base_api_url}kategori`,
+            method: 'PATCH',
+            data,
+            success: () => {
+                toastr.info('Data Kategori Berhasil Di Tambah', 'Sukses')
+                setTimeout(() => location.href = "/admin/kategori", 1500)
+            }
+        })
+    })
+
     $('form#submit_subkategori').on('submit', function(e) {
         e.preventDefault()
         const data = $(this).serialize()
@@ -78,6 +92,21 @@ $(document).ready(function () {
             success: () => {
                 toastr.info('Data Subkategori Berhasil Di Tambah', 'Sukses')
                 const id = $('input[name="id_master_kategori_penelitian"]').val()
+                setTimeout(() => location.href = `/admin/kategori/detail/${id}`, 1500)
+            }
+        })
+    })
+
+    $('form#ubah_subkategori').on('submit', function(e) {
+        e.preventDefault()
+        const data = $(this).serialize()
+        $.ajax({
+            url: `${base_api_url}subkategori`,
+            method: 'PATCH',
+            data,
+            success: () => {
+                toastr.info('Data Subkategori Berhasil Di Ubah', 'Sukses')
+                const id = $('input#kategoriId').val()
                 setTimeout(() => location.href = `/admin/kategori/detail/${id}`, 1500)
             }
         })
