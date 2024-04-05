@@ -162,9 +162,9 @@ exports.updateDosen = async (req, res, next) => {
 
 exports.deleteDosen = async (req, res, next) => {
     try {
-        const data = req.body
+        const {id} = req.params
 
-        await dosenServices.deleteDosen(data)
+        await dosenServices.deleteDosen(id)
 
         res.sendStatus(200)
     } catch (e) {

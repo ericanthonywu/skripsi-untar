@@ -222,6 +222,10 @@ $(document).ready(function () {
                 break
             case 'subkategori-dataTable':
                 subkategoriDatatable.ajax.reload()
+                break
+            case 'dosen-dataTable':
+                dosenDatatable.ajax.reload()
+                break
         }
 
         toastr.success('Data berhasil di hapus', 'Sukses')

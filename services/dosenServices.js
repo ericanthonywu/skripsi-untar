@@ -15,6 +15,7 @@ exports.updateDosen = async data => {
     if (data.password) {
         data.password = await bcrypt.hash(data.password, await bcrypt.genSalt())
     }
+
     await dosenRepository.updateDosen(data.id, data)
 }
 
