@@ -171,3 +171,39 @@ exports.deleteDosen = async (req, res, next) => {
         next(e)
     }
 }
+
+exports.addMahasiswa = async (req, res, next) => {
+    try {
+        const data = req.body
+
+        await mahasiswaServices.addMahasiswa(data)
+
+        res.sendStatus(200)
+    } catch (e) {
+        next(e)
+    }
+}
+
+exports.updateMahasiswa = async (req, res, next) => {
+    try {
+        const data = req.body
+
+        await mahasiswaServices.updateMahasiswa(data)
+
+        res.sendStatus(200)
+    } catch (e) {
+        next(e)
+    }
+}
+
+exports.deleteMahasiswa = async (req, res, next) => {
+    try {
+        const {id} = req.params
+
+        await mahasiswaServices.deleteMahasiswa(id)
+
+        res.sendStatus(200)
+    } catch (e) {
+        next(e)
+    }
+}

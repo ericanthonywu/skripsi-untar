@@ -134,7 +134,7 @@ $(document).ready(function () {
             method: 'PATCH',
             data,
             success: () => {
-                toastr.info('Data Dosen Berhasil Di UBAH', 'Sukses')
+                toastr.info('Data Dosen Berhasil Di Ubah', 'Sukses')
                 setTimeout(() => location.href = `/admin/dosen`, 1500)
             }
         })
@@ -162,7 +162,7 @@ $(document).ready(function () {
             method: 'PATCH',
             data,
             success: () => {
-                toastr.info('Data Mahasiswa Berhasil Di UBAH', 'Sukses')
+                toastr.info('Data Mahasiswa Berhasil Di Ubah', 'Sukses')
                 setTimeout(() => location.href = `/admin/mahasiswa`, 1500)
             }
         })

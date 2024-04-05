@@ -226,6 +226,9 @@ $(document).ready(function () {
             case 'dosen-dataTable':
                 dosenDatatable.ajax.reload()
                 break
+            case 'mahasiswa-dataTable':
+                mahasiswaDatatable.ajax.reload()
+                break
         }
 
         toastr.success('Data berhasil di hapus', 'Sukses')

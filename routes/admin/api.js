@@ -8,7 +8,7 @@ const {
     getSubKategoriByKategoriIdController,
     addPenelitianController, deletePenelitianController, addKategoriController, deleteKategoriController,
     addSubkategoriController, deleteSubkategoriController, ubahKategoriController, updateSubkategoriController, addDosen,
-    updateDosen, deleteDosen
+    updateDosen, deleteDosen, addMahasiswa, updateMahasiswa, deleteMahasiswa
 } = require("../../controller/admin/api/ajaxApiController");
 const {multerMultipleFieldHandler} = require("../../middleware/fileMiddleware");
 const {authMiddleware} = require("../../middleware/authMiddleware");
@@ -59,5 +59,9 @@ router.delete('/subkategori/:id', authMiddleware, deleteSubkategoriController)
 router.post('/dosen', authMiddleware, addDosen)
 router.patch('/dosen', authMiddleware, updateDosen)
 router.delete('/dosen/:id', authMiddleware, deleteDosen)
+
+router.post('/mahasiswa', authMiddleware, addMahasiswa)
+router.patch('/mahasiswa', authMiddleware, updateMahasiswa)
+router.delete('/mahasiswa/:id', authMiddleware, deleteMahasiswa)
 
 module.exports = router;

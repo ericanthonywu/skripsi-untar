@@ -3,7 +3,7 @@ const {
     getKategoriById, getSubKategoriById
 } = require("../../services/kategoriPenelitianServices");
 const {getAllDosen, getDosenById} = require("../../services/dosenServices");
-const {getAllMahasiswa} = require("../../services/mahasiswaServices");
+const {getAllMahasiswa, getMahasiswaById} = require("../../services/mahasiswaServices");
 
 exports.loginPage = (req, res) => {
     res.render('admin/page/login')
@@ -36,8 +36,11 @@ exports.tambahMahasiswaPage = (req, res) => {
     res.render('admin/page/mahasiswa/tambah_mahasiswa')
 }
 
-exports.ubahMahasiswaPage = (req, res) => {
-    res.render('admin/page/mahasiswa/ubah_mahasiswa')
+exports.ubahMahasiswaPage = async (req, res) => {
+    const {id} = req.params
+    res.render('admin/page/mahasiswa/ubah_mahasiswa', {
+        data: await getMahasiswaById(id)
+    })
 }
 
 exports.penelitianPage = (req, res) => {
