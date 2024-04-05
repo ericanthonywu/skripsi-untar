@@ -1,0 +1,62 @@
+<%- include('../../block/header') %>
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center mb-4">
+        <a href="<%= APP_URL %>dosen" class="btn btn-sm btn-primary shadow-sm">Kembali</a>
+    </div>
+    <div class="d-sm-flex align-items-center mb-4">
+        <h1 class="h3 text-gray-800">Form Ubah Dosen</h1>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <form id="ubah_dosen">
+                <input type="hidden" name="id" value="<%= data.id %>">
+                <div class="form-group row">
+                    <label for="nama_dosen" class="col-sm-3 col-form-label">Nama Dosen</label>
+                    <div class="col-sm-9">
+                        <input id="nama_dosen" name="nama_dosen" type="text" class="form-control"
+                               placeholder="Masukkan Nama Dosen ..." value="<%= data.nama_dosen %>" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="nomor_induk_dosen_nasional" class="col-sm-3 col-form-label">Nomor Induk Dosen
+                        Nasional</label>
+                    <div class="col-sm-9">
+                        <input id="nomor_induk_dosen_nasional" value="<%= data.nomor_induk_dosen_nasional %>" name="nomor_induk_dosen_nasional" type="text"
+                               class="form-control"
+                               placeholder="Masukkan Nomor Induk Dosen Nasional ..." required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="nomor_induk_pegawai" class="col-sm-3 col-form-label">Nomor Induk Pegawai</label>
+                    <div class="col-sm-9">
+                        <input id="nomor_induk_pegawai" name="nomor_induk_pegawai" type="text" class="form-control"
+                               placeholder="Masukkan Nomor Induk Pegawai ..." value="<%= data.nomor_induk_pegawai %>" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="email" class="col-sm-3 col-form-label">Email</label>
+                    <div class="col-sm-9">
+                        <input id="email" name="email" type="email" class="form-control"
+                               placeholder="Masukkan Email ..." value="<%= data.email %>" autocomplete="off" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="password" class="col-sm-3 col-form-label">Password</label>
+                    <div class="col-sm-9 input-group-prepend">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan Password ... "
+                               style="border-bottom-right-radius: 0; border-top-right-radius: 0" autocomplete="off"/>
+                        <span class="input-group-text" id="password-eye" style="border-bottom-left-radius: 0; border-top-left-radius: 0">
+                            <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Ubah</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- include('../../block/footer') %>

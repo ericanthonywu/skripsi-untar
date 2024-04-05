@@ -1,6 +1,12 @@
 const db = require("../config/database/connection")
 
-exports.getAllMahasiswa = async () => await db('mahasiswa').select("id", "nama_mahasiswa", "nomor_induk_mahasiswa")
+exports.getAllMahasiswa = async () =>
+    await db('mahasiswa').select("id", "nama_mahasiswa", "nomor_induk_mahasiswa")
+
+exports.getMahasiswaById = async (id) =>
+    await db('mahasiswa')
+        .first('id', "nama_mahasiswa", "nomor_induk_mahasiswa")
+        .where({id})
 
 exports.getMahasiswa = async (search, offset, limit, sort_column, sort_direction) =>
     await db("mahasiswa")

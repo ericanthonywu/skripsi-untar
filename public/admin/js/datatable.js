@@ -1,4 +1,80 @@
 $(document).ready(function () {
+    const dosenDatatable = $('#dosen-dataTable').DataTable({
+        processing: true,
+        serverSide: true,
+        order: [[1, "asc"]],
+        language: {
+            emptyTable: "Data tidak tersedia",
+            zeroRecords: "Tidak ditemukan data yang cocok",
+            search: "Cari berdasarkan nama atau nidn dosen: "
+        },
+        ajax: {
+            url: `${base_table}dosen`,
+            data: d => {
+                if (d.order[0]) {
+                    d.sort_column = d.columns[d.order[0].column].data;
+                    d.sort_direction = d.order[0].dir;
+                }
+                // Delete the original order array as it's not needed anymore
+                delete d.columns;
+                delete d.order;
+            }
+        },
+        columns: [
+            {
+                data: 'id', title: 'No', orderable: false, searchable: false, render: (data, type, row, meta) =>
+                    meta.row + meta.settings._iDisplayStart + 1
+            },
+            {data: 'nama_dosen', title: 'Nama Dosen', searchable: true, orderable: true},
+            {data: 'nomor_induk_dosen_nasional', title: 'Nomor Induk Dosen Nasional', searchable: true, orderable: true},
+            {data: 'nomor_induk_pegawai', title: 'Nomor Induk Pegawai', searchable: true, orderable: true},
+            {data: 'email', title: 'Email', searchable: true, orderable: true},
+            {
+                data: 'id', title: 'Aksi', orderable: false, searchable: false, render: data => {
+                    return `<a href="${base_url}dosen/ubah/${data}" target="_blank" class="btn btn-primary"> Ubah </a> 
+                        <button data-id="${data}" class="btn btn-danger del" data-prefix-url="dosen" data-datatable-id="dosen-dataTable"> Hapus </button>`
+                }
+            }
+        ]
+    })
+
+    const mahasiswaDatatable = $('#mahasiswa-dataTable').DataTable({
+        processing: true,
+        serverSide: true,
+        order: [[1, "asc"]],
+        language: {
+            emptyTable: "Data tidak tersedia",
+            zeroRecords: "Tidak ditemukan data yang cocok",
+            search: "Cari berdasarkan nama atau nim mahasiswa:"
+        },
+        ajax: {
+            url: `${base_table}mahasiswa`,
+            data: d => {
+                if (d.order[0]) {
+                    d.sort_column = d.columns[d.order[0].column].data;
+                    d.sort_direction = d.order[0].dir;
+                }
+                // Delete the original order array as it's not needed anymore
+                delete d.columns;
+                delete d.order;
+            }
+        },
+        columns: [
+            {
+                data: 'id', title: 'No', orderable: false, searchable: false, render: (data, type, row, meta) =>
+                    meta.row + meta.settings._iDisplayStart + 1
+            },
+            {data: 'nama_mahasiswa', title: 'Nama Mahasiswa', searchable: true, orderable: true},
+            {data: 'nomor_induk_mahasiswa', title: 'Nama Induk Mahasiswa', searchable: true, orderable: true},
+            {
+                data: 'id', title: 'Aksi', orderable: false, searchable: false, render: data => {
+                    return `<a href="${base_url}mahasiswa/ubah/${data}" target="_blank" class="btn btn-primary"> Ubah </a> 
+                        <button data-id="${data}" class="btn btn-danger del" data-prefix-url="mahasiswa" data-datatable-id="mahasiswa-dataTable"> Hapus </button>`
+                }
+            }
+        ]
+    })
+
     const penelitianDataTable = $('#penelitian-dataTable').DataTable({
         processing: true,
         serverSide: true,
@@ -21,11 +97,18 @@ $(document).ready(function () {
             }
         },
         columns: [
-            {data: 'id', title: 'No', orderable: false, searchable: false, render: function (data, type, row, meta) {
-                    return meta.row + meta.settings._iDisplayStart + 1;
-                }},
-            {data: 'nama_proposal', title: 'Nama Proposal', searchable: true, orderable: true},
-            {data: 'biaya', title: 'Biaya', searchable: true, orderable: true, render: data => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(data)},
+            {
+                data: 'id', title: 'No', orderable: false, searchable: false, render: (data, type, row, meta) =>
+                    meta.row + meta.settings._iDisplayStart + 1
+            },
+            {data: 'nama_proposal', title: 'Judul Proposal', searchable: true, orderable: true},
+            {
+                data: 'biaya',
+                title: 'Biaya Yang Di Setujui',
+                searchable: true,
+                orderable: true,
+                render: data => new Intl.NumberFormat('id-ID', {style: 'currency', currency: 'IDR'}).format(data)
+            },
             {
                 data: 'periode_awal',
                 title: 'Periode',
@@ -36,10 +119,12 @@ $(document).ready(function () {
                 }
             },
             {data: 'kategori_penelitian', title: 'Kategori Penelitian', searchable: true, orderable: true},
-            {data: 'id', title: 'Aksi', orderable: false, searchable: false, render: data => {
-                return `<a href="${base_url}penelitian/ubah/${data}" target="_blank" class="btn btn-primary"> Ubah </a> 
+            {
+                data: 'id', title: 'Aksi', orderable: false, searchable: false, render: data => {
+                    return `<a href="${base_url}penelitian/ubah/${data}" target="_blank" class="btn btn-primary"> Ubah </a> 
                         <button data-id="${data}" class="btn btn-danger del" data-prefix-url="penelitian" data-datatable-id="penelitian-dataTable"> Hapus </button>`
-                }}
+                }
+            }
         ]
     });
 
@@ -56,16 +141,20 @@ $(document).ready(function () {
             search: "Cari berdasarkan nama kategori: "
         },
         columns: [
-            {data: 'id', title: 'No', orderable: false, searchable: false, render: function (data, type, row, meta) {
+            {
+                data: 'id', title: 'No', orderable: false, searchable: false, render: function (data, type, row, meta) {
                     return meta.row + meta.settings._iDisplayStart + 1;
-                }},
+                }
+            },
             {data: 'nama', title: 'Nama', searchable: true, orderable: true},
-            {data: 'id', title: 'Aksi', orderable: false, searchable: false, render: data => {
+            {
+                data: 'id', title: 'Aksi', orderable: false, searchable: false, render: data => {
                     return `
                     <a href="${base_url}kategori/detail/${data}" target="_blank" class="btn btn-primary"> Detail Subkategori </a>
                     <a href="${base_url}kategori/ubah/${data}" target="_blank" class="btn btn-primary"> Ubah </a> 
                      <button data-id="${data}" class="btn btn-danger del" data-prefix-url="kategori" data-datatable-id="kategori-dataTable"> Hapus </button>`
-                }}
+                }
+            }
         ]
     });
 
@@ -85,15 +174,19 @@ $(document).ready(function () {
             search: "Cari berdasarkan nama :"
         },
         columns: [
-            {data: 'id', title: 'No', orderable: false, searchable: false, render: function (data, type, row, meta) {
+            {
+                data: 'id', title: 'No', orderable: false, searchable: false, render: function (data, type, row, meta) {
                     return meta.row + meta.settings._iDisplayStart + 1;
-                }},
+                }
+            },
             {data: 'nama', title: 'Nama', searchable: true, orderable: true},
-            {data: 'id', title: 'Aksi', orderable: false, searchable: false, render: data => {
+            {
+                data: 'id', title: 'Aksi', orderable: false, searchable: false, render: data => {
                     return `
                     <a href="${base_url}kategori/detail/${lastPart}/ubah/${data}" target="_blank" class="btn btn-primary"> Ubah </a> 
                      <button data-id="${data}" class="btn btn-danger del" data-prefix-url="subkategori" data-datatable-id="subkategori-dataTable"> Hapus </button>`
-                }}
+                }
+            }
         ]
     });
 

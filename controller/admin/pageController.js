@@ -1,9 +1,8 @@
 const {
     getAllKategoriData,
-    getSubKategoriByKategoriId,
     getKategoriById, getSubKategoriById
 } = require("../../services/kategoriPenelitianServices");
-const {getAllDosen} = require("../../services/dosenServices");
+const {getAllDosen, getDosenById} = require("../../services/dosenServices");
 const {getAllMahasiswa} = require("../../services/mahasiswaServices");
 
 exports.loginPage = (req, res) => {
@@ -12,6 +11,33 @@ exports.loginPage = (req, res) => {
 
 exports.indexPage = (req, res) => {
     res.render('admin/page/dashboard')
+}
+
+exports.dosenPage = (req, res) => {
+    res.render('admin/page/dosen/view_dosen')
+}
+
+exports.tambahDosenPage = (req, res) => {
+    res.render('admin/page/dosen/tambah_dosen')
+}
+
+exports.ubahDosenPage = async (req, res) => {
+    const {id} = req.params
+    res.render('admin/page/dosen/ubah_dosen', {
+        data: await getDosenById(id)
+    })
+}
+
+exports.mahasiswaPage = (req, res) => {
+    res.render('admin/page/mahasiswa/view_mahasiswa')
+}
+
+exports.tambahMahasiswaPage = (req, res) => {
+    res.render('admin/page/mahasiswa/tambah_mahasiswa')
+}
+
+exports.ubahMahasiswaPage = (req, res) => {
+    res.render('admin/page/mahasiswa/ubah_mahasiswa')
 }
 
 exports.penelitianPage = (req, res) => {
@@ -67,7 +93,6 @@ exports.tambahSubkategoriPage = async (req, res) => {
 exports.ubahSubkategoriPage = async (req, res) => {
     const {id, kategoriId} = req.params
     const data =  await getSubKategoriById(id)
-    console.log({data})
     res.render('admin/page/kategori/subkategori/ubah_subkategori', {
         data,
         kategoriId

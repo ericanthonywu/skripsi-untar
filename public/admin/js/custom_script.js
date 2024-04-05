@@ -112,6 +112,62 @@ $(document).ready(function () {
         })
     })
 
+    $('form#submit_dosen').on('submit', function(e) {
+        e.preventDefault()
+        const data = $(this).serialize()
+        $.ajax({
+            url: `${base_api_url}dosen`,
+            method: 'POST',
+            data,
+            success: () => {
+                toastr.info('Data Dosen Berhasil Di Tambah', 'Sukses')
+                setTimeout(() => location.href = `/admin/dosen`, 1500)
+            }
+        })
+    })
+
+    $('form#ubah_dosen').on('submit', function(e) {
+        e.preventDefault()
+        const data = $(this).serialize()
+        $.ajax({
+            url: `${base_api_url}dosen`,
+            method: 'PATCH',
+            data,
+            success: () => {
+                toastr.info('Data Dosen Berhasil Di UBAH', 'Sukses')
+                setTimeout(() => location.href = `/admin/dosen`, 1500)
+            }
+        })
+    })
+
+    $('form#submit_mahasiswa').on('submit', function(e) {
+        e.preventDefault()
+        const data = $(this).serialize()
+        $.ajax({
+            url: `${base_api_url}mahasiswa`,
+            method: 'POST',
+            data,
+            success: () => {
+                toastr.info('Data Mahasiswa Berhasil Di Tambah', 'Sukses')
+                setTimeout(() => location.href = `/admin/mahasiswa`, 1500)
+            }
+        })
+    })
+
+    $('form#ubah_mahasiswa').on('submit', function(e) {
+        e.preventDefault()
+        const data = $(this).serialize()
+        $.ajax({
+            url: `${base_api_url}mahasiswa`,
+            method: 'PATCH',
+            data,
+            success: () => {
+                toastr.info('Data Mahasiswa Berhasil Di UBAH', 'Sukses')
+                setTimeout(() => location.href = `/admin/mahasiswa`, 1500)
+            }
+        })
+    })
+
     $("#list_dosen").on('change', function() {
         const selectedOptions = $(this).find('option:selected');
 
@@ -132,4 +188,15 @@ $(document).ready(function () {
         selectorDosenKetua.selectpicker('destroy');
         selectorDosenKetua.selectpicker();
     });
+
+    $('#password-eye').on('click', function () {
+        $(this).find('i').toggleClass('fa-eye-slash fa-eye');
+        const passwordField = $("#password");
+        const passwordFieldType = passwordField.attr('type');
+        if(passwordFieldType === 'password'){
+            passwordField.attr('type', 'text');
+        } else {
+            passwordField.attr('type', 'password');
+        }
+    })
 });

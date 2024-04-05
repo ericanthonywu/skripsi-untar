@@ -31,6 +31,6 @@ exports.multerMultipleFieldHandler = options => multer({
         filename,
     }),
     limits: {
-        fileSize: 1024 * 1024 * 5,
+        fileSize: 1024 * 1024 * 15,
     },
 }).fields(options.map(({name, maxCount}) => ({name, maxCount})));

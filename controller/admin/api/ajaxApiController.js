@@ -1,5 +1,7 @@
 const kategoriPenelitianServices = require("../../../services/kategoriPenelitianServices");
 const penelitianServices = require("../../../services/penelitianServices");
+const dosenServices = require("../../../services/dosenServices");
+const mahasiswaServices = require("../../../services/mahasiswaServices");
 const moment = require("moment");
 
 exports.getSubKategoriByKategoriIdController = async (req, res, next) => {
@@ -127,6 +129,42 @@ exports.deleteSubkategoriController = async (req, res, next) => {
         const {id} = req.params
 
         await kategoriPenelitianServices.deleteSubkategori(id)
+
+        res.sendStatus(200)
+    } catch (e) {
+        next(e)
+    }
+}
+
+exports.addDosen = async (req, res, next) => {
+    try {
+        const data = req.body
+
+        await dosenServices.addDosen(data)
+
+        res.sendStatus(200)
+    } catch (e) {
+        next(e)
+    }
+}
+
+exports.updateDosen = async (req, res, next) => {
+    try {
+        const data = req.body
+
+        await dosenServices.updateDosen(data)
+
+        res.sendStatus(200)
+    } catch (e) {
+        next(e)
+    }
+}
+
+exports.deleteDosen = async (req, res, next) => {
+    try {
+        const data = req.body
+
+        await dosenServices.deleteDosen(data)
 
         res.sendStatus(200)
     } catch (e) {
