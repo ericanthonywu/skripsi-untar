@@ -1,5 +1,9 @@
 const dosenRepository = require('../repository/dosenRepository')
 const bcrypt = require('bcrypt')
+
+exports.checkNISNDosenExists = async nisn =>
+    await dosenRepository.checkNISNDosenExists(nisn)
+
 exports.getAllDosen = async () =>
     await dosenRepository.getAllDosen()
 

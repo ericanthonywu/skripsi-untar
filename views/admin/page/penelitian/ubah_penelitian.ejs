@@ -6,17 +6,18 @@
         <a href="<%= APP_URL %>penelitian" class="btn btn-sm btn-primary shadow-sm">Kembali</a>
     </div>
     <div class="d-sm-flex align-items-center mb-4">
-        <h1 class="h3 text-gray-800">Form Tambah Penelitian</h1>
+        <h1 class="h3 text-gray-800">Form Ubah Penelitian</h1>
     </div>
 
     <div class="card shadow mb-4">
         <div class="card-body">
             <form id="submit_proposal">
+                <input type="hidden" name="id" value="<% data.id %>">
                 <div class="form-group row">
                     <label for="nama_proposal" class="col-sm-2 col-form-label">Judul Proposal</label>
                     <div class="col-sm-10">
                         <input id="nama_proposal" name="nama_proposal" type="text" class="form-control"
-                               placeholder="Masukkan Nama Proposal ..." required>
+                               placeholder="Masukkan Judul Proposal ..." required value="<%= data.nama_proposal %>">
                     </div>
                 </div>
                 <div class="form-group row">
@@ -25,20 +26,21 @@
                         <span class="input-group-text"
                               style="border-bottom-right-radius: 0; border-top-right-radius: 0">Rp</span>
                         <input type="text" class="form-control number ribuan" id="biaya" data-id="biaya-value"
-                               placeholder="Masukan Biaya ..."
+                               placeholder="Masukan Biaya ..." value="<%= data.biaya.toLocaleString('id-ID') %>"
                                style="border-bottom-left-radius: 0; border-top-left-radius: 0" required>
-                        <input type="hidden" class="form-control number" id="biaya-value" name="biaya">
+                        <input type="hidden" class="form-control number" id="biaya-value" name="biaya"
+                               value="<%= data.biaya %>">
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label" for="periode_awal">Periode:</label>
                     <div class="col-sm-5">
                         <input type="text" name="periode_awal" class="form-control month-picker" id="periode_awal"
-                               placeholder="Periode Awal" required >
+                               placeholder="Periode Awal" required value="<%= data.periode_awal %>">
                     </div>
                     <div class="col-sm-5">
                         <input type="text" required name="periode_akhir" class="form-control month-picker"
-                               id="periode_akhir" placeholder="Periode Akhir" >
+                               id="periode_akhir" placeholder="Periode Akhir" value="<%= data.periode_akhir %>"/>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -47,8 +49,8 @@
                         <select type="text" name="kategori" class="form-control selectpicker" id="kategori"
                                 data-live-search="true" required>
                             <option value="">- Pilih Kategori -</option>
-                            <% for (const {nama, id} of kategori) { %>
-                                <option value="<%= id %>"> <%= nama %></option>
+                            <% for (const {nama, id} of kategori_list) { %>
+                                <option value="<%= id %>" <%= id === data.kategori ? 'selected' : "" %> > <%= nama %></option>
                             <% } %>
                         </select>
                     </div>
@@ -59,6 +61,9 @@
                         <select type="text" name="subkategori" class="form-control selectpicker" id="subkategori"
                                 data-live-search="true" readonly required>
                             <option value="">- Pilih Sub Kategori -</option>
+                            <% for (const {nama, id} of subkategori_list) { %>
+                                <option value="<%= id %>" <%= id === data.subkategori ? 'selected' : "" %> > <%= nama %></option>
+                            <% } %>
                         </select>
                     </div>
                 </div>
@@ -68,17 +73,23 @@
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" name="file_proposal" id="file_proposal"
                                    required>
-                            <label class="custom-file-label" for="file_proposal">Upload File</label>
+                            <label class="custom-file-label"
+                                   for="file_proposal"><%= list_proposal.file_proposal?.original_filename %></label>
                         </div>
+                        <a href="<%= list_proposal.file_proposal?.file %>" target="_blank" class="small">Lihat File</a>
                     </div>
                     <div class="col-sm-12 col-md-6 col-lg-3">
                         <label for="surat_perjanjian_kerjasama">2. Surat Perjanjian Kerjasama</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" name="surat_perjanjian_kerjasama"
-                                   id="surat_perjanjian_kerjasama" disabled>
-                            <label class="custom-file-label" for="file_proposal">Upload File</label>
+                                   id="surat_perjanjian_kerjasama">
+                            <label class="custom-file-label"
+                                   for="file_proposal"><%= list_proposal.surat_perjanjian_kerjasama?.original_filename ?? 'Upload file' %></label>
                         </div>
-                        <span class="text-danger small">Harus upload file sebelumnya terlebih dahulu</span>
+                        <% if (list_proposal.surat_perjanjian_kerjasama?.file) { %>
+                            <a href="<%= list_proposal.surat_perjanjian_kerjasama?.file %>" target="_blank"
+                               class="small">Lihat File</a>
+                        <% } %>
                     </div>
                     <div class="col-sm-12 col-md-6 col-lg-3">
                         <label for="file_monef">3. File Monef</label>
@@ -105,32 +116,57 @@
                     <div class="col-sm-6" id="list_dosen">
                         <label class="col-sm-12 col-form-label" for="list_dosen">Dosen:</label>
                         <div class="col-sm-12 row">
+                            <%
+                            let iDosen = 0;
+                            for (const nisn of list_dosen) {
+                            %>
                             <div class="col-sm-10">
-                                <input type="text" name="list_dosen[]" class="form-control input-dosen" placeholder="Masukan NISN Dosen"
+                                <input type="text" name="list_dosen[]" class="form-control input-dosen"
+                                       placeholder="Masukan NISN Dosen" value="<%= nisn %>"
                                        required>
-                                <span class="small text-danger">Mohon masukkan NISN Dosens</span>
+                                <span class="small text-success">NISN tersedia</span>
                             </div>
                             <div class="col-sm-2">
+                                <% if (iDosen === 0) {%>
                                 <button type="button" class="btn btn-outline-primary" id="add-dosen">
                                     <i class="fa fa-plus"></i>
                                 </button>
+                                <% } else {%>
+                                        <button type="button" class="btn btn-outline-danger delete-dynamic-form">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                <%}%>
                             </div>
+                            <% iDosen++; %>
+                            <%}%>
                         </div>
                     </div>
 
                     <div class="col-sm-6" id="list_mahasiswa">
                         <label class="col-sm-12 col-form-label">Mahasiswa:</label>
                         <div class="col-sm-12 row">
+                            <%
+                            let iMahasiswa = 0;
+                            for (const nim of list_mahasiswa) {
+                            %>
                             <div class="col-sm-10">
                                 <input type="text" name="list_mahasiswa[]" class="form-control input-mahasiswa"
-                                       placeholder="Masukan NIM Mahasiswa" required>
-                                <span class="small text-danger">Mohon masukkan NIM Mahasiswa</span>
+                                       placeholder="Masukan NIM Mahasiswa" value="<%= nim %>" required>
+                                <span class="small text-success">NIM tersedia</span>
                             </div>
                             <div class="col-sm-2">
-                                <button type="button" class="btn btn-outline-primary" id="add-mahasiswa">
-                                    <i class="fa fa-plus"></i>
-                                </button>
+                                <% if (iMahasiswa === 0) {%>
+                                    <button type="button" class="btn btn-outline-primary" id="add-mahasiswa">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                <% } else {%>
+                                    <button type="button" class="btn btn-outline-danger delete-dynamic-form">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                <%}%>
                             </div>
+                                <% iMahasiswa++; %>
+                            <%}%>
                         </div>
                     </div>
                 </div>

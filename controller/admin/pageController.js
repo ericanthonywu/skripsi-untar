@@ -1,9 +1,10 @@
 const {
     getAllKategoriData,
-    getKategoriById, getSubKategoriById
+    getKategoriById, getSubKategoriById, getSubKategoriByKategoriId
 } = require("../../services/kategoriPenelitianServices");
-const {getAllDosen, getDosenById} = require("../../services/dosenServices");
-const {getAllMahasiswa, getMahasiswaById} = require("../../services/mahasiswaServices");
+const {getDosenById} = require("../../services/dosenServices");
+const {getMahasiswaById} = require("../../services/mahasiswaServices");
+const {getPenelitianById} = require("../../services/penelitianServices");
 
 exports.loginPage = (req, res) => {
     res.render('admin/page/login')
@@ -50,9 +51,23 @@ exports.penelitianPage = (req, res) => {
 exports.tambahPenelitianPage = async (req, res, next) => {
     try {
         res.render('admin/page/penelitian/tambah_penelitian', {
-            kategori: await getAllKategoriData(),
-            dosen: await getAllDosen(),
-            mahasiswa: await getAllMahasiswa()
+            kategori: await getAllKategoriData()
+        })
+    } catch (e) {
+        console.log(e)
+        res.send('internal server error')
+    }
+}
+
+exports.ubahPenelitianPage = async (req, res, next) => {
+    try {
+        const {id} = req.params
+
+        const data = await getPenelitianById(id)
+        res.render('admin/page/penelitian/ubah_penelitian', {
+            kategori_list: await getAllKategoriData(),
+            subkategori_list: await getSubKategoriByKategoriId(data.data.kategori),
+            ...data,
         })
     } catch (e) {
         console.log(e)

@@ -1,5 +1,8 @@
 const mahasiswaRepository = require('../repository/mahasiswaRepository')
 
+exports.checkNIMMahasiswaExists = async nim =>
+    await mahasiswaRepository.checkNimMahasiswaExists(nim)
+
 exports.getAllMahasiswa = async () =>
     await mahasiswaRepository.getAllMahasiswa()
 

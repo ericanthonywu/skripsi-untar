@@ -1,7 +1,7 @@
 const express = require('express');
 const {indexPage, loginPage, penelitianPage, tambahPenelitianPage, kategoriPage, tambahKategoriPage, subkategoriPage,
     tambahSubkategoriPage, ubahKategoriPage, ubahSubkategoriPage, dosenPage, mahasiswaPage, tambahDosenPage,
-    ubahDosenPage, tambahMahasiswaPage, ubahMahasiswaPage
+    ubahDosenPage, tambahMahasiswaPage, ubahMahasiswaPage, ubahPenelitianPage
 } = require("../../controller/admin/pageController");
 const {authMiddleware} = require("../../middleware/authMiddleware");
 const router = express.Router();
@@ -20,6 +20,7 @@ router.get('/mahasiswa/ubah/:id', authMiddleware, ubahMahasiswaPage);
 
 router.get('/penelitian', authMiddleware, penelitianPage);
 router.get('/penelitian/tambah', authMiddleware, tambahPenelitianPage);
+router.get('/penelitian/ubah/:id', authMiddleware, ubahPenelitianPage);
 
 router.get('/kategori', authMiddleware, kategoriPage);
 router.get('/kategori/tambah', authMiddleware, tambahKategoriPage);

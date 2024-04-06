@@ -1,4 +1,8 @@
 const db = require("../config/database/connection")
+const {checkExistsTable} = require("../util");
+
+exports.checkNimMahasiswaExists = async nim =>
+    await checkExistsTable(db('mahasiswa').where({nomor_induk_mahasiswa: nim}))
 
 exports.getAllMahasiswa = async () =>
     await db('mahasiswa').select("id", "nama_mahasiswa", "nomor_induk_mahasiswa")

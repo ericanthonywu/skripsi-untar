@@ -207,3 +207,27 @@ exports.deleteMahasiswa = async (req, res, next) => {
         next(e)
     }
 }
+
+exports.checkNisnDosenExists = async (req, res, next) => {
+    try {
+        const {nisn} = req.body
+
+        const data = await dosenServices.checkNISNDosenExists(nisn)
+
+        res.status(200).json({data})
+    } catch (e) {
+        next(e)
+    }
+}
+
+exports.checkNIMMahasiswaExists = async (req, res, next) => {
+    try {
+        const {nim} = req.body
+
+        const data = await mahasiswaServices.checkNIMMahasiswaExists(nim)
+
+        res.status(200).json({data})
+    } catch (e) {
+        next(e)
+    }
+}

@@ -65,7 +65,7 @@ $(document).ready(function () {
                     meta.row + meta.settings._iDisplayStart + 1
             },
             {data: 'nama_mahasiswa', title: 'Nama Mahasiswa', searchable: true, orderable: true},
-            {data: 'nomor_induk_mahasiswa', title: 'Nama Induk Mahasiswa', searchable: true, orderable: true},
+            {data: 'nomor_induk_mahasiswa', title: 'Nomor Induk Mahasiswa', searchable: true, orderable: true},
             {
                 data: 'id', title: 'Aksi', orderable: false, searchable: false, render: data => {
                     return `<a href="${base_url}mahasiswa/ubah/${data}" target="_blank" class="btn btn-primary"> Ubah </a> 

@@ -6,9 +6,22 @@ const {
 } = require("../../controller/admin/api/datatableController");
 const {
     getSubKategoriByKategoriIdController,
-    addPenelitianController, deletePenelitianController, addKategoriController, deleteKategoriController,
-    addSubkategoriController, deleteSubkategoriController, ubahKategoriController, updateSubkategoriController, addDosen,
-    updateDosen, deleteDosen, addMahasiswa, updateMahasiswa, deleteMahasiswa
+    addPenelitianController,
+    deletePenelitianController,
+    addKategoriController,
+    deleteKategoriController,
+    addSubkategoriController,
+    deleteSubkategoriController,
+    ubahKategoriController,
+    updateSubkategoriController,
+    addDosen,
+    updateDosen,
+    deleteDosen,
+    addMahasiswa,
+    updateMahasiswa,
+    deleteMahasiswa,
+    checkNisnDosenExists,
+    checkNIMMahasiswaExists
 } = require("../../controller/admin/api/ajaxApiController");
 const {multerMultipleFieldHandler} = require("../../middleware/fileMiddleware");
 const {authMiddleware} = require("../../middleware/authMiddleware");
@@ -59,9 +72,12 @@ router.delete('/subkategori/:id', authMiddleware, deleteSubkategoriController)
 router.post('/dosen', authMiddleware, addDosen)
 router.patch('/dosen', authMiddleware, updateDosen)
 router.delete('/dosen/:id', authMiddleware, deleteDosen)
+router.post('/dosen/check', authMiddleware, checkNisnDosenExists)
 
 router.post('/mahasiswa', authMiddleware, addMahasiswa)
 router.patch('/mahasiswa', authMiddleware, updateMahasiswa)
 router.delete('/mahasiswa/:id', authMiddleware, deleteMahasiswa)
+router.post('/mahasiswa/check', authMiddleware, checkNIMMahasiswaExists)
+
 
 module.exports = router;

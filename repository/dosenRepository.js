@@ -1,8 +1,12 @@
 const db = require("../config/database/connection")
+const {checkExistsTable} = require("../util");
+
+exports.checkNISNDosenExists = async nisn =>
+    await checkExistsTable(db('dosen').where({nomor_induk_dosen_nasional: nisn}))
 
 exports.getAllDosen = async () =>
-await db('dosen')
-    .select("id", "nama_dosen", "nomor_induk_dosen_nasional")
+    await db('dosen')
+        .select("id", "nama_dosen", "nomor_induk_dosen_nasional")
 
 exports.getDosenById = async (id) =>
     await db('dosen')

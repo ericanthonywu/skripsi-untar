@@ -37,8 +37,13 @@ $(document).ready(function () {
         selector.datepicker('setStartDate', $(this).val());
     })
 
-    $('form#submit_proposal').on('submit', function(e) {
+    $('form#submit_proposal').on('submit', function (e) {
         e.preventDefault();
+        if ($('#list_dosen').find('span.text-danger').length > 0 || $('#list_mahasiswa').find('span.text-danger') > 0) {
+            toastr.error('Harap mengisi data dengan lengkap terlebih dahulu')
+            return
+        }
+
         const data = new FormData(this)
         $.ajax({
             url: `${base_api_url}penelitian`,
@@ -54,7 +59,7 @@ $(document).ready(function () {
         })
     })
 
-    $('form#submit_kategori').on('submit', function(e) {
+    $('form#submit_kategori').on('submit', function (e) {
         e.preventDefault()
         const data = $(this).serialize()
         $.ajax({
@@ -68,7 +73,7 @@ $(document).ready(function () {
         })
     })
 
-    $('form#ubah_kategori').on('submit', function(e) {
+    $('form#ubah_kategori').on('submit', function (e) {
         e.preventDefault()
         const data = $(this).serialize()
         $.ajax({
@@ -82,7 +87,7 @@ $(document).ready(function () {
         })
     })
 
-    $('form#submit_subkategori').on('submit', function(e) {
+    $('form#submit_subkategori').on('submit', function (e) {
         e.preventDefault()
         const data = $(this).serialize()
         $.ajax({
@@ -97,7 +102,7 @@ $(document).ready(function () {
         })
     })
 
-    $('form#ubah_subkategori').on('submit', function(e) {
+    $('form#ubah_subkategori').on('submit', function (e) {
         e.preventDefault()
         const data = $(this).serialize()
         $.ajax({
@@ -112,7 +117,7 @@ $(document).ready(function () {
         })
     })
 
-    $('form#submit_dosen').on('submit', function(e) {
+    $('form#submit_dosen').on('submit', function (e) {
         e.preventDefault()
         const data = $(this).serialize()
         $.ajax({
@@ -126,7 +131,7 @@ $(document).ready(function () {
         })
     })
 
-    $('form#ubah_dosen').on('submit', function(e) {
+    $('form#ubah_dosen').on('submit', function (e) {
         e.preventDefault()
         const data = $(this).serialize()
         $.ajax({
@@ -140,7 +145,7 @@ $(document).ready(function () {
         })
     })
 
-    $('form#submit_mahasiswa').on('submit', function(e) {
+    $('form#submit_mahasiswa').on('submit', function (e) {
         e.preventDefault()
         const data = $(this).serialize()
         $.ajax({
@@ -154,7 +159,7 @@ $(document).ready(function () {
         })
     })
 
-    $('form#ubah_mahasiswa').on('submit', function(e) {
+    $('form#ubah_mahasiswa').on('submit', function (e) {
         e.preventDefault()
         const data = $(this).serialize()
         $.ajax({
@@ -168,32 +173,98 @@ $(document).ready(function () {
         })
     })
 
-    $("#list_dosen").on('change', function() {
-        const selectedOptions = $(this).find('option:selected');
+    $('#add-dosen').click(function (e) {
+        $('#list_dosen').append(`<div class="col-sm-12 row">
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control input-dosen" name="list_dosen[]" placeholder="Masukan NISN Dosen" required>
+                                    <span></span>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="button" class="btn btn-outline-danger delete-dynamic-form">
+                                    <i class="fa fa-trash"></i></button>
+                                </div>
+                            </div>`)
+    })
 
-        let selectedTexts = $.map(selectedOptions ,function(option) {
-            return option.text;
-        });
+    $(document).on('click', '.delete-dynamic-form', function (e) {
+        $(this).parent().parent().remove()
+    })
 
+    $('#add-mahasiswa').click(function (e) {
+        $('#list_mahasiswa').append(`<div class="col-sm-12 row">
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control input-mahasiswa" name="list_mahasiswa[]" placeholder="Masukan NIM Mahasiswa" required>
+                                    <span></span>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="button" class="btn btn-outline-danger delete-dynamic-form">
+                                    <i class="fa fa-trash"></i>
+</button>
+                                </div>
+                            </div>`)
+    })
+
+    $(document).on('click', '.delete-dosen', function (e) {
+        $(this).parent().parent().remove()
+    })
+
+    let dosenTimeout = null;
+    $(document).on('keyup', '.input-dosen', function (e) {
+        clearTimeout(dosenTimeout);
         const val = $(this).val()
 
-        let i = 0
-        const selectorDosenKetua = $('#dosen_ketua')
-        selectorDosenKetua.empty()
-        selectorDosenKetua.append(`<option value="">- Pilih Ketua Dosen -</option>`)
-        for (const id of val) {
-            selectorDosenKetua.append(`<option value="${id}">${selectedTexts[i]}</option>`)
-            i++
+        if (!val) {
+            $(this).parent().find('span').text('Mohon masukkan NISN dosen').removeClass('text-success').addClass('text-danger')
+            return
         }
-        selectorDosenKetua.selectpicker('destroy');
-        selectorDosenKetua.selectpicker();
-    });
+
+        dosenTimeout = setTimeout(() => {
+            $.ajax({
+                url: `${base_api_url}dosen/check`,
+                method: 'POST',
+                data: {nisn: val},
+                success: ({data: exists}) => {
+                    if (exists) {
+                        $(this).parent().find('span').removeClass('text-danger').addClass('text-success').text('NISN tersedia')
+                    } else {
+                        $(this).parent().find('span').removeClass('text-success').addClass('text-danger').text('NISN tidak tersedia')
+                    }
+                }
+            })
+        }, 350);
+    })
+
+    let mahasiswaTimeout = null
+    $(document).on('keyup', '.input-mahasiswa', function (e) {
+        clearTimeout(mahasiswaTimeout)
+        const val = $(this).val()
+
+        if (!val) {
+            $(this).parent().find('span').text('Mohon masukkan NIM mahasiswa').removeClass('text-success').addClass('text-danger')
+            return
+        }
+
+        mahasiswaTimeout = setTimeout(() => {
+            $.ajax({
+                url: `${base_api_url}mahasiswa/check`,
+                method: 'POST',
+                data: {nim: val},
+                success: ({data: exists}) => {
+                    if (exists) {
+                        $(this).parent().find('span').removeClass('text-danger').addClass('text-success').text('NIM tersedia')
+                    } else {
+                        $(this).parent().find('span').removeClass('text-success').addClass('text-danger').text('NIM tidak tersedia')
+                    }
+                }
+            })
+        }, 350);
+    })
 
     $('#password-eye').on('click', function () {
         $(this).find('i').toggleClass('fa-eye-slash fa-eye');
         const passwordField = $("#password");
         const passwordFieldType = passwordField.attr('type');
-        if(passwordFieldType === 'password'){
+        if (passwordFieldType === 'password') {
             passwordField.attr('type', 'text');
         } else {
             passwordField.attr('type', 'password');
