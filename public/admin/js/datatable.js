@@ -26,7 +26,12 @@ $(document).ready(function () {
                     meta.row + meta.settings._iDisplayStart + 1
             },
             {data: 'nama_dosen', title: 'Nama Dosen', searchable: true, orderable: true},
-            {data: 'nomor_induk_dosen_nasional', title: 'Nomor Induk Dosen Nasional', searchable: true, orderable: true},
+            {
+                data: 'nomor_induk_dosen_nasional',
+                title: 'Nomor Induk Dosen Nasional',
+                searchable: true,
+                orderable: true
+            },
             {data: 'nomor_induk_pegawai', title: 'Nomor Induk Pegawai', searchable: true, orderable: true},
             {data: 'email', title: 'Email', searchable: true, orderable: true},
             {
@@ -107,7 +112,11 @@ $(document).ready(function () {
                 title: 'Biaya Yang Di Setujui',
                 searchable: true,
                 orderable: true,
-                render: data => new Intl.NumberFormat('id-ID', {style: 'currency', currency: 'IDR'}).format(data)
+                render: data => new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    maximumFractionDigits: 0
+                }).format(data)
             },
             {
                 data: 'periode_awal',
