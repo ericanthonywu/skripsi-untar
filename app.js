@@ -29,7 +29,17 @@ app.use(session({
 }));
 
 // view engine setup
-app.use(helmet())
+
+app.use(
+    helmet.contentSecurityPolicy({
+        directives: {
+            defaultSrc: ["'self'"],
+            scriptSrc: ["'self'", "'unsafe-eval'"], // Allows 'eval'
+            objectSrc: ["'none'"],
+            upgradeInsecureRequests: [],
+        },
+    })
+)
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 

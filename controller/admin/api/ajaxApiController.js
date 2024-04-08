@@ -90,6 +90,17 @@ exports.ubahPenelitianController = async (req, res, next) => {
     }
 }
 
+exports.cancelPenelitianController = async (req, res, next) => {
+    try {
+        const {id} = req.params
+        await penelitianServices.cancelPenelitianServices(id)
+
+        res.sendStatus(200)
+    } catch (e) {
+        next(e)
+    }
+}
+
 exports.deletePenelitianController = async (req, res, next) => {
     try {
         const {id} = req.params

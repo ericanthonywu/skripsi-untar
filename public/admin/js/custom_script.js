@@ -292,4 +292,29 @@ $(document).ready(function () {
             passwordField.attr('type', 'password');
         }
     })
-});
+
+    $('#cancel-penelitian').on('click', async function () {
+        const id = $(this).data('id')
+
+        const {isConfirmed} = await Swal.fire({
+            title: "Apakah anda yakin ingin membatalkan penelitian ini?",
+            text: "Jika sudah di batalkan, data tidak bisa di kembalikan lagi",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, batalkan!',
+            cancelButtonText: 'Tidak'
+        })
+        if (!isConfirmed) {
+            return
+        }
+
+        await $.ajax({
+            method: 'PATCH',
+            url: `${base_api_url}penelitian/cancel/${id}`
+        })
+
+        location.href = `${base_url}penelitian`
+    });
+})

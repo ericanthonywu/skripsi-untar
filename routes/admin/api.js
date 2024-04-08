@@ -21,7 +21,7 @@ const {
     updateMahasiswa,
     deleteMahasiswa,
     checkNisnDosenExists,
-    checkNIMMahasiswaExists, ubahPenelitianController, addDosenByExcel, addMahasiswaByExcel
+    checkNIMMahasiswaExists, ubahPenelitianController, addDosenByExcel, addMahasiswaByExcel, cancelPenelitianController
 } = require("../../controller/admin/api/ajaxApiController");
 const {multerMultipleFieldHandler, multerSingleFieldFileHandler} = require("../../middleware/fileMiddleware");
 const {authMiddleware} = require("../../middleware/authMiddleware");
@@ -78,6 +78,8 @@ router.patch('/penelitian', authMiddleware, multerMultipleFieldHandler([
         maxCount: 1
     }
 ]), ubahPenelitianController)
+
+router.patch('/penelitian/cancel/:id', authMiddleware, cancelPenelitianController)
 
 router.delete('/penelitian/:id', authMiddleware, deletePenelitianController)
 

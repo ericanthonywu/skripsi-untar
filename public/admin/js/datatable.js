@@ -84,6 +84,39 @@ $(document).ready(function () {
         processing: true,
         serverSide: true,
         order: [[1, "asc"]],
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'excel',
+                exportOptions: {
+                    columns: ':not(:last)' // Exclude the last column
+                }
+            },
+            {
+                extend: 'copy',
+                exportOptions: {
+                    columns: ':not(:last)' // Exclude the last column
+                }
+            },
+            {
+                extend: 'csv',
+                exportOptions: {
+                    columns: ':not(:last)',
+                }
+            },
+            {
+                extend: 'pdf',
+                exportOptions: {
+                    columns: ':not(:last)',
+                }
+            },
+            {
+                extend: 'print',
+                exportOptions: {
+                    columns: ':not(:last)',
+                }
+            }
+        ],
         language: {
             emptyTable: "Data tidak tersedia",
             zeroRecords: "Tidak ditemukan data yang cocok",
@@ -127,10 +160,23 @@ $(document).ready(function () {
                     return `${moment(row.periode_awal).format('MMM YYYY')} - ${moment(row.periode_akhir).format('MMM YYYY')}`
                 }
             },
-            {data: 'kategori_penelitian', title: 'Kategori Penelitian', searchable: true, orderable: true, render: (data, _type, row) => `${data} - ${row.subkategori_penelitian}`},
             {
-                data: 'id', title: 'Aksi', orderable: false, searchable: false, render: data => {
-                    return `<a href="${base_url}penelitian/ubah/${data}"  class="btn btn-primary"> Ubah </a> 
+                data: 'kategori_penelitian',
+                title: 'Kategori Penelitian',
+                searchable: true,
+                orderable: true,
+                render: (data, _type, row) => `${data} - ${row.subkategori_penelitian}`
+            },
+            {
+                data: 'status',
+                title: 'Status',
+                searchable: true,
+                orderable: true,
+            },
+            {
+                data: 'id', title: 'Aksi', orderable: false, searchable: false, render: (data, _type, row) => {
+                    return `
+                         ${row.status !== 'Batal' ? `<a href="${base_url}penelitian/ubah/${data}"  class="btn btn-primary"> Ubah </a>` : ''}
                         <button data-id="${data}" class="btn btn-danger del" data-prefix-url="penelitian" data-datatable-id="penelitian-dataTable"> Hapus </button>`
                 }
             }
@@ -190,7 +236,7 @@ $(document).ready(function () {
             },
             {data: 'nama', title: 'Nama', searchable: true, orderable: true},
             {
-                data: 'id', title: 'Aksi', orderable: false, searchable: false, render: data => {
+                data: 'id', title: 'Aksi', orderable: false, searchable: false, render: (data, _type, row) => {
                     return `
                     <a href="${base_url}kategori/detail/${lastPart}/ubah/${data}"  class="btn btn-primary"> Ubah </a> 
                      <button data-id="${data}" class="btn btn-danger del" data-prefix-url="subkategori" data-datatable-id="subkategori-dataTable"> Hapus </button>`
@@ -201,7 +247,7 @@ $(document).ready(function () {
 
     $(document).on('click', '.del', async function () {
         const {isConfirmed} = await Swal.fire({
-            title: "Apakah kamu yakin ingin menghapus?",
+            title: "Apakah anda yakin ingin menghapus?",
             text: "Jika sudah di hapus, data tidak bisa di kembalikan kembali",
             icon: "warning",
             showCancelButton: true,

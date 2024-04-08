@@ -2,7 +2,7 @@ const db = require("../config/database/connection")
 
 exports.getPenelitian = (search, offset, limit, sort_column, sort_direction) =>
     db("penelitian")
-        .select("penelitian.id", "nama_proposal", "biaya", 'periode_awal', 'periode_akhir', 'master_kategori_penelitian.nama as kategori_penelitian', 'master_subkategori_penelitian.nama as subkategori_penelitian')
+        .select("penelitian.id", "nama_proposal", "biaya", 'periode_awal', 'periode_akhir', 'master_kategori_penelitian.nama as kategori_penelitian', 'master_subkategori_penelitian.nama as subkategori_penelitian', 'status')
         .join('master_subkategori_penelitian', 'master_subkategori_penelitian.id', 'penelitian.id_subkategori_penelitian')
         .join('master_kategori_penelitian', 'master_kategori_penelitian.id', 'master_subkategori_penelitian.id_master_kategori_penelitian')
         .offset(offset)
@@ -26,13 +26,16 @@ exports.getTotalPenelitian = async (dosen_id, search) => {
         .count('penelitian.id as total')
         .first()
 
-    return data.total || 0
+    return data || 0
 }
 exports.getAllTipePenelitianDokumen = () => db('master_tipe_penelitian_dokumen')
 
 exports.addPenelitian = async (data, anggota, dokumen) => {
     const trx = await db.transaction()
     try {
+        if (dokumen.length === 4) {
+            data.status = 'Selesai'
+        }
         const [{id}] = await trx('penelitian').insert(data, 'id')
 
         let i = 0
@@ -148,12 +151,21 @@ exports.ubahPenelitian = async (id, data, anggota, dokumen) => {
             }
         }
 
+        const {total} = await trx('dokumen_penelitian').where({id_penelitian: id}).count('id as total').first()
+
+        if (total === "4") {
+            await trx('penelitian').update({status: 'Selesai'}).where({id})
+        }
+
         await trx.commit()
     } catch (e) {
         await trx.rollback()
         throw e
     }
 }
+
+exports.cancelPenelitian = async id =>
+    await db('penelitian').where({id}).update({status: "Batal"})
 
 exports.getProposalPenelitian = async id =>
     await db('dokumen_penelitian')

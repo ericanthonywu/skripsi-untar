@@ -43,6 +43,10 @@ exports.ubahPenelitianServices = async (data, anggota, file) => {
     }
 }
 
+exports.cancelPenelitianServices = async id => {
+    await penelitianRepository.cancelPenelitian(id)
+}
+
 exports.deletePenelitianServices = async id => {
     const listFile = await penelitianRepository.getProposalPenelitian(id)
     await penelitianRepository.deletePenelitian(id)
