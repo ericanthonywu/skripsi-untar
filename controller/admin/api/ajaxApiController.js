@@ -3,6 +3,7 @@ const penelitianServices = require("../../../services/penelitianServices");
 const dosenServices = require("../../../services/dosenServices");
 const mahasiswaServices = require("../../../services/mahasiswaServices");
 const moment = require("moment");
+const XLSX = require('xlsx');
 
 exports.getSubKategoriByKategoriIdController = async (req, res, next) => {
     try {
@@ -178,6 +179,34 @@ exports.addDosen = async (req, res, next) => {
         const data = req.body
 
         await dosenServices.addDosen(data)
+
+        res.sendStatus(200)
+    } catch (e) {
+        next(e)
+    }
+}
+
+exports.addDosenByExcel = async (req, res, next) => {
+    try {
+        const workbook = XLSX.readFile(req.files.file[0].path);
+
+        let xlData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+
+        await dosenServices.addMultipleDosen(xlData)
+
+        res.sendStatus(200)
+    } catch (e) {
+        next(e)
+    }
+}
+
+exports.addMahasiswaByExcel = async (req, res, next) => {
+    try {
+        const workbook = XLSX.readFile(req.files.file[0].path);
+
+        let xlData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+
+        await mahasiswaServices.addMultipleMahasiswa(xlData)
 
         res.sendStatus(200)
     } catch (e) {

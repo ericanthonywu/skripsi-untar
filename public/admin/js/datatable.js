@@ -127,7 +127,7 @@ $(document).ready(function () {
                     return `${moment(row.periode_awal).format('MMM YYYY')} - ${moment(row.periode_akhir).format('MMM YYYY')}`
                 }
             },
-            {data: 'kategori_penelitian', title: 'Kategori Penelitian', searchable: true, orderable: true},
+            {data: 'kategori_penelitian', title: 'Kategori Penelitian', searchable: true, orderable: true, render: (data, _type, row) => `${data} - ${row.subkategori_penelitian}`},
             {
                 data: 'id', title: 'Aksi', orderable: false, searchable: false, render: data => {
                     return `<a href="${base_url}penelitian/ubah/${data}"  class="btn btn-primary"> Ubah </a> 

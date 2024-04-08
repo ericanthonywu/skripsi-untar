@@ -13,7 +13,7 @@ const app = express();
 
 require('dotenv').config()
 
-const db = require('././config/database/connection')
+const db = require('././config/database/sessionConnection')
 app.use(session({
     store: new KnexSessionStore({
         knex: db,
@@ -39,6 +39,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/admin/templates', express.static(path.join(__dirname, 'templates')));
 
 app.use((req, res, next) => {
     const {user} = req.session
@@ -58,7 +59,7 @@ app.use('/admin/api', require('./routes/admin/api'));
 
 // error handler
 app.use(async (req, res, next) => {
-    res.status(HTTP_STATUS.NOT_FOUND).render('admin/page/notFound')
+    res.status(HTTP_STATUS.NOT_FOUND).render('notFound')
 });
 app.use(async (err, req, res, next) => {
     defaultApiErrorhandler(err, req, res)

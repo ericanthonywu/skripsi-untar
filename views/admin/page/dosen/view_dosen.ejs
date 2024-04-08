@@ -1,11 +1,37 @@
 <%- include('../../block/header') %>
 <div class="container-fluid">
 
+    <!-- Upload Excel Modal-->
+    <div class="modal fade" id="upload-dosen" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Upload Excel</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Tarik atau klik di bawah untuk mengupload file excel</p>
+                    <form action="<%= APP_URL %>api/dosen/excel" class="dropzone" id="dosen-excel-dropzone"></form>
+                    <span class="small text-danger">*jika ada logo X di file yang di upload, maka mohon cek kembali file di karenakan ada data yang duplikat atau data yang di file sudah pernah di masukkan</span>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-primary" type="button" href="<%= APP_URL %>dosen">Selesai</a>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Master Data Dosen</h1>
+
         <a href="<%= APP_URL %>dosen/tambah" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Tambah Dosen</a>
     </div>
+
+    <a href="<%= APP_URL %>templates/dosen_template.xlsx" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" target="_blank" >Download Import Template</a>
+    <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" type="button"  data-toggle="modal" data-target="#upload-dosen">Import By Excel</button>
 
     <div class="card shadow mb-4">
         <div class="card-body">

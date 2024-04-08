@@ -1,5 +1,6 @@
 const db = require("../config/database/connection")
 const {checkExistsTable} = require("../util");
+const _ = require("lodash");
 
 exports.checkNimMahasiswaExists = async nim =>
     await checkExistsTable(db('mahasiswa').where({nomor_induk_mahasiswa: nim}))
@@ -29,6 +30,19 @@ exports.getTotalMahasiswa = async () =>
 
 exports.addMahasiswa = async (data) =>
     await db("mahasiswa").insert(data)
+
+exports.addMultipleMahasiswa = async (data) => {
+        const trx = await db.transaction()
+        try {
+                for (const chunk of _.chunk(data, 100)) {
+                        await trx('mahasiswa').insert(chunk);
+                }
+                await trx.commit()
+        } catch (e) {
+                await trx.rollback()
+                throw e
+        }
+}
 
 exports.updateMahasiswa = async (data) =>
     await db('mahasiswa').update(data).where({id: data.id})

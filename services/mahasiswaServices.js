@@ -12,6 +12,9 @@ exports.getMahasiswaById = async (id) =>
 exports.addMahasiswa = async data =>
     await mahasiswaRepository.addMahasiswa(data)
 
+exports.addMultipleMahasiswa = async data =>
+    await mahasiswaRepository.addMultipleMahasiswa(data)
+
 exports.updateMahasiswa = async data =>
     await mahasiswaRepository.updateMahasiswa(data)
 

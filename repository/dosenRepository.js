@@ -1,5 +1,6 @@
 const db = require("../config/database/connection")
 const {checkExistsTable} = require("../util");
+const _ = require('lodash')
 
 exports.checkNISNDosenExists = async nisn =>
     await checkExistsTable(db('dosen').where({nomor_induk_dosen_nasional: nisn}))
@@ -29,6 +30,19 @@ exports.getTotalDosen = async () =>
     await db("dosen").count("id as total").first()
 
 exports.addDosen = async data => await db('dosen').insert(data)
+
+exports.addBulkDosen = async data => {
+    const trx = await db.transaction()
+    try {
+        for (const chunk of _.chunk(data, 100)) {
+            await trx('dosen').insert(chunk);
+        }
+        await trx.commit()
+    } catch (e) {
+        await trx.rollback()
+        throw e
+    }
+}
 
 exports.updateDosen = async (id, data) =>
     await db('dosen').update(data).where({id})

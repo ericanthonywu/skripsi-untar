@@ -12,5 +12,5 @@ module.exports = require("knex")({
         database: process.env.DB_DATABASE,
         timezone: 'Asia/Jakarta',
     },
-    debug: true
+    debug: false
 })

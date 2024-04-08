@@ -8,6 +8,34 @@ const filename = (_, file, cb) => {
 }
 
 /**
+ * Handle single field file upload using multer
+ *
+ * @param {string} dest
+ * @param field
+ */
+exports.multerSingleFieldFileHandler = (dest, field = "image") =>
+    multer({
+        storage: multer.diskStorage({
+            destination: (req, file, cb) => {
+                req.dest = dest;
+                req.field = field;
+                try {
+                    fs.mkdirSync(path.join(__dirname, `../uploads`), {recursive: true})
+                    fs.mkdirSync(path.join(__dirname, `../uploads/${req.dest}`), {recursive: true})
+                    cb(null, path.join(__dirname, `../uploads/${req.dest}`))
+                } catch (e) {
+                    console.error("error creating directory at file handler", e)
+                    cb(e, null)
+                }
+            },
+            filename,
+        }),
+        limits: {
+            fileSize: 1024 * 1024 * 5,
+        },
+    }).fields([{name: field, maxCount: 1}])
+
+/**
  * Handle multiple field file upload using multer
  *
  * @param {array<{name: string, maxCount: number, dest: string}>} options

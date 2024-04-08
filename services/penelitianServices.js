@@ -44,7 +44,7 @@ exports.ubahPenelitianServices = async (data, anggota, file) => {
 }
 
 exports.deletePenelitianServices = async id => {
-    const listFile = await penelitianRepository.getProposalPenelitian(data.id)
+    const listFile = await penelitianRepository.getProposalPenelitian(id)
     await penelitianRepository.deletePenelitian(id)
     for (const file of listFile) {
         fs.unlinkSync(path.join(__dirname, `../`, file))

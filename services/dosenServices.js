@@ -15,6 +15,18 @@ exports.addDosen = async data => {
     await dosenRepository.addDosen(data)
 }
 
+exports.addMultipleDosen = async data => {
+    const datas = []
+    for (const currentData of data) {
+        datas.push({
+            ...currentData,
+            password: await bcrypt.hash(currentData.password, await bcrypt.genSalt())
+        })
+    }
+
+    await dosenRepository.addBulkDosen(datas)
+}
+
 exports.updateDosen = async data => {
     if (data.password) {
         data.password = await bcrypt.hash(data.password, await bcrypt.genSalt())

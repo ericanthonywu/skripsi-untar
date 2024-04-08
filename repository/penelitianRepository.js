@@ -131,16 +131,20 @@ exports.ubahPenelitian = async (id, data, anggota, dokumen) => {
             i++
         }
 
-        if (dokumen.length > 0) {
-            await trx('dokumen_penelitian').where({id_penelitian: id}).del()
-
-            for (const {fieldname, filename, originalname} of dokumen) {
+        for (const {fieldname, filename, originalname} of dokumen) {
+            if (await trx('dokumen_penelitian').update({
+                file: `/uploads/${fieldname}/${filename}`,
+                original_filename: originalname
+            }).where({
+                id_penelitian: id,
+                tipe_dokumen: db('master_tipe_penelitian_dokumen').where({nama: fieldname}).first('id'),
+            }) === 0) {
                 await trx('dokumen_penelitian').insert({
+                    file: `/uploads/${fieldname}/${filename}`,
+                    original_filename: originalname,
                     id_penelitian: id,
                     tipe_dokumen: db('master_tipe_penelitian_dokumen').where({nama: fieldname}).first('id'),
-                    file: `/uploads/${fieldname}/${filename}`,
-                    original_filename: originalname
-                })
+                });
             }
         }
 

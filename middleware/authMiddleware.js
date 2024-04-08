@@ -1,8 +1,8 @@
 const {HTTP_STATUS} = require("../constant/httpStatusConstant");
 const fs = require("fs");
-const moment = require("moment");
+
 exports.authMiddleware = (req, res, next) => {
-    if (!req.session) {
+    if (!req.session.user) {
         return res.redirect("/admin/login")
     }
 
@@ -12,7 +12,7 @@ exports.authMiddleware = (req, res, next) => {
 /**
  * global default error handler
  *
- * @param error
+ * @param error {ServiceError}
  * @param {e.Request} req
  * @param {e.Response} res
  */
@@ -27,8 +27,12 @@ exports.defaultApiErrorhandler = (error, req, res) => {
 
     // delete file if error
     if (req.files) {
-        for (const {path} of req.files) {
-            fs.unlinkSync(path)
+        try {
+            for (const {path} of req.files || req.files.file) {
+                fs.unlinkSync(path)
+            }
+        } catch (e) {
+
         }
     }
 

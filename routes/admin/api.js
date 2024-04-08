@@ -21,9 +21,9 @@ const {
     updateMahasiswa,
     deleteMahasiswa,
     checkNisnDosenExists,
-    checkNIMMahasiswaExists, ubahPenelitianController
+    checkNIMMahasiswaExists, ubahPenelitianController, addDosenByExcel, addMahasiswaByExcel
 } = require("../../controller/admin/api/ajaxApiController");
-const {multerMultipleFieldHandler} = require("../../middleware/fileMiddleware");
+const {multerMultipleFieldHandler, multerSingleFieldFileHandler} = require("../../middleware/fileMiddleware");
 const {authMiddleware} = require("../../middleware/authMiddleware");
 const router = express.Router();
 
@@ -90,11 +90,13 @@ router.patch('/subkategori', authMiddleware, updateSubkategoriController)
 router.delete('/subkategori/:id', authMiddleware, deleteSubkategoriController)
 
 router.post('/dosen', authMiddleware, addDosen)
+router.post('/dosen/excel', authMiddleware, multerSingleFieldFileHandler('/excel', 'file'), addDosenByExcel)
 router.patch('/dosen', authMiddleware, updateDosen)
 router.delete('/dosen/:id', authMiddleware, deleteDosen)
 router.post('/dosen/check', authMiddleware, checkNisnDosenExists)
 
 router.post('/mahasiswa', authMiddleware, addMahasiswa)
+router.post('/mahasiswa/excel', authMiddleware, multerSingleFieldFileHandler('/excel', 'file'), addMahasiswaByExcel)
 router.patch('/mahasiswa', authMiddleware, updateMahasiswa)
 router.delete('/mahasiswa/:id', authMiddleware, deleteMahasiswa)
 router.post('/mahasiswa/check', authMiddleware, checkNIMMahasiswaExists)
