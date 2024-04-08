@@ -59,6 +59,28 @@ $(document).ready(function () {
         })
     })
 
+    $('form#ubah_proposal').on('submit', function (e) {
+        e.preventDefault();
+        if ($('#list_dosen').find('span.text-danger').length > 0 || $('#list_mahasiswa').find('span.text-danger') > 0) {
+            toastr.error('Harap mengisi data dengan lengkap terlebih dahulu')
+            return
+        }
+
+        const data = new FormData(this)
+        $.ajax({
+            url: `${base_api_url}penelitian`,
+            method: 'PATCH',
+            data,
+            processData: false,
+            contentType: false,
+            enctype: 'multipart/form-data',
+            success: () => {
+                toastr.info('Data Penelitian Berhasil Di Ubah', 'Sukses')
+                setTimeout(() => location.href = "/admin/penelitian", 1500)
+            }
+        })
+    })
+
     $('form#submit_kategori').on('submit', function (e) {
         e.preventDefault()
         const data = $(this).serialize()

@@ -64,6 +64,7 @@ exports.ubahPenelitianPage = async (req, res, next) => {
         const {id} = req.params
 
         const data = await getPenelitianById(id)
+
         res.render('admin/page/penelitian/ubah_penelitian', {
             kategori_list: await getAllKategoriData(),
             subkategori_list: await getSubKategoriByKategoriId(data.data.kategori),

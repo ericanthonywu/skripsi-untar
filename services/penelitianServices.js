@@ -1,5 +1,7 @@
 const penelitianRepository = require('../repository/penelitianRepository')
 const moment = require("moment");
+const fs = require("fs");
+const path = require("node:path");
 
 exports.getPenelitianById = async id => {
     const data = await penelitianRepository.getPenelitianById(id)
@@ -29,6 +31,22 @@ exports.addPenelitianServices = async (data, anggota, file) => {
     await penelitianRepository.addPenelitian(data, anggota, file)
 }
 
+exports.ubahPenelitianServices = async (data, anggota, file) => {
+    const listFile = await penelitianRepository.getProposalPenelitian(data.id)
+    await penelitianRepository.ubahPenelitian(data.id, data, anggota, file)
+    for (const file of listFile) {
+        try {
+            fs.unlinkSync(path.join(__dirname, file))
+        } catch (e) {
+
+        }
+    }
+}
+
 exports.deletePenelitianServices = async id => {
+    const listFile = await penelitianRepository.getProposalPenelitian(data.id)
     await penelitianRepository.deletePenelitian(id)
+    for (const file of listFile) {
+        fs.unlinkSync(path.join(__dirname, `../`, file))
+    }
 }

@@ -71,7 +71,7 @@ exports.addPenelitian = async (data, anggota, dokumen) => {
 exports.getPenelitianById = async id =>
     await db('penelitian')
         .first(
-            'penelitian.id',
+            'penelitian.id as id',
             'nama_proposal',
             'biaya',
             'periode_awal',
@@ -106,9 +106,55 @@ exports.getDokumenPenelitianByPenelitianId = async id_penelitian =>
         .select('master_tipe_penelitian_dokumen.nama', 'file', 'original_filename')
 
 
-exports.ubahPenelitian = async (data, id) => {
-    await db('penelitian').update(data).where({id})
+exports.ubahPenelitian = async (id, data, anggota, dokumen) => {
+    const trx = await db.transaction()
+    try {
+        await trx('penelitian').update(data).where({id})
+        await trx('anggota_penelitian')
+            .where({id_penelitian: id})
+            .del()
+
+        for (const nim_mahasiswa of anggota.list_mahasiswa) {
+            await trx('anggota_penelitian').insert({
+                id_penelitian: id,
+                id_mahasiswa: trx('mahasiswa').where({nomor_induk_mahasiswa: nim_mahasiswa}).first('id'),
+            })
+        }
+
+        let i = 0
+        for (const nisn_dosen of anggota.list_dosen) {
+            await trx('anggota_penelitian').insert({
+                id_penelitian: id,
+                id_dosen: trx('dosen').where({nomor_induk_dosen_nasional: nisn_dosen}).first('id'),
+                status_ketua_dosen: i === 0
+            })
+            i++
+        }
+
+        if (dokumen.length > 0) {
+            await trx('dokumen_penelitian').where({id_penelitian: id}).del()
+
+            for (const {fieldname, filename, originalname} of dokumen) {
+                await trx('dokumen_penelitian').insert({
+                    id_penelitian: id,
+                    tipe_dokumen: db('master_tipe_penelitian_dokumen').where({nama: fieldname}).first('id'),
+                    file: `/uploads/${fieldname}/${filename}`,
+                    original_filename: originalname
+                })
+            }
+        }
+
+        await trx.commit()
+    } catch (e) {
+        await trx.rollback()
+        throw e
+    }
 }
+
+exports.getProposalPenelitian = async id =>
+    await db('dokumen_penelitian')
+        .where({id_penelitian: id})
+        .pluck('file')
 
 exports.deletePenelitian = async id => {
     await db('penelitian').where({id}).del()

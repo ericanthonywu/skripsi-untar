@@ -21,7 +21,7 @@ const {
     updateMahasiswa,
     deleteMahasiswa,
     checkNisnDosenExists,
-    checkNIMMahasiswaExists
+    checkNIMMahasiswaExists, ubahPenelitianController
 } = require("../../controller/admin/api/ajaxApiController");
 const {multerMultipleFieldHandler} = require("../../middleware/fileMiddleware");
 const {authMiddleware} = require("../../middleware/authMiddleware");
@@ -58,6 +58,26 @@ router.post('/penelitian', authMiddleware, multerMultipleFieldHandler([
         maxCount: 1
     }
 ]), addPenelitianController)
+
+router.patch('/penelitian', authMiddleware, multerMultipleFieldHandler([
+    {
+        name: 'file_proposal',
+        dest: 'file_proposal',
+        maxCount: 1
+    }, {
+        name: 'surat_perjanjian_kerjasama',
+        dest: 'surat_perjanjian_kerjasama',
+        maxCount: 1
+    }, {
+        name: 'file_monef',
+        dest: 'file_monef',
+        maxCount: 1
+    }, {
+        name: 'file_laporan_akhir',
+        dest: 'file_laporan_akhir',
+        maxCount: 1
+    }
+]), ubahPenelitianController)
 
 router.delete('/penelitian/:id', authMiddleware, deletePenelitianController)
 
