@@ -5,6 +5,7 @@ const {
 const {getDosenById} = require("../../services/dosenServices");
 const {getMahasiswaById} = require("../../services/mahasiswaServices");
 const {getPenelitianById} = require("../../services/penelitianServices");
+const {getAdminById} = require("../../services/adminServices");
 
 exports.loginPage = (req, res) => {
     res.render('admin/page/login')
@@ -115,5 +116,20 @@ exports.ubahSubkategoriPage = async (req, res) => {
     res.render('admin/page/kategori/subkategori/ubah_subkategori', {
         data,
         kategoriId
+    })
+}
+
+exports.adminPage = async (req, res) => {
+    res.render('admin/page/admin/view_admin')
+}
+
+exports.tambahAdminPage = async (req, res) => {
+    res.render('admin/page/admin/tambah_admin')
+}
+
+exports.ubahAdminPage = async (req, res) => {
+    const {id} = req.params
+    res.render('admin/page/admin/ubah_admin', {
+        data: await getAdminById(id)
     })
 }

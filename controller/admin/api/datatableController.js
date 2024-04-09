@@ -66,3 +66,12 @@ exports.subkategoriDatatableController = async (req, res, next) => {
         next(e)
     }
 }
+
+exports.adminDatatableController = async (req, res, next) => {
+    try {
+        const data = await datatableService.getAdminDatatable()
+        res.json({data})
+    } catch (e) {
+        next(e)
+    }
+}

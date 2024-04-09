@@ -2,6 +2,7 @@ const dosenRepository = require('../repository/dosenRepository')
 const mahasiswaRepository = require('../repository/mahasiswaRepository')
 const penelitianRepository = require('../repository/penelitianRepository')
 const kategoriPenelitianRepository = require("../repository/kategoriPenelitianRepository");
+const adminRepository = require("../repository/adminRepository");
 
 exports.getMahasiswaDatatable = async (search, offset, limit, sort_column, sort_direction) => {
     const data = await mahasiswaRepository.getMahasiswa(search, offset, limit, sort_column, sort_direction)
@@ -36,3 +37,6 @@ exports.getKategoriDatatable = async () =>
 
 exports.getSubkategoriDatatable = async (id) =>
     await kategoriPenelitianRepository.getSubKategoriByKategoriId(id)
+
+exports.getAdminDatatable = async () =>
+    await adminRepository.getAdminData()

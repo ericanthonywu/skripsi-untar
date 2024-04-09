@@ -181,6 +181,34 @@ $(document).ready(function () {
         })
     })
 
+    $('form#submit_admin').on('submit', function (e) {
+        e.preventDefault()
+        const data = $(this).serialize()
+        $.ajax({
+            url: `${base_api_url}admin`,
+            method: 'POST',
+            data,
+            success: () => {
+                toastr.info('Data Admin Berhasil Di Tambah', 'Sukses')
+                setTimeout(() => location.href = `/admin/admin`, 1500)
+            }
+        })
+    })
+
+    $('form#ubah_admin').on('submit', function (e) {
+        e.preventDefault()
+        const data = $(this).serialize()
+        $.ajax({
+            url: `${base_api_url}admin`,
+            method: 'PATCH',
+            data,
+            success: () => {
+                toastr.info('Data Admin Berhasil Di Ubah', 'Sukses')
+                setTimeout(() => location.href = `/admin/admin`, 1500)
+            }
+        })
+    })
+
     $('form#ubah_mahasiswa').on('submit', function (e) {
         e.preventDefault()
         const data = $(this).serialize()

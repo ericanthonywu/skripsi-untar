@@ -236,10 +236,39 @@ $(document).ready(function () {
             },
             {data: 'nama', title: 'Nama', searchable: true, orderable: true},
             {
-                data: 'id', title: 'Aksi', orderable: false, searchable: false, render: (data, _type, row) => {
+                data: 'id', title: 'Aksi', orderable: false, searchable: false, render: data => {
                     return `
                     <a href="${base_url}kategori/detail/${lastPart}/ubah/${data}"  class="btn btn-primary"> Ubah </a> 
                      <button data-id="${data}" class="btn btn-danger del" data-prefix-url="subkategori" data-datatable-id="subkategori-dataTable"> Hapus </button>`
+                }
+            }
+        ]
+    });
+
+    const adminDatatable = $('#admin-dataTable').DataTable({
+        processing: true,
+        serverSide: false,
+        order: [[1, "asc"]],
+        ajax: {
+            url: `${base_table}admin`,
+        },
+        language: {
+            emptyTable: "Data tidak tersedia",
+            zeroRecords: "Tidak ditemukan data yang cocok",
+            search: "Cari berdasarkan nama :"
+        },
+        columns: [
+            {
+                data: 'id', title: 'No', orderable: false, searchable: false, render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+            {data: 'username', title: 'Username', searchable: true, orderable: true},
+            {
+                data: 'id', title: 'Aksi', orderable: false, searchable: false, render: data => {
+                    return `
+                    <a href="${base_url}admin/ubah/${data}"  class="btn btn-primary"> Ubah </a> 
+                     <button data-id="${data}" class="btn btn-danger del" data-prefix-url="admin" data-datatable-id="admin-dataTable"> Hapus </button>`
                 }
             }
         ]
@@ -283,6 +312,9 @@ $(document).ready(function () {
                 break
             case 'mahasiswa-dataTable':
                 mahasiswaDatatable.ajax.reload()
+                break
+            case 'admin-dataTable':
+                adminDatatable.ajax.reload()
                 break
         }
 

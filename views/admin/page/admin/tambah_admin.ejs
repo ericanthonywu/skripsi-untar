@@ -1,0 +1,38 @@
+<%- include('../../block/header') %>
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center mb-4">
+        <a href="<%= APP_URL %>admin" class="btn btn-sm btn-primary shadow-sm">Kembali</a>
+    </div>
+    <div class="d-sm-flex align-items-center mb-4">
+        <h1 class="h3 text-gray-800">Form Tambah Admin</h1>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <form id="submit_admin">
+                <div class="form-group row">
+                    <label for="username" class="col-sm-3 col-form-label">Username</label>
+                    <div class="col-sm-9">
+                        <input id="username" name="username" type="text" class="form-control alphanumeric"
+                               placeholder="Masukkan Username ..." required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="password" class="col-sm-3 col-form-label">Password</label>
+                    <div class="col-sm-9 input-group-prepend">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Masukkan Password ... "
+                               style="border-bottom-right-radius: 0; border-top-right-radius: 0" autocomplete="off" required/>
+                        <span class="input-group-text" id="password-eye" style="border-bottom-left-radius: 0; border-top-left-radius: 0">
+                            <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- include('../../block/footer') %>

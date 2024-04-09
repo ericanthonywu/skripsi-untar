@@ -2,7 +2,8 @@ const express = require('express');
 const {loginController, migrateController, logoutController} = require("../../controller/admin/api/authController");
 const {
     penelitianDatatableController,
-    kategoriDatatableController, subkategoriDatatableController, mahasiswaDatatableController, dosenDatatableController
+    kategoriDatatableController, subkategoriDatatableController, mahasiswaDatatableController, dosenDatatableController,
+    adminDatatableController
 } = require("../../controller/admin/api/datatableController");
 const {
     getSubKategoriByKategoriIdController,
@@ -21,7 +22,8 @@ const {
     updateMahasiswa,
     deleteMahasiswa,
     checkNisnDosenExists,
-    checkNIMMahasiswaExists, ubahPenelitianController, addDosenByExcel, addMahasiswaByExcel, cancelPenelitianController
+    checkNIMMahasiswaExists, ubahPenelitianController, addDosenByExcel, addMahasiswaByExcel, cancelPenelitianController,
+    addAdmin, updateAdmin, deleteAdmin
 } = require("../../controller/admin/api/ajaxApiController");
 const {multerMultipleFieldHandler, multerSingleFieldFileHandler} = require("../../middleware/fileMiddleware");
 const {authMiddleware} = require("../../middleware/authMiddleware");
@@ -36,6 +38,7 @@ router.get("/table/dosen", authMiddleware, dosenDatatableController)
 router.get("/table/penelitian", authMiddleware, penelitianDatatableController)
 router.get("/table/kategori", authMiddleware, kategoriDatatableController)
 router.get("/table/subkategori/:id", authMiddleware, subkategoriDatatableController)
+router.get("/table/admin", authMiddleware, adminDatatableController)
 
 router.get('/subkategori/:kategoriId', authMiddleware, getSubKategoriByKategoriIdController)
 
@@ -103,5 +106,8 @@ router.patch('/mahasiswa', authMiddleware, updateMahasiswa)
 router.delete('/mahasiswa/:id', authMiddleware, deleteMahasiswa)
 router.post('/mahasiswa/check', authMiddleware, checkNIMMahasiswaExists)
 
+router.post('/admin', authMiddleware, addAdmin)
+router.patch('/admin', authMiddleware, updateAdmin)
+router.delete('/admin/:id', authMiddleware, deleteAdmin)
 
 module.exports = router;

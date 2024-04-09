@@ -28,7 +28,6 @@ exports.getTotalPenelitian = async (dosen_id, search) => {
 
     return data || 0
 }
-exports.getAllTipePenelitianDokumen = () => db('master_tipe_penelitian_dokumen')
 
 exports.addPenelitian = async (data, anggota, dokumen) => {
     const trx = await db.transaction()

@@ -53,10 +53,10 @@ app.use('/admin/templates', express.static(path.join(__dirname, 'templates')));
 
 app.use((req, res, next) => {
     const {user} = req.session
-    res.locals.APP_URL = process.env.APP_URL
+    res.locals.APP_URL = req.protocol + '://' + req.get('host') + "/"
     res.locals.path = req.path;
     if (user?.role === ADMIN) {
-        res.locals.APP_URL = process.env.APP_URL + "admin/"
+        res.locals.APP_URL = res.locals.APP_URL + "admin/"
     }
     res.locals.user = user
     res.sendResponse = (data = null, status = HTTP_STATUS.OK, error = null) =>

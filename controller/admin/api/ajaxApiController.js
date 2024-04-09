@@ -2,8 +2,10 @@ const kategoriPenelitianServices = require("../../../services/kategoriPenelitian
 const penelitianServices = require("../../../services/penelitianServices");
 const dosenServices = require("../../../services/dosenServices");
 const mahasiswaServices = require("../../../services/mahasiswaServices");
+const adminServices = require("../../../services/adminServices");
 const moment = require("moment");
 const XLSX = require('xlsx');
+const {next} = require("lodash/seq");
 
 exports.getSubKategoriByKategoriIdController = async (req, res, next) => {
     try {
@@ -304,6 +306,42 @@ exports.checkNIMMahasiswaExists = async (req, res, next) => {
         const data = await mahasiswaServices.checkNIMMahasiswaExists(nim)
 
         res.status(200).json({data})
+    } catch (e) {
+        next(e)
+    }
+}
+
+exports.addAdmin = async (req, res, next) => {
+    try {
+        const data = req.body
+
+        await adminServices.addAdmin(data.username, data.password)
+
+        res.sendStatus(200)
+    } catch (e) {
+        next(e)
+    }
+}
+
+exports.updateAdmin = async (req,res,next) => {
+    try {
+        const data = req.body
+
+        await adminServices.updateAdmin(data.id, data)
+
+        res.sendStatus(200)
+    } catch (e) {
+        next(e)
+    }
+}
+
+exports.deleteAdmin = async (req,res,next) => {
+    try {
+        const {id} = req.params
+
+        await adminServices.deleteAdmin(id)
+
+        res.sendStatus(200)
     } catch (e) {
         next(e)
     }

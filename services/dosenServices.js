@@ -1,5 +1,6 @@
 const dosenRepository = require('../repository/dosenRepository')
 const bcrypt = require('bcrypt')
+const {del} = require("express/lib/application");
 
 exports.checkNISNDosenExists = async nisn =>
     await dosenRepository.checkNISNDosenExists(nisn)
@@ -11,7 +12,11 @@ exports.getDosenById = async id =>
     await dosenRepository.getDosenById(id)
 
 exports.addDosen = async data => {
-    data.password = await bcrypt.hash(data.password, await bcrypt.genSalt())
+    if (data.password) {
+        data.password = await bcrypt.hash(data.password, await bcrypt.genSalt())
+    } else {
+        delete data.password
+    }
     await dosenRepository.addDosen(data)
 }
 
