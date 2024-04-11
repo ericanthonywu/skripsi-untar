@@ -71,8 +71,7 @@ app.use('/admin/api', require('./routes/admin/api'));
 app.use(async (req, res, next) => {
     res.status(HTTP_STATUS.NOT_FOUND).render('notFound')
 });
-app.use(async (err, req, res, next) => {
-    defaultApiErrorhandler(err, req, res)
-});
+
+app.use(defaultApiErrorhandler);
 
 module.exports = app;

@@ -172,6 +172,7 @@ $(document).ready(function () {
                 title: 'Status',
                 searchable: true,
                 orderable: true,
+                render: (data, _type, row) => `${data} (${moment(row.status_updated_at).format('DD/MM/YYYY HH:mm:ss')})`
             },
             {
                 data: 'id', title: 'Aksi', orderable: false, searchable: false, render: (data, _type, row) => {

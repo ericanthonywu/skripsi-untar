@@ -13,13 +13,13 @@ exports.login = async (username, password) => {
         throw new ServiceError("username tidak tersedia", HTTP_STATUS.FORBIDDEN)
     }
 
-    const {id, password: dbPassword} = await adminRepository.findAdminByUsername(username)
+    const {id, password: dbPassword, role} = await adminRepository.findAdminByUsername(username)
 
     if (!await bcrypt.compare(password, dbPassword)) {
         throw new ServiceError("password salah", HTTP_STATUS.FORBIDDEN)
     }
 
     return {
-        id
+        id, role
     }
 }

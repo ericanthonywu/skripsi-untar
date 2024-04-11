@@ -5,11 +5,11 @@ exports.loginController = async (req, res, next) => {
     try {
         const {username, password} = req.body;
 
-        const {id} = await authServices.login(username, password)
+        const {id, role} = await authServices.login(username, password)
 
-        req.session.user = {id, username, role: ADMIN}
+        req.session.user = {id, username, role: ADMIN, admin_role: role}
 
-        res.sendResponse()
+        res.sendStatus(200)
     } catch (e) {
         next(e)
     }
@@ -29,7 +29,7 @@ exports.migrateController = async (req, res, next) => {
     try {
         await authServices.migrate()
 
-        res.sendResponse()
+        res.sendStatus(200)
     } catch (e) {
         next(e)
     }

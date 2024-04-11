@@ -4,15 +4,24 @@ const {
 } = require("../../services/kategoriPenelitianServices");
 const {getDosenById} = require("../../services/dosenServices");
 const {getMahasiswaById} = require("../../services/mahasiswaServices");
-const {getPenelitianById} = require("../../services/penelitianServices");
+const {getPenelitianById, getTotalPenelitianSelesai, getTotalPenelitian, getTotalPenelitianBatal,
+    getTotalPenelitianSedangBerlanjut
+} = require("../../services/penelitianServices");
 const {getAdminById} = require("../../services/adminServices");
 
 exports.loginPage = (req, res) => {
     res.render('admin/page/login')
 }
 
-exports.indexPage = (req, res) => {
-    res.render('admin/page/dashboard')
+exports.indexPage = async (req, res) => {
+    res.render('admin/page/dashboard', {
+        data: {
+            total_penelitian: await getTotalPenelitian(),
+            total_penelitian_selesai: await getTotalPenelitianSelesai(),
+            total_penelitian_batal: await getTotalPenelitianBatal(),
+            total_penelitian_sedang_berlanjut: await getTotalPenelitianSedangBerlanjut()
+        }
+    })
 }
 
 exports.dosenPage = (req, res) => {

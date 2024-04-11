@@ -10,6 +10,12 @@
  * Copyright 2011-2021 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
+
+.chart {
+  width: 100%;
+  height: 100%;
+}
+
 :root {
   --blue: #4e73df;
   --indigo: #6610f2;

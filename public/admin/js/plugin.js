@@ -23,6 +23,8 @@ $(document).ready(function () {
         });
     }
 
+    animasinomor('.anomate-nomor', $('.animate-nomor').text(), 300, true)
+
     function validatenohp(nomor) {
         var re = /^08[0-9]{9,}$/;
         return re.test(nomor)

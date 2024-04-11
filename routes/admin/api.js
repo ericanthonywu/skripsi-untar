@@ -27,11 +27,12 @@ const {
 } = require("../../controller/admin/api/ajaxApiController");
 const {multerMultipleFieldHandler, multerSingleFieldFileHandler} = require("../../middleware/fileMiddleware");
 const {authMiddleware} = require("../../middleware/authMiddleware");
+const {getPenelitian, getBiayaPenelitian} = require("../../controller/admin/api/chartController");
 const router = express.Router();
 
-router.get("/auth/migrate", authMiddleware, migrateController)
-router.post("/auth/login", authMiddleware, loginController)
-router.get("/auth/logout", authMiddleware, logoutController)
+router.get("/auth/migrate", migrateController)
+router.post("/auth/login", loginController)
+router.get("/auth/logout", logoutController)
 
 router.get("/table/mahasiswa", authMiddleware, mahasiswaDatatableController)
 router.get("/table/dosen", authMiddleware, dosenDatatableController)
@@ -39,6 +40,9 @@ router.get("/table/penelitian", authMiddleware, penelitianDatatableController)
 router.get("/table/kategori", authMiddleware, kategoriDatatableController)
 router.get("/table/subkategori/:id", authMiddleware, subkategoriDatatableController)
 router.get("/table/admin", authMiddleware, adminDatatableController)
+
+router.get('/chart/penelitian/all/:year', authMiddleware, getPenelitian)
+router.get('/chart/penelitian/biaya/:year', authMiddleware, getBiayaPenelitian)
 
 router.get('/subkategori/:kategoriId', authMiddleware, getSubKategoriByKategoriIdController)
 

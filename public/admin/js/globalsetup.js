@@ -9,6 +9,14 @@ $(document).ready(function () {
         language: "id"
     })
 
+    $('.year-picker').datepicker({
+        format: "yyyy",
+        startView: "years",
+        minViewMode: "years",
+        autoclose: true,
+        language: "id"
+    })
+
     $('.chosen-select').chosen({
         width: '100%',
         no_results_text: "Maaf, pencarian berikut tidak di temukan: "

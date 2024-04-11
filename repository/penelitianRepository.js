@@ -2,7 +2,7 @@ const db = require("../config/database/connection")
 
 exports.getPenelitian = (search, offset, limit, sort_column, sort_direction) =>
     db("penelitian")
-        .select("penelitian.id", "nama_proposal", "biaya", 'periode_awal', 'periode_akhir', 'master_kategori_penelitian.nama as kategori_penelitian', 'master_subkategori_penelitian.nama as subkategori_penelitian', 'status')
+        .select("penelitian.id", "nama_proposal", "biaya", 'periode_awal', 'periode_akhir', 'master_kategori_penelitian.nama as kategori_penelitian', 'master_subkategori_penelitian.nama as subkategori_penelitian', 'status', 'status_updated_at')
         .join('master_subkategori_penelitian', 'master_subkategori_penelitian.id', 'penelitian.id_subkategori_penelitian')
         .join('master_kategori_penelitian', 'master_kategori_penelitian.id', 'master_subkategori_penelitian.id_master_kategori_penelitian')
         .offset(offset)
@@ -29,11 +29,60 @@ exports.getTotalPenelitian = async (dosen_id, search) => {
     return data || 0
 }
 
+exports.getAnalyticPenelitian = async year =>
+    await db("penelitian")
+        .whereRaw('EXTRACT(year FROM status_updated_at) = ?', [year])
+        .select(
+            'status',
+            db.raw('EXTRACT(MONTH FROM status_updated_at) AS month'),
+            db.raw('EXTRACT(year FROM status_updated_at) AS year'),
+            db.raw('count(id) as total'),
+        )
+        .groupBy('status')
+        .groupBy('month')
+        .groupBy('year')
+        .orderBy('month')
+        .orderBy('year')
+
+exports.getBiayaPenelitian = async year =>
+    await db("penelitian")
+        .whereRaw('EXTRACT(year FROM status_updated_at) = ?', [year])
+        .select(
+            'status',
+            db.raw('EXTRACT(MONTH FROM status_updated_at) AS month'),
+            db.raw('EXTRACT(year FROM status_updated_at) AS year'),
+            db.raw('sum(biaya) as total')
+        )
+        .groupBy('status')
+        .groupBy('month')
+        .groupBy('year')
+        .orderBy('month')
+        .orderBy('year')
+
+exports.getTotalPenelitianSelesai = async () =>
+    await db('penelitian')
+        .count('penelitian.id as total')
+        .first()
+        .where({status: "Selesai"})
+
+exports.getTotalPenelitianBatal = async () =>
+    await db('penelitian')
+        .count('penelitian.id as total')
+        .first()
+        .where({status: "Batal"})
+
+exports.getTotalPenelitianSedangBerlanjut = async () =>
+    await db('penelitian')
+        .count('penelitian.id as total')
+        .first()
+        .where({status: "Sedang Berlanjut"})
+
 exports.addPenelitian = async (data, anggota, dokumen) => {
     const trx = await db.transaction()
     try {
         if (dokumen.length === 4) {
             data.status = 'Selesai'
+            data.status_updated_at = trx.raw('CURRENT_TIMESTAMP')
         }
         const [{id}] = await trx('penelitian').insert(data, 'id')
 
@@ -153,7 +202,7 @@ exports.ubahPenelitian = async (id, data, anggota, dokumen) => {
         const {total} = await trx('dokumen_penelitian').where({id_penelitian: id}).count('id as total').first()
 
         if (total === "4") {
-            await trx('penelitian').update({status: 'Selesai'}).where({id})
+            await trx('penelitian').update({status: 'Selesai', status_updated_at: trx.raw('CURRENT_TIMESTAMP')}).where({id})
         }
 
         await trx.commit()

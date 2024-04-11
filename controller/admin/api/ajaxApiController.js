@@ -5,7 +5,6 @@ const mahasiswaServices = require("../../../services/mahasiswaServices");
 const adminServices = require("../../../services/adminServices");
 const moment = require("moment");
 const XLSX = require('xlsx');
-const {next} = require("lodash/seq");
 
 exports.getSubKategoriByKategoriIdController = async (req, res, next) => {
     try {
