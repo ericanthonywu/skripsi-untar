@@ -57,12 +57,18 @@ app.use((req, res, next) => {
     res.locals.path = req.path;
     if (user?.role === ADMIN) {
         res.locals.APP_URL = res.locals.APP_URL + "admin/"
+    } else if (user?.role === DOSEN) {
+        res.locals.APP_URL = res.locals.APP_URL + "dosen/"
     }
+
     res.locals.user = user
     res.sendResponse = (data = null, status = HTTP_STATUS.OK, error = null) =>
         sendResponse(res, data, status, error)
     next()
 })
+
+app.use('/dosen', require('./routes/dosen/page'));
+app.use('/dosen/api', require('./routes/dosen/api'));
 
 app.use('/admin', require('./routes/admin/page'));
 app.use('/admin/api', require('./routes/admin/api'));

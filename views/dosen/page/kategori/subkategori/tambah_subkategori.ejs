@@ -1,0 +1,29 @@
+<%- include('../../../block/header') %>
+
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center mb-4">
+        <a href="<%= APP_URL %>kategori/detail/<%= id %>" class="btn btn-sm btn-primary shadow-sm">Kembali</a>
+    </div>
+    <div class="d-sm-flex align-items-center mb-4">
+        <h1 class="h3 text-gray-800">Form Tambah Subkategori</h1>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <form id="submit_subkategori">
+                <div class="form-group row">
+                    <input type="hidden" name="id_master_kategori_penelitian" value="<%= id %>">
+                    <label for="nama" class="col-sm-2 col-form-label">Nama Subkategori</label>
+                    <div class="col-sm-10">
+                        <input id="nama" name="nama" type="text" class="form-control"
+                               placeholder="Masukkan Nama Subkategori ..." required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- include('../../../block/footer') %>

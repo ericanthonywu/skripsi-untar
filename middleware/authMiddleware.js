@@ -3,7 +3,7 @@ const fs = require("fs");
 
 exports.authMiddleware = (req, res, next) => {
     if (!req.session.user) {
-        return res.redirect("/admin/login")
+        return res.redirect("/dosen/login")
     }
 
     next()
@@ -15,7 +15,16 @@ exports.adminRoleMiddleware = (req, res, next) => {
         return
     }
 
-    return res.redirect("/admin/login")
+    return res.redirect("/dosen/login")
+}
+
+exports.dosenRoleMiddleware = (req, res, next) => {
+    if (req.session.user.role === "dosen") {
+        next()
+        return
+    }
+
+    return res.redirect("/dosen/login")
 }
 
 /**
