@@ -1,10 +1,10 @@
 const express = require('express');
-const {loginController, migrateController, logoutController} = require("../../controller/admin/api/authController");
+const {loginController, migrateController, logoutController} = require("../../controller/api/authController");
 const {
     penelitianDatatableController,
     kategoriDatatableController, subkategoriDatatableController, mahasiswaDatatableController, dosenDatatableController,
     adminDatatableController
-} = require("../../controller/admin/api/datatableController");
+} = require("../../controller/api/datatableController");
 const {
     getSubKategoriByKategoriIdController,
     addPenelitianController,
@@ -24,10 +24,10 @@ const {
     checkNisnDosenExists,
     checkNIMMahasiswaExists, ubahPenelitianController, addDosenByExcel, addMahasiswaByExcel, cancelPenelitianController,
     addAdmin, updateAdmin, deleteAdmin
-} = require("../../controller/admin/api/ajaxApiController");
+} = require("../../controller/api/ajaxApiController");
 const {multerMultipleFieldHandler, multerSingleFieldFileHandler} = require("../../middleware/fileMiddleware");
 const {authMiddleware, adminRoleMiddleware} = require("../../middleware/authMiddleware");
-const {getPenelitian, getBiayaPenelitian} = require("../../controller/admin/api/chartController");
+const {getPenelitian, getBiayaPenelitian} = require("../../controller/api/chartController");
 const router = express.Router();
 
 router.get("/auth/migrate", migrateController)

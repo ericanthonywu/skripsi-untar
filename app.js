@@ -1,4 +1,4 @@
-const {ADMIN} = require("./constant/role")
+const {ADMIN, DOSEN} = require("./constant/role")
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -55,10 +55,14 @@ app.use((req, res, next) => {
     const {user} = req.session
     res.locals.APP_URL = req.protocol + '://' + req.get('host') + "/"
     res.locals.path = req.path;
-    if (user?.role === ADMIN) {
-        res.locals.APP_URL = res.locals.APP_URL + "admin/"
-    } else if (user?.role === DOSEN) {
-        res.locals.APP_URL = res.locals.APP_URL + "dosen/"
+
+    switch (user?.role) {
+        case ADMIN:
+            res.locals.APP_URL = res.locals.APP_URL + "admin/"
+            break;
+        case DOSEN:
+            res.locals.APP_URL = res.locals.APP_URL + "dosen/"
+            break;
     }
 
     res.locals.user = user
@@ -78,6 +82,8 @@ app.use(async (req, res, next) => {
     res.status(HTTP_STATUS.NOT_FOUND).render('notFound')
 });
 
-app.use(defaultApiErrorhandler);
+app.use((err, req, res, next) => {
+    defaultApiErrorhandler(err, req, res)
+});
 
 module.exports = app;

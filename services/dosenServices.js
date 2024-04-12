@@ -5,6 +5,12 @@ const {del} = require("express/lib/application");
 exports.checkNISNDosenExists = async nisn =>
     await dosenRepository.checkNISNDosenExists(nisn)
 
+exports.checkEmailDosenExists = async email =>
+    await dosenRepository.checkEmailDosenExists(email)
+
+exports.getDosenByEmail = async email =>
+    await dosenRepository.getDosenByEmail(email)
+
 exports.getAllDosen = async () =>
     await dosenRepository.getAllDosen()
 

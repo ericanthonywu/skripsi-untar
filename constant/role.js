@@ -1,2 +1,2 @@
-const ADMIN = "admin"
-const DOSEN = "dosen"
+exports.ADMIN = "admin"
+exports.DOSEN = "dosen"

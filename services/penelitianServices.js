@@ -69,9 +69,7 @@ exports.getBiayaPenelitianAnalytic = async year => {
         .groupBy('year')
         .map((yearValue, yearKey) => {
             return _.map(allMonths, month => {
-                console.log(yearValue)
                 const monthKey = String(month);
-                console.log(monthKey)
                 const filteredData = yearValue.filter(item => item.month == monthKey);
 
                 let obj = {

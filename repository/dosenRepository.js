@@ -5,6 +5,13 @@ const _ = require('lodash')
 exports.checkNISNDosenExists = async nisn =>
     await checkExistsTable(db('dosen').where({nomor_induk_dosen_nasional: nisn}))
 
+exports.checkEmailDosenExists = async email =>
+    await checkExistsTable(db('dosen').where({email}))
+
+exports.getDosenByEmail = async email =>
+    await db('dosen').where({email})
+        .first('id', 'password')
+
 exports.getAllDosen = async () =>
     await db('dosen')
         .select("id", "nama_dosen", "nomor_induk_dosen_nasional")
