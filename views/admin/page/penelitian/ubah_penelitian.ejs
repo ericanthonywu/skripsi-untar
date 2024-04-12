@@ -17,7 +17,8 @@
                     <label for="nama_proposal" class="col-sm-2 col-form-label">Judul Proposal</label>
                     <div class="col-sm-10">
                         <input id="nama_proposal" name="nama_proposal" type="text" class="form-control"
-                               placeholder="Masukkan Judul Proposal ..." required value="<%= data.nama_proposal %>">
+                               placeholder="Masukkan Judul Proposal ..." <%= data.status == "Batal" ? "readonly" : "" %>
+                               required value="<%= data.nama_proposal %>">
                     </div>
                 </div>
                 <div class="form-group row">
@@ -26,7 +27,8 @@
                         <span class="input-group-text"
                               style="border-bottom-right-radius: 0; border-top-right-radius: 0">Rp</span>
                         <input type="text" class="form-control number ribuan" id="biaya" data-id="biaya-value"
-                               placeholder="Masukan Biaya ..." value="<%= data.biaya.toLocaleString('id-ID') %>"
+                               placeholder="Masukan Biaya ..." <%= data.status == "Batal" ? "readonly" : "" %>
+                               value="<%= data.biaya.toLocaleString('id-ID') %>"
                                style="border-bottom-left-radius: 0; border-top-left-radius: 0" required>
                         <input type="hidden" class="form-control number" id="biaya-value" name="biaya"
                                value="<%= data.biaya %>">
@@ -36,18 +38,20 @@
                     <label class="col-sm-2 col-form-label" for="periode_awal">Periode:</label>
                     <div class="col-sm-5">
                         <input type="text" name="periode_awal" class="form-control month-picker" id="periode_awal"
-                               placeholder="Periode Awal" required value="<%= data.periode_awal %>">
+                               placeholder="Periode Awal" <%= data.status == "Batal" ? "disabled" : "" %> required
+                               value="<%= data.periode_awal %>">
                     </div>
                     <div class="col-sm-5">
                         <input type="text" required name="periode_akhir" class="form-control month-picker"
-                               id="periode_akhir" placeholder="Periode Akhir" value="<%= data.periode_akhir %>"/>
+                               id="periode_akhir" <%= data.status == "Batal" ? "disabled" : "" %>
+                               placeholder="Periode Akhir" value="<%= data.periode_akhir %>"/>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label" for="kategori">Kategori:</label>
                     <div class="col-sm-10">
                         <select type="text" name="kategori" class="form-control selectpicker" id="kategori"
-                                data-live-search="true" required>
+                                data-live-search="true" required <%= data.status == "Batal" ? "disabled" : "" %>>
                             <option value="">- Pilih Kategori -</option>
                             <% for (const {nama, id} of kategori_list) { %>
                                 <option value="<%= id %>" <%= id === data.kategori ? 'selected' : "" %> > <%= nama %></option>
@@ -59,7 +63,8 @@
                     <label class="col-sm-2 col-form-label" for="subkategori">Sub Kategori:</label>
                     <div class="col-sm-10">
                         <select type="text" name="subkategori" class="form-control selectpicker" id="subkategori"
-                                data-live-search="true" readonly required>
+                                data-live-search="true" readonly
+                                required <%= data.status == "Batal" ? "disabled" : "" %>>
                             <option value="">- Pilih Sub Kategori -</option>
                             <% for (const {nama, id} of subkategori_list) { %>
                                 <option value="<%= id %>" <%= id === data.subkategori ? 'selected' : "" %> > <%= nama %></option>
@@ -71,7 +76,8 @@
                     <div class="col-sm-12 col-md-6 col-lg-3">
                         <label for="file_proposal">1. File Proposal</label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" name="file_proposal" id="file_proposal" >
+                            <input type="file" class="custom-file-input" <%= data.status == "Batal" ? "disabled" : "" %>
+                                   name="file_proposal" id="file_proposal">
                             <label class="custom-file-label"
                                    for="file_proposal"><%= list_proposal.file_proposal?.original_filename %></label>
                         </div>
@@ -81,7 +87,7 @@
                         <label for="surat_perjanjian_kerjasama">2. Surat Perjanjian Kerjasama</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" name="surat_perjanjian_kerjasama"
-                                   id="surat_perjanjian_kerjasama">
+                                   id="surat_perjanjian_kerjasama" <%= data.status == "Batal" ? "disabled" : "" %>>
                             <label class="custom-file-label"
                                    for="file_proposal"><%= list_proposal.surat_perjanjian_kerjasama?.original_filename ?? 'Upload file' %></label>
                         </div>
@@ -93,7 +99,8 @@
                     <div class="col-sm-12 col-md-6 col-lg-3">
                         <label for="file_monef">3. File Monef</label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" name="file_monef"
+                            <input type="file" class="custom-file-input"
+                                   name="file_monef" <%= data.status == "Batal" ? "disabled" : "" %>
                                    id="file_monef" <%= !list_proposal.surat_perjanjian_kerjasama?.file ? 'disabled' : '' %>>
                             <label class="custom-file-label"
                                    for="file_proposal"><%= list_proposal.file_monef?.original_filename ?? 'Upload file' %></label>
@@ -108,8 +115,9 @@
                     <div class="col-sm-12 col-md-6 col-lg-3">
                         <label for="file_laporan_akhir">4. File Laporan Akhir</label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" name="file_laporan_akhir"
-                                   id="file_laporan_akhir" <%= list_proposal.file_monef?.original_filename ? '' : 'disabled' %>>
+                            <input type="file" class="custom-file-input"
+                                   name="file_laporan_akhir" <%= data.status == "Batal" ? "readonly" : "" %>
+                                   id="file_laporan_akhir" <%= list_proposal.file_monef?.original_filename ? '' : 'disabled' %> <%= data.status == "Batal" ? "disabled" : "" %>>
                             <label class="custom-file-label"
                                    for="file_proposal"><%= list_proposal.file_laporan_akhir?.original_filename ?? 'Upload file' %></label>
                         </div>
@@ -134,19 +142,22 @@
                             %>
                                 <div class="col-sm-10">
                                     <input type="text" name="list_dosen[]" class="form-control input-dosen"
-                                           placeholder="Masukan NISN Dosen" value="<%= nisn %>"
+                                           placeholder="Masukan NISN Dosen"
+                                           value="<%= nisn %>" <%= data.status == "Batal" ? "disabled" : "" %>
                                            required>
                                     <span class="small text-success">NISN tersedia</span>
                                 </div>
                                 <div class="col-sm-2">
-                                    <% if (iDosen === 0) { %>
-                                        <button type="button" class="btn btn-outline-primary" id="add-dosen">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    <% } else { %>
-                                        <button type="button" class="btn btn-outline-danger delete-dynamic-form">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
+                                    <% if (data.status !== "Batal") { %>
+                                        <% if (iDosen === 0) { %>
+                                            <button type="button" class="btn btn-outline-primary" id="add-dosen">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        <% } else { %>
+                                            <button type="button" class="btn btn-outline-danger delete-dynamic-form">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        <% } %>
                                     <% } %>
                                 </div>
                             <%
@@ -164,19 +175,22 @@
                                     for (const nim of list_mahasiswa) {
                             %>
                                 <div class="col-sm-10">
-                                    <input type="text" name="list_mahasiswa[]" class="form-control input-mahasiswa"
+                                    <input type="text" name="list_mahasiswa[]"
+                                           class="form-control input-mahasiswa" <%= data.status == "Batal" ? "disabled" : "" %>
                                            placeholder="Masukan NIM Mahasiswa" value="<%= nim %>" required>
                                     <span class="small text-success">NIM tersedia</span>
                                 </div>
                                 <div class="col-sm-2">
-                                    <% if (iMahasiswa === 0) { %>
-                                        <button type="button" class="btn btn-outline-primary" id="add-mahasiswa">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    <% } else { %>
-                                        <button type="button" class="btn btn-outline-danger delete-dynamic-form">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
+                                    <% if (data.status !== "Batal") { %>
+                                        <% if (iMahasiswa === 0) { %>
+                                            <button type="button" class="btn btn-outline-primary" id="add-mahasiswa">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                        <% } else { %>
+                                            <button type="button" class="btn btn-outline-danger delete-dynamic-form">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        <% } %>
                                     <% } %>
                                 </div>
                             <%
@@ -186,8 +200,14 @@
                         </div>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Ubah</button>
-                <button type="button" class="btn btn-danger" data-id="<%= data.id %>" id="cancel-penelitian">Batalkan Penelitian</button>
+                <% if (data.status !== "Batal") { %>
+                    <button type="submit" class="btn btn-primary">Ubah</button>
+                    <button type="button" class="btn btn-danger" data-id="<%= data.id %>" id="cancel-penelitian">
+                        Batalkan
+                        Penelitian
+                    </button>
+                <% } %>
+
             </form>
         </div>
     </div>

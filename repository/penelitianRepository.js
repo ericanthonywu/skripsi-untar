@@ -129,7 +129,8 @@ exports.getPenelitianById = async id =>
             'created_at',
             'periode_akhir',
             'master_subkategori_penelitian.id as subkategori',
-            'master_kategori_penelitian.id as kategori'
+            'master_kategori_penelitian.id as kategori',
+            'status'
         )
         .where('penelitian.id', id)
         .join('master_subkategori_penelitian', 'master_subkategori_penelitian.id', 'penelitian.id_subkategori_penelitian')

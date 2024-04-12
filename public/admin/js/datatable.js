@@ -120,7 +120,7 @@ $(document).ready(function () {
         language: {
             emptyTable: "Data tidak tersedia",
             zeroRecords: "Tidak ditemukan data yang cocok",
-            search: "Cari berdasarkan nama penelitian: "
+            search: "Cari berdasarkan judul penelitian: "
         },
         ajax: {
             url: `${base_table}penelitian`,
@@ -177,7 +177,7 @@ $(document).ready(function () {
             {
                 data: 'id', title: 'Aksi', orderable: false, searchable: false, render: (data, _type, row) => {
                     return `
-                         ${row.status !== 'Batal' ? `<a href="${base_url}penelitian/ubah/${data}"  class="btn btn-primary"> Ubah </a>` : ''}
+                         <a href="${base_url}penelitian/ubah/${data}"  class="btn btn-primary"> Ubah </a>
                         <button data-id="${data}" class="btn btn-danger del" data-prefix-url="penelitian" data-datatable-id="penelitian-dataTable"> Hapus </button>`
                 }
             }

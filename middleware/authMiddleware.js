@@ -12,9 +12,10 @@ exports.authMiddleware = (req, res, next) => {
 exports.adminRoleMiddleware = (req, res, next) => {
     if (req.session.user.admin_role === "admin") {
         next()
+        return
     }
 
-        return res.redirect("/admin/login")
+    return res.redirect("/admin/login")
 }
 
 /**

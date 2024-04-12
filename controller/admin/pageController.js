@@ -58,7 +58,7 @@ exports.penelitianPage = (req, res) => {
     res.render('admin/page/penelitian/view_penelitian')
 }
 
-exports.tambahPenelitianPage = async (req, res, next) => {
+exports.tambahPenelitianPage = async (req, res) => {
     try {
         res.render('admin/page/penelitian/tambah_penelitian', {
             kategori: await getAllKategoriData()
