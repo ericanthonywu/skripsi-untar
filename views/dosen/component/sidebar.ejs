@@ -12,36 +12,21 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item <%= path == "/admin/" ? "active" : "" %>">
+    <li class="nav-item <%= path == "/dosen/" ? "active" : "" %>">
         <a class="nav-link" href="<%= APP_URL %>">
             <span>Dashboard</span></a>
     </li>
 
-    <% if (user.admin_role == "admin") { %>
-        <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item <%= path == "/admin/penelitian" ? "active" : "" %>">
-            <a class="nav-link" href="<%= APP_URL %>penelitian">
-                <span>Penelitian </span></a>
-        </li>
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item <%= path == "/dosen/penelitian" ? "active" : "" %>">
+        <a class="nav-link" href="<%= APP_URL %>penelitian">
+            <span>Penelitian </span></a>
+    </li>
 
-        <li class="nav-item <%= path == "/admin/kategori" ? "active" : "" %>">
-            <a class="nav-link" href="<%= APP_URL %>kategori">
-                <span>Kategori</span></a>
-        </li>
-
-        <li class="nav-item <%= path == "/admin/dosen" ? "active" : "" %>">
-            <a class="nav-link" href="<%= APP_URL %>dosen">
-                <span>Dosen</span></a>
-        </li>
-        <li class="nav-item <%= path == "/admin/mahasiswa" ? "active" : "" %>">
-            <a class="nav-link" href="<%= APP_URL %>mahasiswa">
-                <span>Mahasiswa</span></a>
-        </li>
-        <li class="nav-item <%= path == "/admin/admin" ? "active" : "" %>">
-            <a class="nav-link" href="<%= APP_URL %>admin">
-                <span>Admin</span></a>
-        </li>
-    <% } %>
+    <li class="nav-item <%= path == "/dosen/kategori" ? "active" : "" %>">
+        <a class="nav-link" href="<%= APP_URL %>kategori">
+            <span>Kategori</span></a>
+    </li>
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
