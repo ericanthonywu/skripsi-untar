@@ -155,7 +155,7 @@ $(document).ready(async function () {
                     x: am5.percent(50),
                     centerX: am5.percent(50),
                     paddingTop: 0,
-                    paddingBottom: 0
+                    paddingBottom: 0,
                 }));
 
                 const cursor = chart.set("cursor", am5xy.XYCursor.new(root, {
@@ -182,7 +182,7 @@ $(document).ready(async function () {
 
                 xAxis.data.setAll(data);
 
-                function createSeries(name, field, data) {
+                function createSeries(name, field, data, color) {
                     const series = chart.series.push(am5xy.LineSeries.new(root, {
                         name: name,
                         xAxis: xAxis,
@@ -193,7 +193,8 @@ $(document).ready(async function () {
                         tooltip: am5.Tooltip.new(root, {
                             pointerOrientation: "horizontal",
                             labelText: "[bold]{name}[/]\n{categoryX}: {valueY}"
-                        })
+                        }),
+                        fill: color,
                     }));
 
                     series.fills.template.setAll({
@@ -205,9 +206,9 @@ $(document).ready(async function () {
                     series.appear(1000);
                 }
 
-                createSeries("Jumlah Penelitian yang Sedang Berlanjut", "jumlah_penelitian_sedang_berlanjut", data);
-                createSeries("Jumlah Penelitian yang Selesai", "jumlah_penelitian_selesai", data);
-                createSeries("Jumlah Penelitian yang Batal", "jumlah_penelitian_batal", data);
+                createSeries("Jumlah Penelitian yang Sedang Berlanjut", "jumlah_penelitian_sedang_berlanjut",data, root.interfaceColors.get("primaryButton"));
+                createSeries("Jumlah Penelitian yang Selesai", "jumlah_penelitian_selesai", data, root.interfaceColors.get("positive"));
+                createSeries("Jumlah Penelitian yang Batal", "jumlah_penelitian_batal", data, root.interfaceColors.get("negative"));
 
                 return chart
             }

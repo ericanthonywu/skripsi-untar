@@ -14,11 +14,15 @@ exports.getTotalPenelitianSelesai = async () =>
 exports.getPenelitianAnalytic = async year => {
     const data = await penelitianRepository.getAnalyticPenelitian(year)
 
+    const allMonths = Array.from({length: 12}, (_, i) => i + 1);
+
     return _.chain(data)
         .groupBy('year')
-        .map((yearValue, yearKey) => _.chain(yearValue)
-            .groupBy('month')
-            .map((monthValue, monthKey) => {
+        .map((yearValue, yearKey) => {
+            return _.map(allMonths, month => {
+                const monthKey = String(month);
+                const filteredData = yearValue.filter(item => item.month == monthKey);
+
                 let obj = {
                     date: moment(monthKey, 'M').format('MMM') + " " + yearKey,
                     jumlah_penelitian_selesai: 0,
@@ -26,7 +30,7 @@ exports.getPenelitianAnalytic = async year => {
                     jumlah_penelitian_sedang_berlanjut: 0
                 };
 
-                for (let item of monthValue) {
+                for (let item of filteredData) {
                     switch (item.status) {
                         case 'Selesai':
                             obj.jumlah_penelitian_selesai += Number(item.total);
@@ -40,12 +44,12 @@ exports.getPenelitianAnalytic = async year => {
                     }
                 }
 
-                if (obj.jumlah_penelitian_batal === 0) {
-                    delete obj.jumlah_penelitian_batal
-                }
-
                 if (obj.jumlah_penelitian_selesai === 0) {
                     delete obj.jumlah_penelitian_selesai
+                }
+
+                if (obj.jumlah_penelitian_batal === 0) {
+                    delete obj.jumlah_penelitian_batal
                 }
 
                 if (obj.jumlah_penelitian_sedang_berlanjut === 0) {
@@ -53,9 +57,8 @@ exports.getPenelitianAnalytic = async year => {
                 }
 
                 return obj;
-            })
-            .value()
-        )
+            });
+        })
         .flatten()
         .value();
 }
