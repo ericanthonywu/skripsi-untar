@@ -53,15 +53,15 @@ app.use('/admin/templates', express.static(path.join(__dirname, 'templates')));
 
 app.use((req, res, next) => {
     const {user} = req.session
-    res.locals.APP_URL = req.protocol + '://' + req.get('host') + "/"
+    res.locals.BASE_URL = req.protocol + '://' + req.get('host') + "/"
     res.locals.path = req.path;
 
     switch (user?.role) {
         case ADMIN:
-            res.locals.APP_URL = res.locals.APP_URL + "admin/"
+            res.locals.APP_URL = res.locals.BASE_URL + "admin/"
             break;
         case DOSEN:
-            res.locals.APP_URL = res.locals.APP_URL + "dosen/"
+            res.locals.APP_URL = res.locals.BASE_URL + "dosen/"
             break;
     }
 
