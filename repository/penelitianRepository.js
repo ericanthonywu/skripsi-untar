@@ -38,6 +38,7 @@ exports.getAnalyticPenelitian = async year =>
             db.raw('EXTRACT(year FROM periode_awal) AS year'),
             db.raw('count(id) as total'),
         )
+        .whereIn('status', ['Sedang Berlangsung', 'Selesai'])
         .groupBy('status')
         .groupBy('month')
         .groupBy('year')
@@ -53,6 +54,7 @@ exports.getBiayaPenelitian = async year =>
             db.raw('EXTRACT(year FROM periode_awal) AS year'),
             db.raw('sum(biaya_yang_disetujui) as total')
         )
+        .whereIn('status', ['Sedang Berlangsung', 'Selesai'])
         .groupBy('status')
         .groupBy('month')
         .groupBy('year')
@@ -217,7 +219,7 @@ exports.ubahPenelitian = async (id, data, anggota, dokumen) => {
 }
 
 exports.cancelPenelitian = async id =>
-    await db('penelitian').where({id}).update({status: "Batal"})
+    await db('penelitian').where({id}).update({status: "Batal", status_updated_at: db.raw('CURRENT_TIMESTAMP')})
 
 exports.getProposalPenelitian = async id =>
     await db('dokumen_penelitian')

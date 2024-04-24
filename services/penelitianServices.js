@@ -23,7 +23,7 @@ exports.getPenelitianAnalytic = async year => {
                     let obj = {
                         jumlah_penelitian_selesai: 0,
                         jumlah_penelitian_batal: 0,
-                        jumlah_penelitian_sedang_berlanjut: 0
+                        jumlah_penelitian_sedang_berlangsung: 0
                     };
 
                     monthValue.forEach(item => {
@@ -34,8 +34,8 @@ exports.getPenelitianAnalytic = async year => {
                             case 'Batal':
                                 obj.jumlah_penelitian_batal += Number(item.total);
                                 break;
-                            case 'Sedang Berlanjut':
-                                obj.jumlah_penelitian_sedang_berlanjut += Number(item.total);
+                            case 'Sedang Berlangsung':
+                                obj.jumlah_penelitian_sedang_berlangsung += Number(item.total);
                                 break;
                         }
                     });
@@ -51,7 +51,7 @@ exports.getPenelitianAnalytic = async year => {
                             obj.date = `${monthKey} ${yearKey}`
                     }
 
-                    ['jumlah_penelitian_selesai', 'jumlah_penelitian_batal', 'jumlah_penelitian_sedang_berlanjut'].forEach(key => {
+                    ['jumlah_penelitian_selesai', 'jumlah_penelitian_batal', 'jumlah_penelitian_sedang_berlangsung'].forEach(key => {
                         if (obj[key] === 0) {
                             delete obj[key];
                         }
@@ -76,7 +76,7 @@ exports.getBiayaPenelitianAnalytic = async year => {
                     let obj = {
                         jumlah_penelitian_selesai: 0,
                         jumlah_penelitian_batal: 0,
-                        jumlah_penelitian_sedang_berlanjut: 0
+                        jumlah_penelitian_sedang_berlangsung: 0
                     };
 
                     monthValue.forEach(item => {
@@ -87,8 +87,8 @@ exports.getBiayaPenelitianAnalytic = async year => {
                             case 'Batal':
                                 obj.jumlah_penelitian_batal += Number(item.total);
                                 break;
-                            case 'Sedang Berlanjut':
-                                obj.jumlah_penelitian_sedang_berlanjut += Number(item.total);
+                            case 'Sedang Berlangsung':
+                                obj.jumlah_penelitian_sedang_berlangsung += Number(item.total);
                                 break;
                         }
                     });
@@ -104,7 +104,7 @@ exports.getBiayaPenelitianAnalytic = async year => {
                             obj.date = `${monthKey} ${yearKey}`
                     }
 
-                    ['jumlah_penelitian_selesai', 'jumlah_penelitian_batal', 'jumlah_penelitian_sedang_berlanjut'].forEach(key => {
+                    ['jumlah_penelitian_selesai', 'jumlah_penelitian_batal', 'jumlah_penelitian_sedang_berlangsung'].forEach(key => {
                         if (obj[key] === 0) {
                             delete obj[key];
                         }

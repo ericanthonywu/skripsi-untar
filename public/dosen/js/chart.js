@@ -104,7 +104,7 @@ $(document).ready(async function () {
 
                 makeSeries("Jumlah Penelitian yang Selesai", "jumlah_penelitian_selesai", data, root.interfaceColors.get("positive"));
                 makeSeries("Jumlah Penelitian yang Batal", "jumlah_penelitian_batal", data, root.interfaceColors.get("negative"));
-                makeSeries("Jumlah Penelitian yang Sedang Berlanjut", "jumlah_penelitian_sedang_berlanjut", data, root.interfaceColors.get("primaryButton"));
+                makeSeries("Jumlah Penelitian yang Sedang Berlangsung", "jumlah_penelitian_sedang_berlanjut", data, root.interfaceColors.get("primaryButton"));
             }
             generateChart(data, tahun)
 
@@ -205,7 +205,7 @@ $(document).ready(async function () {
                     series.appear(1000);
                 }
 
-                createSeries("Jumlah Penelitian yang Sedang Berlanjut", "jumlah_penelitian_sedang_berlanjut", data);
+                createSeries("Jumlah Penelitian yang Sedang Berlangsung", "jumlah_penelitian_sedang_berlanjut", data);
                 createSeries("Jumlah Penelitian yang Selesai", "jumlah_penelitian_selesai", data);
                 createSeries("Jumlah Penelitian yang Batal", "jumlah_penelitian_batal", data);
 
