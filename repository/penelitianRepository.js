@@ -2,7 +2,7 @@ const db = require("../config/database/connection")
 
 exports.getPenelitian = (search, offset, limit, sort_column, sort_direction) =>
     db("penelitian")
-        .select("penelitian.id", "nama_proposal", "biaya", 'periode_awal', 'periode_akhir', 'master_kategori_penelitian.nama as kategori_penelitian', 'master_subkategori_penelitian.nama as subkategori_penelitian', 'status', 'status_updated_at')
+        .select("penelitian.id", "nama_proposal", "biaya_yang_disetujui","biaya_yang_diajukan", 'periode_awal', 'periode_akhir', 'master_kategori_penelitian.nama as kategori_penelitian', 'master_subkategori_penelitian.nama as subkategori_penelitian', 'status', 'status_updated_at')
         .join('master_subkategori_penelitian', 'master_subkategori_penelitian.id', 'penelitian.id_subkategori_penelitian')
         .join('master_kategori_penelitian', 'master_kategori_penelitian.id', 'master_subkategori_penelitian.id_master_kategori_penelitian')
         .offset(offset)
@@ -31,11 +31,11 @@ exports.getTotalPenelitian = async (dosen_id, search) => {
 
 exports.getAnalyticPenelitian = async year =>
     await db("penelitian")
-        .whereRaw('EXTRACT(year FROM status_updated_at) = ?', [year])
+        .whereRaw('EXTRACT(year FROM periode_awal) = ?', [year])
         .select(
             'status',
-            db.raw('EXTRACT(MONTH FROM status_updated_at) AS month'),
-            db.raw('EXTRACT(year FROM status_updated_at) AS year'),
+            db.raw('EXTRACT(MONTH FROM periode_awal) AS month'),
+            db.raw('EXTRACT(year FROM periode_awal) AS year'),
             db.raw('count(id) as total'),
         )
         .groupBy('status')
@@ -46,12 +46,12 @@ exports.getAnalyticPenelitian = async year =>
 
 exports.getBiayaPenelitian = async year =>
     await db("penelitian")
-        .whereRaw('EXTRACT(year FROM status_updated_at) = ?', [year])
+        .whereRaw('EXTRACT(year FROM periode_awal) = ?', [year])
         .select(
             'status',
-            db.raw('EXTRACT(MONTH FROM status_updated_at) AS month'),
-            db.raw('EXTRACT(year FROM status_updated_at) AS year'),
-            db.raw('sum(biaya) as total')
+            db.raw('EXTRACT(MONTH FROM periode_awal) AS month'),
+            db.raw('EXTRACT(year FROM periode_awal) AS year'),
+            db.raw('sum(biaya_yang_disetujui) as total')
         )
         .groupBy('status')
         .groupBy('month')
@@ -71,11 +71,11 @@ exports.getTotalPenelitianBatal = async () =>
         .first()
         .where({status: "Batal"})
 
-exports.getTotalPenelitianSedangBerlanjut = async () =>
+exports.getTotalPenelitianSedangBerlangsung = async () =>
     await db('penelitian')
         .count('penelitian.id as total')
         .first()
-        .where({status: "Sedang Berlanjut"})
+        .whereBetween(db.raw('current_date'), [db.raw('periode_awal'), db.raw('periode_akhir')])
 
 exports.addPenelitian = async (data, anggota, dokumen) => {
     const trx = await db.transaction()
@@ -84,16 +84,16 @@ exports.addPenelitian = async (data, anggota, dokumen) => {
             data.status = 'Selesai'
             data.status_updated_at = trx.raw('CURRENT_TIMESTAMP')
         }
+
+        data.ketua_dosen_penelitian = trx('dosen').where({nomor_induk_dosen_nasional: data.ketua_dosen_penelitian}).first('id')
+
         const [{id}] = await trx('penelitian').insert(data, 'id')
 
-        let i = 0
         for (const nisn_dosen of anggota.list_dosen) {
             await trx('anggota_penelitian').insert({
                 id_penelitian: id,
                 id_dosen: trx('dosen').where({nomor_induk_dosen_nasional: nisn_dosen}).first('id'),
-                status_ketua_dosen: i === 0
             })
-            i++
         }
 
         for (const nim_mahasiswa of anggota.list_mahasiswa) {
@@ -124,23 +124,25 @@ exports.getPenelitianById = async id =>
         .first(
             'penelitian.id as id',
             'nama_proposal',
-            'biaya',
+            'biaya_yang_disetujui',
+            'biaya_yang_diajukan',
             'periode_awal',
             'created_at',
             'periode_akhir',
             'master_subkategori_penelitian.id as subkategori',
             'master_kategori_penelitian.id as kategori',
-            'status'
+            'status',
+            'dosen.nomor_induk_dosen_nasional as ketua_dosen_penelitian'
         )
         .where('penelitian.id', id)
         .join('master_subkategori_penelitian', 'master_subkategori_penelitian.id', 'penelitian.id_subkategori_penelitian')
         .join('master_kategori_penelitian', 'master_kategori_penelitian.id', 'master_subkategori_penelitian.id_master_kategori_penelitian')
+        .join('dosen', 'dosen.id', 'penelitian.ketua_dosen_penelitian')
 
 exports.getAnggotaDosenByPenelitianId = async id_penelitian =>
     await db('anggota_penelitian')
         .leftJoin('dosen', 'dosen.id', 'anggota_penelitian.id_dosen')
         .pluck('dosen.nomor_induk_dosen_nasional')
-        .orderByRaw('status_ketua_dosen = true')
         .where({id_penelitian})
         .whereNotNull('dosen.nomor_induk_dosen_nasional')
 
@@ -161,6 +163,8 @@ exports.getDokumenPenelitianByPenelitianId = async id_penelitian =>
 exports.ubahPenelitian = async (id, data, anggota, dokumen) => {
     const trx = await db.transaction()
     try {
+        data.ketua_dosen_penelitian = trx('dosen').where({nomor_induk_dosen_nasional: data.ketua_dosen_penelitian}).first('id')
+
         await trx('penelitian').update(data).where({id})
         await trx('anggota_penelitian')
             .where({id_penelitian: id})
@@ -178,7 +182,6 @@ exports.ubahPenelitian = async (id, data, anggota, dokumen) => {
             await trx('anggota_penelitian').insert({
                 id_penelitian: id,
                 id_dosen: trx('dosen').where({nomor_induk_dosen_nasional: nisn_dosen}).first('id'),
-                status_ketua_dosen: i === 0
             })
             i++
         }
@@ -224,3 +227,9 @@ exports.getProposalPenelitian = async id =>
 exports.deletePenelitian = async id => {
     await db('penelitian').where({id}).del()
 }
+
+exports.getMaxYear = async () =>
+    await db('penelitian').first().max(db.raw('EXTRACT(YEAR FROM periode_awal)')).as('max_year')
+
+exports.getMinYear = async () =>
+    await db('penelitian').first().min(db.raw('EXTRACT(YEAR FROM periode_awal)')).as('min_year')

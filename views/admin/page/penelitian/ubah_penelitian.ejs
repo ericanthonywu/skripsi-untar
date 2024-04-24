@@ -1,5 +1,4 @@
 <%- include('../../block/header') %>
-
 <div class="container-fluid">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center mb-4">
@@ -22,29 +21,50 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="biaya" class="col-sm-2 col-form-label">Biaya yang di setujui</label>
+                    <label for="biaya_yang_diajukan" class="col-sm-2 col-form-label">Biaya Yang di Ajukan</label>
                     <div class="col-sm-10 input-group-prepend">
                         <span class="input-group-text"
                               style="border-bottom-right-radius: 0; border-top-right-radius: 0">Rp</span>
-                        <input type="text" class="form-control number ribuan" id="biaya" data-id="biaya-value"
-                               placeholder="Masukan Biaya ..." <%= data.status == "Batal" ? "readonly" : "" %>
-                               value="<%= data.biaya.toLocaleString('id-ID') %>"
+                        <input type="text"
+                               class="form-control number ribuan" <%= data.status == "Batal" ? "readonly" : "" %>
+                               id="biaya_yang_diajukan" data-id="biaya_yang_diajukan-value"
+                               placeholder="Masukan Biaya yang di Ajukan ..."
+                               value="<%= data.biaya_yang_diajukan.toLocaleString("id-ID") %>"
                                style="border-bottom-left-radius: 0; border-top-left-radius: 0" required>
-                        <input type="hidden" class="form-control number" id="biaya-value" name="biaya"
-                               value="<%= data.biaya %>">
+                        <input type="hidden" class="form-control number" id="biaya_yang_diajukan-value"
+                               name="biaya_yang_diajukan" value="<%= data.biaya_yang_diajukan %>">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-sm-2 col-form-label" for="periode_awal">Periode:</label>
+                    <label for="biaya_yang_disetujui" class="col-sm-2 col-form-label">Biaya Yang di Setujui</label>
+                    <div class="col-sm-10 input-group-prepend">
+                        <span class="input-group-text"
+                              style="border-bottom-right-radius: 0; border-top-right-radius: 0">Rp</span>
+                        <input type="text"
+                               class="form-control number ribuan" <%= data.status == "Batal" ? "readonly" : "" %>
+                               id="biaya_yang_disetujui" data-id="biaya_yang_disetujui-value"
+                               placeholder="Masukan Biaya yang di Setujui ..."
+                               value="<%= data.biaya_yang_disetujui.toLocaleString("id-ID") %>"
+                               style="border-bottom-left-radius: 0; border-top-left-radius: 0" required>
+                        <input type="hidden" class="form-control number" id="biaya_yang_disetujui-value"
+                               name="biaya_yang_disetujui" value="<%= data.biaya_yang_disetujui %>">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label" for="tipe_periode">Periode: </label>
                     <div class="col-sm-5">
-                        <input type="text" name="periode_awal" class="form-control month-picker" id="periode_awal"
-                               placeholder="Periode Awal" <%= data.status == "Batal" ? "disabled" : "" %> required
-                               value="<%= data.periode_awal %>">
+                        <select type="text" name="tipe_periode" class="form-control selectpicker" id="tipe_periode"
+                                <%= data.status == "Batal" ? "disabled" : "" %>
+                                required>
+                            <option value="">- Pilih Tipe Periode -</option>
+                            <option value="periode_1" <%= moment(data.periode_awal).month() + 1 === 2 ? "selected" : "" %>>Periode 1 (feb - juni)</option>
+                            <option value="periode_2" <%= moment(data.periode_awal).month() + 1 === 8 ? "selected" : "" %>>Periode 2 (agustus - januari)</option>
+                        </select>
                     </div>
                     <div class="col-sm-5">
-                        <input type="text" required name="periode_akhir" class="form-control month-picker"
-                               id="periode_akhir" <%= data.status == "Batal" ? "disabled" : "" %>
-                               placeholder="Periode Akhir" value="<%= data.periode_akhir %>"/>
+                        <input type="text" required name="periode_tahun" class="form-control year-picker" <%= data.status == "Batal" ? "disabled" : "" %>
+                                value="<%= moment(data.periode_awal).year() %>"
+                               id="periode_akhir" placeholder="Tahun Periode">
                     </div>
                 </div>
                 <div class="form-group row">
@@ -130,6 +150,16 @@
                     </div>
                 </div>
                 <div class="form-group row">
+                    <label for="ketua_penelitian" class="col-sm-2 col-form-label">Ketua Penelitian: </label>
+                    <div class="col-sm-10">
+                        <input id="ketua_penelitian" name="ketua_dosen_penelitian" type="text"
+                               class="form-control input-dosen"
+                               placeholder="Masukkan NIDN Dosen Ketua Penelitian" <%= data.status == "Batal" ? "disabled" : "" %>
+                               required value="<%= data.ketua_dosen_penelitian %>">
+                        <span class="small text-success">NIDN tersedia</span>
+                    </div>
+                </div>
+                <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Anggota Penelitian: </label>
                 </div>
                 <div class="form-group row">
@@ -137,6 +167,21 @@
                         <label class="col-sm-12 col-form-label" for="list_dosen">Dosen:</label>
                         <div class="col-sm-12 row">
                             <%
+                            if (list_dosen.length === 0) {
+                            %>
+                                <div class="col-sm-10">
+                                    <input type="text" name="list_dosen[]" class="form-control input-dosen"
+                                           placeholder="Masukan NIDN Anggota Dosen"
+                                    >
+                                    <span></span>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="button" class="btn btn-outline-primary" id="add-dosen">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            <%
+                            }
                             let iDosen = 0;
                                     for (const nisn of list_dosen) {
                             %>
@@ -145,7 +190,7 @@
                                            placeholder="Masukan NISN Dosen"
                                            value="<%= nisn %>" <%= data.status == "Batal" ? "disabled" : "" %>
                                            required>
-                                    <span class="small text-success">NISN tersedia</span>
+                                    <span class="small text-success">NIDN tersedia</span>
                                 </div>
                                 <div class="col-sm-2">
                                     <% if (data.status !== "Batal") { %>
@@ -171,6 +216,19 @@
                         <label class="col-sm-12 col-form-label">Mahasiswa:</label>
                         <div class="col-sm-12 row">
                             <%
+                            if (list_mahasiswa.length === 0) {
+                            %>
+                                <div class="col-sm-10">
+                                    <input type="text" name="list_mahasiswa[]" class="form-control input-mahasiswa"
+                                           placeholder="Masukan NIM Anggota Mahasiswa">
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="button" class="btn btn-outline-primary" id="add-mahasiswa">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            <%
+                            }
                             let iMahasiswa = 0;
                                     for (const nim of list_mahasiswa) {
                             %>

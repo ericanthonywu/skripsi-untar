@@ -120,7 +120,7 @@ $(document).ready(function () {
         language: {
             emptyTable: "Data tidak tersedia",
             zeroRecords: "Tidak ditemukan data yang cocok",
-            search: "Cari berdasarkan judul penelitian: "
+            search: "Cari Berdasarkan Judul Proposal: "
         },
         ajax: {
             url: `${base_table}penelitian`,
@@ -141,7 +141,18 @@ $(document).ready(function () {
             },
             {data: 'nama_proposal', title: 'Judul Proposal', searchable: true, orderable: true},
             {
-                data: 'biaya',
+                data: 'biaya_yang_diajukan',
+                title: 'Biaya Yang Di Ajukan',
+                searchable: true,
+                orderable: true,
+                render: data => new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    maximumFractionDigits: 0
+                }).format(data)
+            },
+            {
+                data: 'biaya_yang_disetujui',
                 title: 'Biaya Yang Di Setujui',
                 searchable: true,
                 orderable: true,
@@ -157,6 +168,13 @@ $(document).ready(function () {
                 searchable: true,
                 orderable: true,
                 render: (data, _type, row) => {
+                    switch (moment(data).month() + 1) {
+                        case 2:
+                            return `Periode 1 (${moment(row.periode_awal).format('MMM YYYY')} ${moment(row.periode_akhir).format('MMM YYYY')})`
+                        case 8:
+                            return `Periode 2 (${moment(row.periode_awal).format('MMM YYYY')} ${moment(row.periode_akhir).format('MMM YYYY')})`
+                    }
+
                     return `${moment(row.periode_awal).format('MMM YYYY')} - ${moment(row.periode_akhir).format('MMM YYYY')}`
                 }
             },
@@ -172,7 +190,6 @@ $(document).ready(function () {
                 title: 'Status',
                 searchable: true,
                 orderable: true,
-                render: (data, _type, row) => `${data} (${moment(row.status_updated_at).format('DD/MM/YYYY HH:mm:ss')})`
             },
             {
                 data: 'id', title: 'Aksi', orderable: false, searchable: false, render: (data, _type, row) => {

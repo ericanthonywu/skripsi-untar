@@ -248,8 +248,8 @@ $(document).ready(function () {
                                 </div>
                                 <div class="col-sm-2">
                                     <button type="button" class="btn btn-outline-danger delete-dynamic-form">
-                                    <i class="fa fa-trash"></i>
-</button>
+                                        <i class="fa fa-trash"></i>
+                                    </button>
                                 </div>
                             </div>`)
     })
@@ -264,7 +264,7 @@ $(document).ready(function () {
         const val = $(this).val()
 
         if (!val) {
-            $(this).parent().find('span').text('Mohon masukkan NISN dosen').removeClass('text-success').addClass('text-danger')
+            $(this).parent().find('span').text('').removeClass('text-success').removeClass('text-danger')
             return
         }
 
@@ -290,7 +290,7 @@ $(document).ready(function () {
         const val = $(this).val()
 
         if (!val) {
-            $(this).parent().find('span').text('Mohon masukkan NIM mahasiswa').removeClass('text-success').addClass('text-danger')
+            $(this).parent().find('span').text('').removeClass('text-success').removeClass('text-danger')
             return
         }
 

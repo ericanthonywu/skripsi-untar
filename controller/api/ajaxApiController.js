@@ -30,20 +30,43 @@ exports.addPenelitianController = async (req, res, next) => {
 
         console.log('file: ', req.files)
 
-        let {nama_proposal, biaya, periode_awal, periode_akhir, list_dosen, list_mahasiswa, subkategori} = req.body
+        let {
+            nama_proposal,
+            biaya_yang_diajukan,
+            biaya_yang_disetujui,
+            list_dosen,
+            list_mahasiswa,
+            subkategori,
+            tipe_periode,
+            periode_tahun,
+            ketua_dosen_penelitian
+        } = req.body
 
-        if (typeof list_dosen === 'string') {
-            list_dosen = [list_dosen]
+        let periode_awal;
+        let periode_akhir;
+
+        switch (tipe_periode) {
+            case "periode_1":
+                periode_awal = `${periode_tahun}-02-01` // feb
+                periode_akhir = `${periode_tahun}-06-01` // juni
+                break
+            case "periode_2":
+                periode_awal = `${periode_tahun}-08-01` // agustus
+                periode_akhir = `${parseInt(periode_tahun) + 1}-01-01` // januari
+                break
+            default:
+                res.status(400).json({message: '', error: {message: 'status periode not valid'}})
         }
 
-        if (typeof list_mahasiswa === 'string') {
-            list_mahasiswa = [list_mahasiswa]
-        }
-
-        periode_awal = moment(periode_awal, 'MMMM YYYY').format('YYYY-MM-DD')
-        periode_akhir = moment(periode_akhir, 'MMMM YYYY').format('YYYY-MM-DD')
-
-        await penelitianServices.addPenelitianServices({nama_proposal, biaya, periode_awal, periode_akhir, id_subkategori_penelitian: subkategori}, {
+        await penelitianServices.addPenelitianServices({
+            nama_proposal,
+            biaya_yang_diajukan,
+            biaya_yang_disetujui,
+            periode_awal,
+            periode_akhir,
+            id_subkategori_penelitian: subkategori,
+            ketua_dosen_penelitian
+        }, {
             list_dosen,
             list_mahasiswa
         }, req.files)
@@ -67,20 +90,45 @@ exports.ubahPenelitianController = async (req, res, next) => {
 
         console.log('file: ', req.files)
 
-        let {id, nama_proposal, biaya, periode_awal, periode_akhir, list_dosen, list_mahasiswa, subkategori} = req.body
+        let {
+            id,
+            nama_proposal,
+            biaya_yang_diajukan,
+            biaya_yang_disetujui,
+            list_dosen,
+            list_mahasiswa,
+            subkategori,
+            tipe_periode,
+            periode_tahun,
+            ketua_dosen_penelitian
+        } = req.body
 
-        if (typeof list_dosen === 'string') {
-            list_dosen = [list_dosen]
+        let periode_awal;
+        let periode_akhir;
+
+        switch (tipe_periode) {
+            case "periode_1":
+                periode_awal = `${periode_tahun}-02-01` // feb
+                periode_akhir = `${periode_tahun}-06-01` // juni
+                break
+            case "periode_2":
+                periode_awal = `${periode_tahun}-08-01` // agustus
+                periode_akhir = `${parseInt(periode_tahun) + 1}-01-01` // januari
+                break
+            default:
+                res.status(400).json({message: '', error: {message: 'status periode not valid'}})
         }
 
-        if (typeof list_mahasiswa === 'string') {
-            list_mahasiswa = [list_mahasiswa]
-        }
-
-        periode_awal = moment(periode_awal, 'MMMM YYYY').format('YYYY-MM-DD')
-        periode_akhir = moment(periode_akhir, 'MMMM YYYY').format('YYYY-MM-DD')
-
-        await penelitianServices.ubahPenelitianServices({id, nama_proposal, biaya, periode_awal, periode_akhir, id_subkategori_penelitian: subkategori}, {
+        await penelitianServices.ubahPenelitianServices({
+            id,
+            nama_proposal,
+            biaya_yang_diajukan,
+            biaya_yang_disetujui,
+            periode_awal,
+            periode_akhir,
+            id_subkategori_penelitian: subkategori,
+            ketua_dosen_penelitian
+        }, {
             list_dosen,
             list_mahasiswa
         }, req.files)
@@ -322,7 +370,7 @@ exports.addAdmin = async (req, res, next) => {
     }
 }
 
-exports.updateAdmin = async (req,res,next) => {
+exports.updateAdmin = async (req, res, next) => {
     try {
         const data = req.body
 
@@ -334,7 +382,7 @@ exports.updateAdmin = async (req,res,next) => {
     }
 }
 
-exports.deleteAdmin = async (req,res,next) => {
+exports.deleteAdmin = async (req, res, next) => {
     try {
         const {id} = req.params
 

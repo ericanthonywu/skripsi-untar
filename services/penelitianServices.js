@@ -14,50 +14,51 @@ exports.getTotalPenelitianSelesai = async () =>
 exports.getPenelitianAnalytic = async year => {
     const data = await penelitianRepository.getAnalyticPenelitian(year)
 
-    const allMonths = Array.from({length: 12}, (_, i) => i + 1);
-
     return _.chain(data)
         .groupBy('year')
         .map((yearValue, yearKey) => {
-            return _.map(allMonths, month => {
-                const monthKey = String(month);
-                const filteredData = yearValue.filter(item => item.month == monthKey);
+            return _.chain(yearValue)
+                .groupBy('month')
+                .map((monthValue, monthKey) => {
+                    let obj = {
+                        jumlah_penelitian_selesai: 0,
+                        jumlah_penelitian_batal: 0,
+                        jumlah_penelitian_sedang_berlanjut: 0
+                    };
 
-                let obj = {
-                    date: moment(monthKey, 'M').format('MMM') + " " + yearKey,
-                    jumlah_penelitian_selesai: 0,
-                    jumlah_penelitian_batal: 0,
-                    jumlah_penelitian_sedang_berlanjut: 0
-                };
+                    monthValue.forEach(item => {
+                        switch (item.status) {
+                            case 'Selesai':
+                                obj.jumlah_penelitian_selesai += Number(item.total);
+                                break;
+                            case 'Batal':
+                                obj.jumlah_penelitian_batal += Number(item.total);
+                                break;
+                            case 'Sedang Berlanjut':
+                                obj.jumlah_penelitian_sedang_berlanjut += Number(item.total);
+                                break;
+                        }
+                    });
 
-                for (let item of filteredData) {
-                    switch (item.status) {
-                        case 'Selesai':
-                            obj.jumlah_penelitian_selesai += Number(item.total);
+                    switch (monthKey) {
+                        case '2':
+                            obj.date = `Periode 1 (Februari ${yearKey} - Juni ${yearKey})`;
                             break;
-                        case 'Batal':
-                            obj.jumlah_penelitian_batal += Number(item.total);
+                        case '8':
+                            obj.date = `Periode 2 (Agustus ${yearKey} - Januari ${parseInt(yearKey) + 1})`;
                             break;
-                        case 'Sedang Berlanjut':
-                            obj.jumlah_penelitian_sedang_berlanjut += Number(item.total);
-                            break;
+                        default:
+                            obj.date = `${monthKey} ${yearKey}`
                     }
-                }
 
-                if (obj.jumlah_penelitian_selesai === 0) {
-                    delete obj.jumlah_penelitian_selesai
-                }
+                    ['jumlah_penelitian_selesai', 'jumlah_penelitian_batal', 'jumlah_penelitian_sedang_berlanjut'].forEach(key => {
+                        if (obj[key] === 0) {
+                            delete obj[key];
+                        }
+                    });
 
-                if (obj.jumlah_penelitian_batal === 0) {
-                    delete obj.jumlah_penelitian_batal
-                }
-
-                if (obj.jumlah_penelitian_sedang_berlanjut === 0) {
-                    delete obj.jumlah_penelitian_sedang_berlanjut
-                }
-
-                return obj;
-            });
+                    return obj;
+                }).value();
         })
         .flatten()
         .value();
@@ -66,38 +67,51 @@ exports.getPenelitianAnalytic = async year => {
 exports.getBiayaPenelitianAnalytic = async year => {
     const data = await penelitianRepository.getBiayaPenelitian(year)
 
-    const allMonths = Array.from({length: 12}, (_, i) => i + 1);
-
     return _.chain(data)
         .groupBy('year')
         .map((yearValue, yearKey) => {
-            return _.map(allMonths, month => {
-                const monthKey = String(month);
-                const filteredData = yearValue.filter(item => item.month == monthKey);
+            return _.chain(yearValue)
+                .groupBy('month')
+                .map((monthValue, monthKey) => {
+                    let obj = {
+                        jumlah_penelitian_selesai: 0,
+                        jumlah_penelitian_batal: 0,
+                        jumlah_penelitian_sedang_berlanjut: 0
+                    };
 
-                let obj = {
-                    date: moment(monthKey, 'M').format('MMM') + " " + yearKey,
-                    jumlah_penelitian_selesai: 0,
-                    jumlah_penelitian_batal: 0,
-                    jumlah_penelitian_sedang_berlanjut: 0
-                };
+                    monthValue.forEach(item => {
+                        switch (item.status) {
+                            case 'Selesai':
+                                obj.jumlah_penelitian_selesai += Number(item.total);
+                                break;
+                            case 'Batal':
+                                obj.jumlah_penelitian_batal += Number(item.total);
+                                break;
+                            case 'Sedang Berlanjut':
+                                obj.jumlah_penelitian_sedang_berlanjut += Number(item.total);
+                                break;
+                        }
+                    });
 
-                for (let item of filteredData) {
-                    switch(item.status) {
-                        case 'Selesai':
-                            obj.jumlah_penelitian_selesai += Number(item.total);
+                    switch (monthKey) {
+                        case '2':
+                            obj.date = `Periode 1 (Februari ${yearKey} - Juni ${yearKey})`;
                             break;
-                        case 'Batal':
-                            obj.jumlah_penelitian_batal += Number(item.total);
+                        case '8':
+                            obj.date = `Periode 2 (Agustus ${yearKey} - Januari ${parseInt(yearKey) + 1})`;
                             break;
-                        case 'Sedang Berlanjut':
-                            obj.jumlah_penelitian_sedang_berlanjut += Number(item.total);
-                            break;
+                        default:
+                            obj.date = `${monthKey} ${yearKey}`
                     }
-                }
 
-                return obj;
-            });
+                    ['jumlah_penelitian_selesai', 'jumlah_penelitian_batal', 'jumlah_penelitian_sedang_berlanjut'].forEach(key => {
+                        if (obj[key] === 0) {
+                            delete obj[key];
+                        }
+                    });
+
+                    return obj;
+                }).value();
         })
         .flatten()
         .value();
@@ -106,17 +120,14 @@ exports.getBiayaPenelitianAnalytic = async year => {
 exports.getTotalPenelitianBatal = async () =>
     (await penelitianRepository.getTotalPenelitianBatal()).total || 0
 
-exports.getTotalPenelitianSedangBerlanjut = async () =>
-    (await penelitianRepository.getTotalPenelitianSedangBerlanjut()).total || 0
+exports.getTotalPenelitianSedangBerlangsung = async () =>
+    (await penelitianRepository.getTotalPenelitianSedangBerlangsung()).total || 0
 
 exports.getPenelitianById = async id => {
     const data = await penelitianRepository.getPenelitianById(id)
     const list_dosen = await penelitianRepository.getAnggotaDosenByPenelitianId(id)
     const list_mahasiswa = await penelitianRepository.getAnggotaMahasiswaByPenelitianId(id)
     const list_proposal = await penelitianRepository.getDokumenPenelitianByPenelitianId(id)
-
-    data.periode_awal = moment(data.periode_awal).format('MMMM YYYY')
-    data.periode_akhir = moment(data.periode_akhir).format('MMMM YYYY')
 
     const proper_list_proposal = {}
 
@@ -158,5 +169,14 @@ exports.deletePenelitianServices = async id => {
     await penelitianRepository.deletePenelitian(id)
     for (const file of listFile) {
         fs.unlinkSync(path.join(__dirname, `../`, file))
+    }
+}
+
+exports.getMaxAndMinYearServices = async () => {
+    const maxYear = await penelitianRepository.getMaxYear();
+    const minYear = await penelitianRepository.getMinYear();
+    return {
+        maxYear: maxYear.max,
+        minYear: minYear.min
     }
 }

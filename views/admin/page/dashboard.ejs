@@ -70,9 +70,9 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">
-                                Jumlah Penelitian yang Sedang Berlanjut
+                                Jumlah Penelitian yang Sedang Berlangsung
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800 animate-number"><%= data.total_penelitian_sedang_berlanjut %> </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800 animate-number"><%= data.total_penelitian_sedang_berlangsung %> </div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-clipboard-list fa-2x text-secondary"></i>
@@ -101,7 +101,8 @@
                         <label for="filter-tahun-rekap-penelitian" class="col-sm-2 col-form-label">Filter
                             Tahun: </label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control year-picker"
+                            <input type="text" class="form-control year-picker" data-min-year="<%= data.minYear %>"
+                                   data-max-year="<%= data.maxYear %>"
                                    id="filter-tahun-rekap-penelitian" value="<%= new Date().getFullYear() %>">
                         </div>
                     </div>
@@ -128,7 +129,8 @@
                     <label for="filter-tahun-biaya-penelitian" class="col-sm-2 col-form-label">Filter
                         Tahun: </label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control year-picker"
+                        <input type="text" class="form-control year-picker" data-min-year="<%= data.minYear %>"
+                               data-max-year="<%= data.maxYear %>"
                                id="filter-tahun-biaya-penelitian" value="<%= new Date().getFullYear() %>">
                     </div>
                 </div>

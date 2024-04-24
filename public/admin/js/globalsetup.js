@@ -9,12 +9,33 @@ $(document).ready(function () {
         language: "id"
     })
 
+    $('#filter-tahun-biaya-penelitian').datepicker({
+        format: "yyyy",
+        startView: "years",
+        minViewMode: "years",
+        autoclose: true,
+        language: "id",
+        startDate: $('#filter-tahun-biaya-penelitian').data('min-year').toString(),
+        endDate: $('#filter-tahun-biaya-penelitian').data('max-year').toString()
+    })
+
+    $('#filter-tahun-rekap-penelitian').datepicker({
+        format: "yyyy",
+        startView: "years",
+        minViewMode: "years",
+        autoclose: true,
+        language: "id",
+        startDate: $('#filter-tahun-rekap-penelitian').data('min-year').toString(),
+        endDate: $('#filter-tahun-rekap-penelitian').data('max-year').toString()
+    })
+
+
     $('.year-picker').datepicker({
         format: "yyyy",
         startView: "years",
         minViewMode: "years",
         autoclose: true,
-        language: "id"
+        language: "id",
     })
 
     $('.chosen-select').chosen({

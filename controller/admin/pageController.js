@@ -5,7 +5,7 @@ const {
 const {getDosenById} = require("../../services/dosenServices");
 const {getMahasiswaById} = require("../../services/mahasiswaServices");
 const {getPenelitianById, getTotalPenelitianSelesai, getTotalPenelitian, getTotalPenelitianBatal,
-    getTotalPenelitianSedangBerlanjut
+    getTotalPenelitianSedangBerlangsung, getMaxAndMinYearServices
 } = require("../../services/penelitianServices");
 const {getAdminById} = require("../../services/adminServices");
 
@@ -14,12 +14,14 @@ exports.loginPage = (req, res) => {
 }
 
 exports.indexPage = async (req, res) => {
+    const data = await getMaxAndMinYearServices()
     res.render('admin/page/dashboard', {
         data: {
             total_penelitian: await getTotalPenelitian(),
             total_penelitian_selesai: await getTotalPenelitianSelesai(),
             total_penelitian_batal: await getTotalPenelitianBatal(),
-            total_penelitian_sedang_berlanjut: await getTotalPenelitianSedangBerlanjut()
+            total_penelitian_sedang_berlangsung: await getTotalPenelitianSedangBerlangsung(),
+            ...await getMaxAndMinYearServices()
         }
     })
 }
@@ -50,7 +52,7 @@ exports.tambahMahasiswaPage = (req, res) => {
 exports.ubahMahasiswaPage = async (req, res) => {
     const {id} = req.params
     res.render('admin/page/mahasiswa/ubah_mahasiswa', {
-        data: await getMahasiswaById(id)
+        data: await getMahasiswaById(id),
     })
 }
 
@@ -78,6 +80,7 @@ exports.ubahPenelitianPage = async (req, res, next) => {
         res.render('admin/page/penelitian/ubah_penelitian', {
             kategori_list: await getAllKategoriData(),
             subkategori_list: await getSubKategoriByKategoriId(data.data.kategori),
+            moment: require('moment'),
             ...data,
         })
     } catch (e) {

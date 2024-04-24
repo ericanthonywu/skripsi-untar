@@ -63,6 +63,9 @@ app.use((req, res, next) => {
         case DOSEN:
             res.locals.APP_URL = res.locals.BASE_URL + "dosen/"
             break;
+        default:
+            res.locals.APP_URL = res.locals.BASE_URL
+            break
     }
 
     res.locals.user = user
