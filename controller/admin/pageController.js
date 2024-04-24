@@ -14,7 +14,6 @@ exports.loginPage = (req, res) => {
 }
 
 exports.indexPage = async (req, res) => {
-    const data = await getMaxAndMinYearServices()
     res.render('admin/page/dashboard', {
         data: {
             total_penelitian: await getTotalPenelitian(),
