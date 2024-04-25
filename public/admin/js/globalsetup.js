@@ -15,8 +15,8 @@ $(document).ready(function () {
         minViewMode: "years",
         autoclose: true,
         language: "id",
-        startDate: $('#filter-tahun-biaya-penelitian').data('min-year').toString(),
-        endDate: $('#filter-tahun-biaya-penelitian').data('max-year').toString()
+        startDate: $('#filter-tahun-biaya-penelitian').data('min-year')?.toString(),
+        endDate: $('#filter-tahun-biaya-penelitian').data('max-year')?.toString()
     })
 
     $('#filter-tahun-rekap-penelitian').datepicker({
@@ -25,8 +25,8 @@ $(document).ready(function () {
         minViewMode: "years",
         autoclose: true,
         language: "id",
-        startDate: $('#filter-tahun-rekap-penelitian').data('min-year').toString(),
-        endDate: $('#filter-tahun-rekap-penelitian').data('max-year').toString()
+        startDate: $('#filter-tahun-rekap-penelitian').data('min-year')?.toString(),
+        endDate: $('#filter-tahun-rekap-penelitian').data('max-year')?.toString()
     })
 
 
