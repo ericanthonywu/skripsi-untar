@@ -3,7 +3,7 @@ const {checkExistsTable} = require("../util");
 const _ = require('lodash')
 
 exports.checkNISNDosenExists = async nisn =>
-    await checkExistsTable(db('dosen').where({nomor_induk_dosen_nasional: nisn}))
+    await db('dosen').where({nomor_induk_dosen_nasional: nisn}).first('nama_dosen')
 
 exports.checkEmailDosenExists = async email =>
     await checkExistsTable(db('dosen').where({email}))

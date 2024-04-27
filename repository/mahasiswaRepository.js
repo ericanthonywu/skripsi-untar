@@ -3,7 +3,7 @@ const {checkExistsTable} = require("../util");
 const _ = require("lodash");
 
 exports.checkNimMahasiswaExists = async nim =>
-    await checkExistsTable(db('mahasiswa').where({nomor_induk_mahasiswa: nim}))
+    await db('mahasiswa').where({nomor_induk_mahasiswa: nim}).first('nama_mahasiswa')
 
 exports.getAllMahasiswa = async () =>
     await db('mahasiswa').select("id", "nama_mahasiswa", "nomor_induk_mahasiswa")
