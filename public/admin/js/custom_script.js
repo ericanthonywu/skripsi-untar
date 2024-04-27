@@ -226,7 +226,7 @@ $(document).ready(function () {
     $('#add-dosen').click(function (e) {
         $('#list_dosen').append(`<div class="col-sm-12 row">
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control input-dosen" name="list_dosen[]" placeholder="Masukan NISN Dosen" required>
+                                    <input type="text" class="form-control input-dosen" name="list_dosen[]" placeholder="Masukan NIDN Dosen" required>
                                     <span></span>
                                 </div>
                                 <div class="col-sm-2">
@@ -273,11 +273,11 @@ $(document).ready(function () {
                 url: `${base_api_url}dosen/check`,
                 method: 'POST',
                 data: {nisn: val},
-                success: ({data: exists}) => {
-                    if (exists) {
-                        $(this).parent().find('span').removeClass('text-danger').addClass('text-success').text('NISN tersedia')
+                success: ({data}) => {
+                    if (data) {
+                        $(this).parent().find('span').removeClass('text-danger').addClass('text-success').text(`NIDN milik ${data.nama_dosen}`)
                     } else {
-                        $(this).parent().find('span').removeClass('text-success').addClass('text-danger').text('NISN tidak tersedia')
+                        $(this).parent().find('span').removeClass('text-success').addClass('text-danger').text('NIDN tidak tersedia')
                     }
                 }
             })
