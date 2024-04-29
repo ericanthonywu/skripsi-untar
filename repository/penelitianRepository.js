@@ -38,7 +38,7 @@ exports.getAnalyticPenelitian = async year =>
             db.raw('EXTRACT(year FROM periode_awal) AS year'),
             db.raw('count(id) as total'),
         )
-        .whereIn('status', ['Sedang Berlangsung', 'Selesai'])
+        .whereIn('status', ['Di Setujui', 'Selesai'])
         .groupBy('status')
         .groupBy('month')
         .groupBy('year')
@@ -54,7 +54,7 @@ exports.getBiayaPenelitian = async year =>
             db.raw('EXTRACT(year FROM periode_awal) AS year'),
             db.raw('sum(biaya_yang_disetujui) as total')
         )
-        .whereIn('status', ['Sedang Berlangsung', 'Selesai'])
+        .whereIn('status', ['Di Setujui', 'Selesai'])
         .groupBy('status')
         .groupBy('month')
         .groupBy('year')
@@ -82,10 +82,25 @@ exports.getTotalPenelitianSedangBerlangsung = async () =>
 exports.addPenelitian = async (data, anggota, dokumen) => {
     const trx = await db.transaction()
     try {
-        if (dokumen.length === 4) {
-            data.status = 'Selesai'
-            data.status_updated_at = trx.raw('CURRENT_TIMESTAMP')
+        switch (dokumen.length) {
+            case 1:
+                data.status = 'Di Ajukan'
+                break
+            case 2:
+                data.status = 'Di Setujui'
+                break
+            case 3:
+                data.status = 'Di Setujui'
+                break
+            case 4:
+                data.status = 'Selesai'
+                break
+            default:
+                await trx.rollback()
+                throw new Error(`dokumen length is ${dokumen.length}`)
         }
+
+        data.status_updated_at = trx.raw('CURRENT_TIMESTAMP')
 
         data.ketua_dosen_penelitian = trx('dosen').where({nomor_induk_dosen_nasional: data.ketua_dosen_penelitian}).first('id')
 
@@ -108,7 +123,7 @@ exports.addPenelitian = async (data, anggota, dokumen) => {
         for (const {fieldname, filename, originalname} of dokumen) {
             await trx('dokumen_penelitian').insert({
                 id_penelitian: id,
-                tipe_dokumen: db('master_tipe_penelitian_dokumen').where({nama: fieldname}).first('id'),
+                tipe_dokumen: trx('master_tipe_penelitian_dokumen').where({nama: fieldname}).first('id'),
                 file: `/uploads/${fieldname}/${filename}`,
                 original_filename: originalname
             })
@@ -207,8 +222,19 @@ exports.ubahPenelitian = async (id, data, anggota, dokumen) => {
 
         const {total} = await trx('dokumen_penelitian').where({id_penelitian: id}).count('id as total').first()
 
-        if (total === "4") {
-            await trx('penelitian').update({status: 'Selesai', status_updated_at: trx.raw('CURRENT_TIMESTAMP')}).where({id})
+        switch (parseInt(total)) {
+            case 1:
+                await trx('penelitian').update({status: 'Di Ajukan', status_updated_at: trx.raw('CURRENT_TIMESTAMP')}).where({id})
+                break
+            case 2:
+                await trx('penelitian').update({status: 'Di Setujui', status_updated_at: trx.raw('CURRENT_TIMESTAMP')}).where({id})
+                break
+            case 3:
+                await trx('penelitian').update({status: 'Di Setujui', status_updated_at: trx.raw('CURRENT_TIMESTAMP')}).where({id})
+                break
+            case 4:
+                await trx('penelitian').update({status: 'Selesai', status_updated_at: trx.raw('CURRENT_TIMESTAMP')}).where({id})
+                break
         }
 
         await trx.commit()

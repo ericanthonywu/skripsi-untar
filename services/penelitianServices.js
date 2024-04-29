@@ -22,8 +22,7 @@ exports.getPenelitianAnalytic = async year => {
                 .map((monthValue, monthKey) => {
                     let obj = {
                         jumlah_penelitian_selesai: 0,
-                        jumlah_penelitian_batal: 0,
-                        jumlah_penelitian_sedang_berlangsung: 0
+                        jumlah_penelitian_yang_disetujui: 0
                     };
 
                     monthValue.forEach(item => {
@@ -31,11 +30,8 @@ exports.getPenelitianAnalytic = async year => {
                             case 'Selesai':
                                 obj.jumlah_penelitian_selesai += Number(item.total);
                                 break;
-                            case 'Batal':
-                                obj.jumlah_penelitian_batal += Number(item.total);
-                                break;
-                            case 'Sedang Berlangsung':
-                                obj.jumlah_penelitian_sedang_berlangsung += Number(item.total);
+                            case 'Di Setujui':
+                                obj.jumlah_penelitian_yang_disetujui += Number(item.total);
                                 break;
                         }
                     });
@@ -51,7 +47,7 @@ exports.getPenelitianAnalytic = async year => {
                             obj.date = `${monthKey} ${yearKey}`
                     }
 
-                    ['jumlah_penelitian_selesai', 'jumlah_penelitian_batal', 'jumlah_penelitian_sedang_berlangsung'].forEach(key => {
+                    ['jumlah_penelitian_selesai', 'jumlah_penelitian_yang_disetujui'].forEach(key => {
                         if (obj[key] === 0) {
                             delete obj[key];
                         }
@@ -75,8 +71,7 @@ exports.getBiayaPenelitianAnalytic = async year => {
                 .map((monthValue, monthKey) => {
                     let obj = {
                         jumlah_penelitian_selesai: 0,
-                        jumlah_penelitian_batal: 0,
-                        jumlah_penelitian_sedang_berlangsung: 0
+                        jumlah_penelitian_yang_disetujui: 0,
                     };
 
                     monthValue.forEach(item => {
@@ -84,11 +79,8 @@ exports.getBiayaPenelitianAnalytic = async year => {
                             case 'Selesai':
                                 obj.jumlah_penelitian_selesai += Number(item.total);
                                 break;
-                            case 'Batal':
-                                obj.jumlah_penelitian_batal += Number(item.total);
-                                break;
-                            case 'Sedang Berlangsung':
-                                obj.jumlah_penelitian_sedang_berlangsung += Number(item.total);
+                            case 'Di Setujui':
+                                obj.jumlah_penelitian_yang_disetujui += Number(item.total);
                                 break;
                         }
                     });
@@ -104,7 +96,7 @@ exports.getBiayaPenelitianAnalytic = async year => {
                             obj.date = `${monthKey} ${yearKey}`
                     }
 
-                    ['jumlah_penelitian_selesai', 'jumlah_penelitian_batal', 'jumlah_penelitian_sedang_berlangsung'].forEach(key => {
+                    ['jumlah_penelitian_selesai', 'jumlah_penelitian_yang_disetujui'].forEach(key => {
                         if (obj[key] === 0) {
                             delete obj[key];
                         }
@@ -155,7 +147,7 @@ exports.ubahPenelitianServices = async (data, anggota, file) => {
         try {
             fs.unlinkSync(path.join(__dirname, file))
         } catch (e) {
-
+            console.log('fail to unsync path:', path.join(__dirname, file))
         }
     }
 }
