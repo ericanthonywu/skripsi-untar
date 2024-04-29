@@ -96,7 +96,7 @@
                     <div class="col-sm-12 col-md-6 col-lg-3">
                         <label for="file_proposal">1. File Proposal</label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" <%= data.status == "Batal" ? "disabled" : "" %>
+                            <input type="file" accept=".pdf, .doc, .docx" class="custom-file-input" <%= data.status == "Batal" ? "disabled" : "" %>
                                    name="file_proposal" id="file_proposal">
                             <label class="custom-file-label"
                                    for="file_proposal"><%= list_proposal.file_proposal?.original_filename %></label>
@@ -106,7 +106,7 @@
                     <div class="col-sm-12 col-md-6 col-lg-3">
                         <label for="surat_perjanjian_kerjasama">2. Surat Perjanjian Kerjasama</label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" name="surat_perjanjian_kerjasama"
+                            <input type="file" accept=".pdf, .doc, .docx" class="custom-file-input" name="surat_perjanjian_kerjasama"
                                    id="surat_perjanjian_kerjasama" <%= data.status == "Batal" ? "disabled" : "" %>>
                             <label class="custom-file-label"
                                    for="file_proposal"><%= list_proposal.surat_perjanjian_kerjasama?.original_filename ?? 'Upload file' %></label>
@@ -119,7 +119,7 @@
                     <div class="col-sm-12 col-md-6 col-lg-3">
                         <label for="file_monef">3. File Monef</label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input"
+                            <input type="file" class="custom-file-input" accept=".pdf, .doc, .docx"
                                    name="file_monef" <%= data.status == "Batal" ? "disabled" : "" %>
                                    id="file_monef" <%= !list_proposal.surat_perjanjian_kerjasama?.file ? 'disabled' : '' %>>
                             <label class="custom-file-label"
@@ -135,7 +135,7 @@
                     <div class="col-sm-12 col-md-6 col-lg-3">
                         <label for="file_laporan_akhir">4. File Laporan Akhir</label>
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input"
+                            <input type="file" class="custom-file-input" accept=".pdf, .doc, .docx"
                                    name="file_laporan_akhir" <%= data.status == "Batal" ? "readonly" : "" %>
                                    id="file_laporan_akhir" <%= list_proposal.file_monef?.original_filename ? '' : 'disabled' %> <%= data.status == "Batal" ? "disabled" : "" %>>
                             <label class="custom-file-label"

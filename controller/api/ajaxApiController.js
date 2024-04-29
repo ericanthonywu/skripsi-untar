@@ -4,13 +4,14 @@ const dosenServices = require("../../services/dosenServices");
 const mahasiswaServices = require("../../services/mahasiswaServices");
 const adminServices = require("../../services/adminServices");
 const XLSX = require('xlsx');
+const {HTTP_STATUS} = require("../../constant/httpStatusConstant");
 
 exports.getSubKategoriByKategoriIdController = async (req, res, next) => {
     try {
         const {kategoriId} = req.params
         const data = await kategoriPenelitianServices.getSubKategoriByKategoriId(kategoriId)
 
-        res.status(200).json(data)
+        res.status(HTTP_STATUS.OK).json(data)
     } catch (e) {
         next(e)
     }
@@ -54,7 +55,7 @@ exports.addPenelitianController = async (req, res, next) => {
                 periode_akhir = `${parseInt(periode_tahun) + 1}-01-01` // januari
                 break
             default:
-                res.status(400).json({message: '', error: {message: 'status periode not valid'}})
+                res.status(HTTP_STATUS.BAD_REQUEST).json({message: '', error: {message: 'status periode not valid'}})
         }
 
         await penelitianServices.addPenelitianServices({
@@ -70,7 +71,7 @@ exports.addPenelitianController = async (req, res, next) => {
             list_mahasiswa
         }, req.files)
 
-        res.sendStatus(200)
+        res.sendStatus(HTTP_STATUS.OK)
     } catch (e) {
         next(e)
     }
@@ -115,7 +116,7 @@ exports.ubahPenelitianController = async (req, res, next) => {
                 periode_akhir = `${parseInt(periode_tahun) + 1}-01-01` // januari
                 break
             default:
-                res.status(400).json({message: '', error: {message: 'status periode not valid'}})
+                res.status(HTTP_STATUS.BAD_REQUEST).json({message: '', error: {message: 'status periode not valid'}})
         }
 
         await penelitianServices.ubahPenelitianServices({
@@ -132,7 +133,7 @@ exports.ubahPenelitianController = async (req, res, next) => {
             list_mahasiswa
         }, req.files)
 
-        res.sendStatus(200)
+        res.sendStatus(HTTP_STATUS.OK)
     } catch (e) {
         next(e)
     }
@@ -143,7 +144,7 @@ exports.cancelPenelitianController = async (req, res, next) => {
         const {id} = req.params
         await penelitianServices.cancelPenelitianServices(id)
 
-        res.sendStatus(200)
+        res.sendStatus(HTTP_STATUS.OK)
     } catch (e) {
         next(e)
     }
@@ -155,7 +156,7 @@ exports.deletePenelitianController = async (req, res, next) => {
 
         await penelitianServices.deletePenelitianServices(id)
 
-        res.sendStatus(200)
+        res.sendStatus(HTTP_STATUS.OK)
     } catch (e) {
         next(e)
     }
@@ -167,7 +168,7 @@ exports.addKategoriController = async (req, res, next) => {
 
         await kategoriPenelitianServices.addKategori(nama)
 
-        res.sendStatus(200)
+        res.sendStatus(HTTP_STATUS.OK)
     } catch (e) {
         next(e)
     }
@@ -179,7 +180,7 @@ exports.ubahKategoriController = async (req, res, next) => {
 
         await kategoriPenelitianServices.updateKategori(id, nama)
 
-        res.sendStatus(200)
+        res.sendStatus(HTTP_STATUS.OK)
     } catch (e) {
         next(e)
     }
@@ -191,7 +192,7 @@ exports.deleteKategoriController = async (req, res, next) => {
 
         await kategoriPenelitianServices.deleteKategori(id)
 
-        res.sendStatus(200)
+        res.sendStatus(HTTP_STATUS.OK)
     } catch (e) {
         next(e)
     }
@@ -203,7 +204,7 @@ exports.addSubkategoriController = async (req, res, next) => {
 
         await kategoriPenelitianServices.addSubkategori(nama, id_master_kategori_penelitian)
 
-        res.sendStatus(200)
+        res.sendStatus(HTTP_STATUS.OK)
     } catch (e) {
         next(e)
     }
@@ -215,7 +216,7 @@ exports.updateSubkategoriController = async (req, res, next) => {
 
         await kategoriPenelitianServices.updateSubkategori(nama, id)
 
-        res.sendStatus(200)
+        res.sendStatus(HTTP_STATUS.OK)
     } catch (e) {
         next(e)
     }
@@ -227,7 +228,7 @@ exports.deleteSubkategoriController = async (req, res, next) => {
 
         await kategoriPenelitianServices.deleteSubkategori(id)
 
-        res.sendStatus(200)
+        res.sendStatus(HTTP_STATUS.OK)
     } catch (e) {
         next(e)
     }
@@ -239,7 +240,7 @@ exports.addDosen = async (req, res, next) => {
 
         await dosenServices.addDosen(data)
 
-        res.sendStatus(200)
+        res.sendStatus(HTTP_STATUS.OK)
     } catch (e) {
         next(e)
     }
@@ -249,11 +250,11 @@ exports.addDosenByExcel = async (req, res, next) => {
     try {
         const workbook = XLSX.readFile(req.files.file[0].path);
 
-        let xlData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+        const xlData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
 
         await dosenServices.addMultipleDosen(xlData)
 
-        res.sendStatus(200)
+        res.sendStatus(HTTP_STATUS.OK)
     } catch (e) {
         next(e)
     }
@@ -263,11 +264,11 @@ exports.addMahasiswaByExcel = async (req, res, next) => {
     try {
         const workbook = XLSX.readFile(req.files.file[0].path);
 
-        let xlData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+        const xlData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
 
         await mahasiswaServices.addMultipleMahasiswa(xlData)
 
-        res.sendStatus(200)
+        res.sendStatus(HTTP_STATUS.OK)
     } catch (e) {
         next(e)
     }
@@ -279,7 +280,7 @@ exports.updateDosen = async (req, res, next) => {
 
         await dosenServices.updateDosen(data)
 
-        res.sendStatus(200)
+        res.sendStatus(HTTP_STATUS.OK)
     } catch (e) {
         next(e)
     }
@@ -291,7 +292,7 @@ exports.deleteDosen = async (req, res, next) => {
 
         await dosenServices.deleteDosen(id)
 
-        res.sendStatus(200)
+        res.sendStatus(HTTP_STATUS.OK)
     } catch (e) {
         next(e)
     }
@@ -303,7 +304,7 @@ exports.addMahasiswa = async (req, res, next) => {
 
         await mahasiswaServices.addMahasiswa(data)
 
-        res.sendStatus(200)
+        res.sendStatus(HTTP_STATUS.OK)
     } catch (e) {
         next(e)
     }
@@ -315,7 +316,7 @@ exports.updateMahasiswa = async (req, res, next) => {
 
         await mahasiswaServices.updateMahasiswa(data)
 
-        res.sendStatus(200)
+        res.sendStatus(HTTP_STATUS.OK)
     } catch (e) {
         next(e)
     }
@@ -327,7 +328,7 @@ exports.deleteMahasiswa = async (req, res, next) => {
 
         await mahasiswaServices.deleteMahasiswa(id)
 
-        res.sendStatus(200)
+        res.sendStatus(HTTP_STATUS.OK)
     } catch (e) {
         next(e)
     }
@@ -339,7 +340,7 @@ exports.checkNisnDosenExists = async (req, res, next) => {
 
         const data = await dosenServices.checkNISNDosenExists(nisn)
 
-        res.status(200).json({data})
+        res.status(HTTP_STATUS.OK).json({data})
     } catch (e) {
         next(e)
     }
@@ -351,7 +352,7 @@ exports.checkNIMMahasiswaExists = async (req, res, next) => {
 
         const data = await mahasiswaServices.checkNIMMahasiswaExists(nim)
 
-        res.status(200).json({data})
+        res.status(HTTP_STATUS.OK).json({data})
     } catch (e) {
         next(e)
     }
@@ -363,7 +364,7 @@ exports.addAdmin = async (req, res, next) => {
 
         await adminServices.addAdmin(data.username, data.password)
 
-        res.sendStatus(200)
+        res.sendStatus(HTTP_STATUS.OK)
     } catch (e) {
         next(e)
     }
@@ -375,7 +376,7 @@ exports.updateAdmin = async (req, res, next) => {
 
         await adminServices.updateAdmin(data.id, data)
 
-        res.sendStatus(200)
+        res.sendStatus(HTTP_STATUS.OK)
     } catch (e) {
         next(e)
     }
@@ -387,7 +388,7 @@ exports.deleteAdmin = async (req, res, next) => {
 
         await adminServices.deleteAdmin(id)
 
-        res.sendStatus(200)
+        res.sendStatus(HTTP_STATUS.OK)
     } catch (e) {
         next(e)
     }

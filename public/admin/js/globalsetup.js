@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $('.selectpicker').selectpicker();
+    $('select').selectpicker();
 
     $('.month-picker').datepicker({
         format: "MM yyyy",
@@ -37,11 +37,6 @@ $(document).ready(function () {
         autoclose: true,
         language: "id",
     })
-
-    $('.chosen-select').chosen({
-        width: '100%',
-        no_results_text: "Maaf, pencarian berikut tidak di temukan: "
-    });
 
     $('input[type="file"]').on('change', function () {
         const fileName = $(this).val().split('\\').pop();

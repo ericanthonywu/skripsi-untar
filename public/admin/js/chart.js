@@ -5,6 +5,7 @@ $(document).ready(async function () {
             let data = []
 
             const root = am5.Root.new("chart_rekap_penelitian");
+
             root.setThemes([
                 am5themes_Animated.new(root)
             ]);
@@ -36,7 +37,7 @@ $(document).ready(async function () {
                     x: am5.percent(50),
                     centerX: am5.percent(50),
                     paddingTop: 0,
-                    paddingBottom: 0
+                    paddingBottom: 20
                 }));
 
                 chart.zoomOutButton.set("forceHidden", true);
@@ -143,7 +144,7 @@ $(document).ready(async function () {
                     x: am5.percent(50),
                     centerX: am5.percent(50),
                     paddingTop: 0,
-                    paddingBottom: 0
+                    paddingBottom: 20
                 }));
 
                 const xRenderer = am5xy.AxisRendererX.new(rootBiayaChart, {

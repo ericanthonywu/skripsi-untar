@@ -2,7 +2,6 @@ $(document).ready(function () {
     const dosenDatatable = $('#dosen-dataTable').DataTable({
         processing: true,
         serverSide: true,
-        order: [[1, "asc"]],
         language: {
             emptyTable: "Data tidak tersedia",
             zeroRecords: "Tidak ditemukan data yang cocok",
@@ -46,7 +45,6 @@ $(document).ready(function () {
     const mahasiswaDatatable = $('#mahasiswa-dataTable').DataTable({
         processing: true,
         serverSide: true,
-        order: [[1, "asc"]],
         language: {
             emptyTable: "Data tidak tersedia",
             zeroRecords: "Tidak ditemukan data yang cocok",
@@ -83,7 +81,6 @@ $(document).ready(function () {
     const penelitianDataTable = $('#penelitian-dataTable').DataTable({
         processing: true,
         serverSide: true,
-        order: [[1, "asc"]],
         dom: 'Bfrtip',
         buttons: [
             {
@@ -170,9 +167,9 @@ $(document).ready(function () {
                 render: (data, _type, row) => {
                     switch (moment(data).month() + 1) {
                         case 2:
-                            return `Periode 1 (${moment(row.periode_awal).format('MMM YYYY')} ${moment(row.periode_akhir).format('MMM YYYY')})`
+                            return `Periode 1 (${moment(row.periode_awal).format('MMM YYYY')} - ${moment(row.periode_akhir).format('MMM YYYY')})`
                         case 8:
-                            return `Periode 2 (${moment(row.periode_awal).format('MMM YYYY')} ${moment(row.periode_akhir).format('MMM YYYY')})`
+                            return `Periode 2 (${moment(row.periode_awal).format('MMM YYYY')} - ${moment(row.periode_akhir).format('MMM YYYY')})`
                     }
 
                     return `${moment(row.periode_awal).format('MMM YYYY')} - ${moment(row.periode_akhir).format('MMM YYYY')}`
@@ -204,7 +201,6 @@ $(document).ready(function () {
     const kategoriDatatable = $('#kategori-dataTable').DataTable({
         processing: true,
         serverSide: false,
-        order: [[1, "asc"]],
         ajax: {
             url: `${base_table}kategori`,
         },
@@ -237,7 +233,6 @@ $(document).ready(function () {
     const subkategoriDatatable = $('#subkategori-dataTable').DataTable({
         processing: true,
         serverSide: false,
-        order: [[1, "asc"]],
         ajax: {
             url: `${base_table}subkategori/${lastPart}`,
         },
@@ -266,7 +261,6 @@ $(document).ready(function () {
     const adminDatatable = $('#admin-dataTable').DataTable({
         processing: true,
         serverSide: false,
-        order: [[1, "asc"]],
         ajax: {
             url: `${base_table}admin`,
         },
@@ -338,4 +332,44 @@ $(document).ready(function () {
 
         toastr.success('Data berhasil di hapus', 'Sukses')
     })
+
+    if ($('form#mahasiswa-excel-dropzone').length > 0) {
+        new Dropzone('form#mahasiswa-excel-dropzone', {
+            acceptedFiles: '.xlsx,.xls',
+            init: function () {
+                this.on("addedfile", function (file) {
+                    if (!file.name.match(/(.xlsx|.xls)$/i)) {
+                        this.removeFile(file);
+                        toastr.error('Hanya file berekstensi .xlsx dan .xls yang diizinkan');
+                    }
+                });
+                this.on("error", function (file, response) {
+                    $(file.previewElement).addClass("dz-error").find('.dz-error-message').text(response.error.message);
+                });
+                this.on('success', function () {
+                    mahasiswaDatatable.ajax.reload()
+                })
+            }
+        });
+    }
+
+    if ($('form#dosen-excel-dropzone').length > 0) {
+        new Dropzone('form#dosen-excel-dropzone', {
+            acceptedFiles: '.xlsx,.xls',
+            init: function () {
+                this.on("addedfile", function (file) {
+                    if (!file.name.match(/(.xlsx|.xls)$/i)) {
+                        this.removeFile(file);
+                        toastr.error('Hanya file berekstensi .xlsx dan .xls yang diizinkan');
+                    }
+                });
+                this.on("error", function (file, response) {
+                    $(file.previewElement).addClass("dz-error").find('.dz-error-message').text(response.error.message);
+                });
+                this.on('success', function () {
+                    dosenDatatable.ajax.reload()
+                })
+            }
+        });
+    }
 });

@@ -32,7 +32,7 @@ exports.multerSingleFieldFileHandler = (dest, field = "image") =>
         }),
         limits: {
             fileSize: 1024 * 1024 * 5,
-        },
+        }
     }).fields([{name: field, maxCount: 1}])
 
 /**

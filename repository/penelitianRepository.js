@@ -1,6 +1,6 @@
 const db = require("../config/database/connection")
 
-exports.getPenelitian = (search, offset, limit, sort_column, sort_direction) =>
+exports.getPenelitian = (search, offset, limit, sort_column = 'created_at', sort_direction = 'asc') =>
     db("penelitian")
         .select("penelitian.id", "nama_proposal", "biaya_yang_disetujui","biaya_yang_diajukan", 'periode_awal', 'periode_akhir', 'master_kategori_penelitian.nama as kategori_penelitian', 'master_subkategori_penelitian.nama as subkategori_penelitian', 'status', 'status_updated_at')
         .join('master_subkategori_penelitian', 'master_subkategori_penelitian.id', 'penelitian.id_subkategori_penelitian')

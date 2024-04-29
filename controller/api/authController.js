@@ -1,5 +1,6 @@
 const authServices = require("../../services/authServices")
 const {ADMIN, DOSEN} = require("../../constant/role")
+const {HTTP_STATUS} = require("../../constant/httpStatusConstant");
 
 exports.loginController = async (req, res, next) => {
     try {
@@ -9,7 +10,7 @@ exports.loginController = async (req, res, next) => {
 
         req.session.user = {id, username, role: ADMIN, admin_role: role}
 
-        res.sendStatus(200)
+        res.sendStatus(HTTP_STATUS.OK)
     } catch (e) {
         next(e)
     }
@@ -23,7 +24,7 @@ exports.loginDosenController = async (req, res, next) => {
 
         req.session.user = {id, username, role: DOSEN}
 
-        res.sendStatus(200)
+        res.sendStatus(HTTP_STATUS.OK)
     } catch (e) {
         next(e)
     }
@@ -44,7 +45,7 @@ exports.migrateController = async (req, res, next) => {
     try {
         await authServices.migrate()
 
-        res.sendStatus(200)
+        res.sendStatus(HTTP_STATUS.OK)
     } catch (e) {
         next(e)
     }

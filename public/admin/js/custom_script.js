@@ -1,3 +1,4 @@
+Dropzone.autoDiscover = false;
 $(document).ready(function () {
     $(document).on('change', 'select#kategori', function () {
         const val = $(this).val()
