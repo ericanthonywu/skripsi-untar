@@ -1,3 +1,4 @@
+Dropzone.autoDiscover = false;
 $(document).ready(function () {
     $(document).on('change', 'select#kategori', function () {
         const val = $(this).val()
@@ -53,8 +54,8 @@ $(document).ready(function () {
             contentType: false,
             enctype: 'multipart/form-data',
             success: () => {
-                toastr.info('Data Penelitian Berhasil Di Tambah', 'Sukses')
-                setTimeout(() => location.href = "/admin/penelitian", 1500)
+                toastr.info('Data Penelitian Berhasil Ditambah', 'Sukses')
+                setTimeout(() => location.href = "/dosen/penelitian", 1500)
             }
         })
     })
@@ -75,8 +76,8 @@ $(document).ready(function () {
             contentType: false,
             enctype: 'multipart/form-data',
             success: () => {
-                toastr.info('Data Penelitian Berhasil Di Ubah', 'Sukses')
-                setTimeout(() => location.href = "/admin/penelitian", 1500)
+                toastr.info('Data Penelitian Berhasil Diubah', 'Sukses')
+                setTimeout(() => location.href = "/dosen/penelitian", 1500)
             }
         })
     })
@@ -89,8 +90,8 @@ $(document).ready(function () {
             method: 'POST',
             data,
             success: () => {
-                toastr.info('Data Kategori Berhasil Di Tambah', 'Sukses')
-                setTimeout(() => location.href = "/admin/kategori", 1500)
+                toastr.info('Data Kategori Berhasil Ditambah', 'Sukses')
+                setTimeout(() => location.href = "/dosen/kategori", 1500)
             }
         })
     })
@@ -103,8 +104,8 @@ $(document).ready(function () {
             method: 'PATCH',
             data,
             success: () => {
-                toastr.info('Data Kategori Berhasil Di Tambah', 'Sukses')
-                setTimeout(() => location.href = "/admin/kategori", 1500)
+                toastr.info('Data Kategori Berhasil Ditambah', 'Sukses')
+                setTimeout(() => location.href = "/dosen/kategori", 1500)
             }
         })
     })
@@ -117,9 +118,9 @@ $(document).ready(function () {
             method: 'POST',
             data,
             success: () => {
-                toastr.info('Data Subkategori Berhasil Di Tambah', 'Sukses')
+                toastr.info('Data Subkategori Berhasil Ditambah', 'Sukses')
                 const id = $('input[name="id_master_kategori_penelitian"]').val()
-                setTimeout(() => location.href = `/admin/kategori/detail/${id}`, 1500)
+                setTimeout(() => location.href = `/dosen/kategori/detail/${id}`, 1500)
             }
         })
     })
@@ -132,9 +133,9 @@ $(document).ready(function () {
             method: 'PATCH',
             data,
             success: () => {
-                toastr.info('Data Subkategori Berhasil Di Ubah', 'Sukses')
+                toastr.info('Data Subkategori Berhasil Diubah', 'Sukses')
                 const id = $('input#kategoriId').val()
-                setTimeout(() => location.href = `/admin/kategori/detail/${id}`, 1500)
+                setTimeout(() => location.href = `/dosen/kategori/detail/${id}`, 1500)
             }
         })
     })
@@ -147,8 +148,8 @@ $(document).ready(function () {
             method: 'POST',
             data,
             success: () => {
-                toastr.info('Data Dosen Berhasil Di Tambah', 'Sukses')
-                setTimeout(() => location.href = `/admin/dosen`, 1500)
+                toastr.info('Data Dosen Berhasil Ditambah', 'Sukses')
+                setTimeout(() => location.href = `/dosen/dosen`, 1500)
             }
         })
     })
@@ -161,8 +162,8 @@ $(document).ready(function () {
             method: 'PATCH',
             data,
             success: () => {
-                toastr.info('Data Dosen Berhasil Di Ubah', 'Sukses')
-                setTimeout(() => location.href = `/admin/dosen`, 1500)
+                toastr.info('Data Dosen Berhasil Diubah', 'Sukses')
+                setTimeout(() => location.href = `/dosen/dosen`, 1500)
             }
         })
     })
@@ -175,8 +176,8 @@ $(document).ready(function () {
             method: 'POST',
             data,
             success: () => {
-                toastr.info('Data Mahasiswa Berhasil Di Tambah', 'Sukses')
-                setTimeout(() => location.href = `/admin/mahasiswa`, 1500)
+                toastr.info('Data Mahasiswa Berhasil Ditambah', 'Sukses')
+                setTimeout(() => location.href = `/dosen/mahasiswa`, 1500)
             }
         })
     })
@@ -189,8 +190,8 @@ $(document).ready(function () {
             method: 'POST',
             data,
             success: () => {
-                toastr.info('Data Admin Berhasil Di Tambah', 'Sukses')
-                setTimeout(() => location.href = `/admin/admin`, 1500)
+                toastr.info('Data Admin Berhasil Ditambah', 'Sukses')
+                setTimeout(() => location.href = `/dosen/admin`, 1500)
             }
         })
     })
@@ -203,8 +204,8 @@ $(document).ready(function () {
             method: 'PATCH',
             data,
             success: () => {
-                toastr.info('Data Admin Berhasil Di Ubah', 'Sukses')
-                setTimeout(() => location.href = `/admin/admin`, 1500)
+                toastr.info('Data Admin Berhasil Diubah', 'Sukses')
+                setTimeout(() => location.href = `/dosen/admin`, 1500)
             }
         })
     })
@@ -217,8 +218,8 @@ $(document).ready(function () {
             method: 'PATCH',
             data,
             success: () => {
-                toastr.info('Data Mahasiswa Berhasil Di Ubah', 'Sukses')
-                setTimeout(() => location.href = `/admin/mahasiswa`, 1500)
+                toastr.info('Data Mahasiswa Berhasil Diubah', 'Sukses')
+                setTimeout(() => location.href = `/dosen/mahasiswa`, 1500)
             }
         })
     })
@@ -226,7 +227,7 @@ $(document).ready(function () {
     $('#add-dosen').click(function (e) {
         $('#list_dosen').append(`<div class="col-sm-12 row">
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control input-dosen" name="list_dosen[]" placeholder="Masukan NISN Dosen" required>
+                                    <input type="text" class="form-control input-dosen" name="list_dosen[]" placeholder="Masukan NIDN Dosen" required>
                                     <span></span>
                                 </div>
                                 <div class="col-sm-2">
@@ -248,8 +249,8 @@ $(document).ready(function () {
                                 </div>
                                 <div class="col-sm-2">
                                     <button type="button" class="btn btn-outline-danger delete-dynamic-form">
-                                    <i class="fa fa-trash"></i>
-</button>
+                                        <i class="fa fa-trash"></i>
+                                    </button>
                                 </div>
                             </div>`)
     })
@@ -264,7 +265,7 @@ $(document).ready(function () {
         const val = $(this).val()
 
         if (!val) {
-            $(this).parent().find('span').text('Mohon masukkan NISN dosen').removeClass('text-success').addClass('text-danger')
+            $(this).parent().find('span').text('').removeClass('text-success').removeClass('text-danger')
             return
         }
 
@@ -273,11 +274,11 @@ $(document).ready(function () {
                 url: `${base_api_url}dosen/check`,
                 method: 'POST',
                 data: {nisn: val},
-                success: ({data: exists}) => {
-                    if (exists) {
-                        $(this).parent().find('span').removeClass('text-danger').addClass('text-success').text('NISN tersedia')
+                success: ({data}) => {
+                    if (data) {
+                        $(this).parent().find('span').removeClass('text-danger').addClass('text-success').text(`NIDN milik ${data.nama_dosen}`)
                     } else {
-                        $(this).parent().find('span').removeClass('text-success').addClass('text-danger').text('NISN tidak tersedia')
+                        $(this).parent().find('span').removeClass('text-success').addClass('text-danger').text('NIDN tidak tersedia')
                     }
                 }
             })
@@ -290,7 +291,7 @@ $(document).ready(function () {
         const val = $(this).val()
 
         if (!val) {
-            $(this).parent().find('span').text('Mohon masukkan NIM mahasiswa').removeClass('text-success').addClass('text-danger')
+            $(this).parent().find('span').text('').removeClass('text-success').removeClass('text-danger')
             return
         }
 
@@ -299,9 +300,9 @@ $(document).ready(function () {
                 url: `${base_api_url}mahasiswa/check`,
                 method: 'POST',
                 data: {nim: val},
-                success: ({data: exists}) => {
-                    if (exists) {
-                        $(this).parent().find('span').removeClass('text-danger').addClass('text-success').text('NIM tersedia')
+                success: ({data}) => {
+                    if (data) {
+                        $(this).parent().find('span').removeClass('text-danger').addClass('text-success').text(`NIM milik ${data.nama_mahasiswa}`)
                     } else {
                         $(this).parent().find('span').removeClass('text-success').addClass('text-danger').text('NIM tidak tersedia')
                     }

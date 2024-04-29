@@ -1,8 +1,12 @@
 const db = require("../config/database/connection")
+const {checkExistsTable} = require("../util");
 
-exports.getPenelitian = (search, offset, limit, sort_column = 'created_at', sort_direction = 'asc') =>
-    db("penelitian")
-        .select("penelitian.id", "nama_proposal", "biaya_yang_disetujui","biaya_yang_diajukan", 'periode_awal', 'periode_akhir', 'master_kategori_penelitian.nama as kategori_penelitian', 'master_subkategori_penelitian.nama as subkategori_penelitian', 'status', 'status_updated_at')
+exports.checkJudulPenelitian = async judul =>
+    await checkExistsTable(db("penelitian").where({nama_proposal: judul}))
+
+exports.getPenelitian = (search, offset, limit, sort_column = 'created_at', sort_direction = 'asc', dosen_id = 0) => {
+    const query = db("penelitian")
+        .select("penelitian.id", "nama_proposal", "biaya_yang_disetujui", "biaya_yang_diajukan", 'periode_awal', 'periode_akhir', 'master_kategori_penelitian.nama as kategori_penelitian', 'master_subkategori_penelitian.nama as subkategori_penelitian', 'status', 'status_updated_at')
         .join('master_subkategori_penelitian', 'master_subkategori_penelitian.id', 'penelitian.id_subkategori_penelitian')
         .join('master_kategori_penelitian', 'master_kategori_penelitian.id', 'master_subkategori_penelitian.id_master_kategori_penelitian')
         .offset(offset)
@@ -10,12 +14,21 @@ exports.getPenelitian = (search, offset, limit, sort_column = 'created_at', sort
         .orderBy(sort_column, sort_direction)
         .where('nama_proposal', 'ILIKE', `${search}%`)
 
+    if (dosen_id) {
+        query.where('ketua_dosen_penelitian', dosen_id)
+    }
+
+    return query
+}
+
+exports.getJudulPenelitianById = async id =>
+    await db('penelitian').where({id}).first('nama_proposal')
+
 exports.getTotalPenelitian = async (dosen_id, search) => {
     const query = db("penelitian")
 
     if (dosen_id) {
-        query.join('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
-            .whereIn('id_dosen', dosen_id)
+        query.where('ketua_dosen_penelitian', dosen_id)
     }
 
     if (search) {
@@ -29,8 +42,8 @@ exports.getTotalPenelitian = async (dosen_id, search) => {
     return data || 0
 }
 
-exports.getAnalyticPenelitian = async year =>
-    await db("penelitian")
+exports.getAnalyticPenelitian = async (year, dosen_id) => {
+    const query = db("penelitian")
         .whereRaw('EXTRACT(year FROM periode_awal) = ?', [year])
         .select(
             'status',
@@ -45,8 +58,15 @@ exports.getAnalyticPenelitian = async year =>
         .orderBy('month')
         .orderBy('year')
 
-exports.getBiayaPenelitian = async year =>
-    await db("penelitian")
+    if (dosen_id) {
+        query.where('ketua_dosen_penelitian', dosen_id)
+    }
+
+    return query
+}
+
+exports.getBiayaPenelitian = async (year, dosen_id) => {
+    const query = db("penelitian")
         .whereRaw('EXTRACT(year FROM periode_awal) = ?', [year])
         .select(
             'status',
@@ -61,23 +81,51 @@ exports.getBiayaPenelitian = async year =>
         .orderBy('month')
         .orderBy('year')
 
-exports.getTotalPenelitianSelesai = async () =>
-    await db('penelitian')
+    if (dosen_id) {
+        query.where('ketua_dosen_penelitian', dosen_id)
+    }
+
+    return query
+}
+
+exports.getTotalPenelitianSelesai = async (dosen_id) => {
+    const query = db('penelitian')
         .count('penelitian.id as total')
         .first()
         .where({status: "Selesai"})
 
-exports.getTotalPenelitianBatal = async () =>
-    await db('penelitian')
+    if (dosen_id) {
+        query.where('ketua_dosen_penelitian', dosen_id)
+    }
+
+    return query
+}
+
+exports.getTotalPenelitianBatal = async (dosen_id) => {
+    const query = db('penelitian')
         .count('penelitian.id as total')
         .first()
         .where({status: "Batal"})
 
-exports.getTotalPenelitianSedangBerlangsung = async () =>
-    await db('penelitian')
+    if (dosen_id) {
+        query.where('ketua_dosen_penelitian', dosen_id)
+    }
+
+    return query
+}
+
+exports.getTotalPenelitianSedangBerlangsung = async (dosen_id) => {
+    const query = db('penelitian')
         .count('penelitian.id as total')
         .first()
         .whereBetween(db.raw('current_date'), [db.raw('periode_awal'), db.raw('periode_akhir')])
+
+    if (dosen_id) {
+        query.where('ketua_dosen_penelitian', dosen_id)
+    }
+
+    return query
+}
 
 exports.addPenelitian = async (data, anggota, dokumen) => {
     const trx = await db.transaction()
@@ -224,16 +272,28 @@ exports.ubahPenelitian = async (id, data, anggota, dokumen) => {
 
         switch (parseInt(total)) {
             case 1:
-                await trx('penelitian').update({status: 'Di Ajukan', status_updated_at: trx.raw('CURRENT_TIMESTAMP')}).where({id})
+                await trx('penelitian').update({
+                    status: 'Di Ajukan',
+                    status_updated_at: trx.raw('CURRENT_TIMESTAMP')
+                }).where({id})
                 break
             case 2:
-                await trx('penelitian').update({status: 'Di Setujui', status_updated_at: trx.raw('CURRENT_TIMESTAMP')}).where({id})
+                await trx('penelitian').update({
+                    status: 'Di Setujui',
+                    status_updated_at: trx.raw('CURRENT_TIMESTAMP')
+                }).where({id})
                 break
             case 3:
-                await trx('penelitian').update({status: 'Di Setujui', status_updated_at: trx.raw('CURRENT_TIMESTAMP')}).where({id})
+                await trx('penelitian').update({
+                    status: 'Di Setujui',
+                    status_updated_at: trx.raw('CURRENT_TIMESTAMP')
+                }).where({id})
                 break
             case 4:
-                await trx('penelitian').update({status: 'Selesai', status_updated_at: trx.raw('CURRENT_TIMESTAMP')}).where({id})
+                await trx('penelitian').update({
+                    status: 'Selesai',
+                    status_updated_at: trx.raw('CURRENT_TIMESTAMP')
+                }).where({id})
                 break
         }
 

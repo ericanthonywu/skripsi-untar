@@ -4,15 +4,17 @@ const fs = require("fs");
 const path = require("node:path");
 const _ = require("lodash");
 const {del} = require("express/lib/application");
+const ServiceError = require("../exception/errorException");
+const {HTTP_STATUS} = require("../constant/httpStatusConstant");
 
 exports.getTotalPenelitian = async (dosen_id, search) =>
     (await penelitianRepository.getTotalPenelitian(dosen_id, search)).total || 0
 
-exports.getTotalPenelitianSelesai = async () =>
-    (await penelitianRepository.getTotalPenelitianSelesai()).total || 0
+exports.getTotalPenelitianSelesai = async (dosen_id) =>
+    (await penelitianRepository.getTotalPenelitianSelesai(dosen_id)).total || 0
 
-exports.getPenelitianAnalytic = async year => {
-    const data = await penelitianRepository.getAnalyticPenelitian(year)
+exports.getPenelitianAnalytic = async (year, dosen_id) => {
+    const data = await penelitianRepository.getAnalyticPenelitian(year, dosen_id)
 
     return _.chain(data)
         .groupBy('year')
@@ -60,8 +62,8 @@ exports.getPenelitianAnalytic = async year => {
         .value();
 }
 
-exports.getBiayaPenelitianAnalytic = async year => {
-    const data = await penelitianRepository.getBiayaPenelitian(year)
+exports.getBiayaPenelitianAnalytic = async (year, dosen_id) => {
+    const data = await penelitianRepository.getBiayaPenelitian(year, dosen_id)
 
     return _.chain(data)
         .groupBy('year')
@@ -109,11 +111,11 @@ exports.getBiayaPenelitianAnalytic = async year => {
         .value();
 }
 
-exports.getTotalPenelitianBatal = async () =>
-    (await penelitianRepository.getTotalPenelitianBatal()).total || 0
+exports.getTotalPenelitianBatal = async (dosen_id) =>
+    (await penelitianRepository.getTotalPenelitianBatal(dosen_id)).total || 0
 
-exports.getTotalPenelitianSedangBerlangsung = async () =>
-    (await penelitianRepository.getTotalPenelitianSedangBerlangsung()).total || 0
+exports.getTotalPenelitianSedangBerlangsung = async (dosen_id) =>
+    (await penelitianRepository.getTotalPenelitianSedangBerlangsung(dosen_id)).total || 0
 
 exports.getPenelitianById = async id => {
     const data = await penelitianRepository.getPenelitianById(id)
@@ -137,19 +139,20 @@ exports.getPenelitianById = async id => {
 }
 
 exports.addPenelitianServices = async (data, anggota, file) => {
+    if (await penelitianRepository.checkJudulPenelitian(data.nama_proposal)) {
+        throw new ServiceError('Judul proposal sudah pernah di tambahkan', HTTP_STATUS.BAD_REQUEST)
+    }
     await penelitianRepository.addPenelitian(data, anggota, file)
 }
 
 exports.ubahPenelitianServices = async (data, anggota, file) => {
-    const listFile = await penelitianRepository.getProposalPenelitian(data.id)
-    await penelitianRepository.ubahPenelitian(data.id, data, anggota, file)
-    for (const file of listFile) {
-        try {
-            fs.unlinkSync(path.join(__dirname, file))
-        } catch (e) {
-            console.log('fail to unsync path:', path.join(__dirname, file))
+    const {nama_proposal} = await penelitianRepository.getJudulPenelitianById(data.id)
+    if (nama_proposal !== data.nama_proposal) {
+        if (await penelitianRepository.checkJudulPenelitian(data.nama_proposal)) {
+            throw new ServiceError('Judul proposal sudah pernah di tambahkan', HTTP_STATUS.BAD_REQUEST)
         }
     }
+    await penelitianRepository.ubahPenelitian(data.id, data, anggota, file)
 }
 
 exports.cancelPenelitianServices = async id => {

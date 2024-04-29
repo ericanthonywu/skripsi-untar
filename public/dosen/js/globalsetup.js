@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $('.selectpicker').selectpicker();
+    $('select').selectpicker();
 
     $('.month-picker').datepicker({
         format: "MM yyyy",
@@ -9,18 +9,34 @@ $(document).ready(function () {
         language: "id"
     })
 
+    $('#filter-tahun-biaya-penelitian').datepicker({
+        format: "yyyy",
+        startView: "years",
+        minViewMode: "years",
+        autoclose: true,
+        language: "id",
+        startDate: $('#filter-tahun-biaya-penelitian').data('min-year')?.toString(),
+        endDate: $('#filter-tahun-biaya-penelitian').data('max-year')?.toString()
+    })
+
+    $('#filter-tahun-rekap-penelitian').datepicker({
+        format: "yyyy",
+        startView: "years",
+        minViewMode: "years",
+        autoclose: true,
+        language: "id",
+        startDate: $('#filter-tahun-rekap-penelitian').data('min-year')?.toString(),
+        endDate: $('#filter-tahun-rekap-penelitian').data('max-year')?.toString()
+    })
+
+
     $('.year-picker').datepicker({
         format: "yyyy",
         startView: "years",
         minViewMode: "years",
         autoclose: true,
-        language: "id"
+        language: "id",
     })
-
-    $('.chosen-select').chosen({
-        width: '100%',
-        no_results_text: "Maaf, pencarian berikut tidak di temukan: "
-    });
 
     $('input[type="file"]').on('change', function () {
         const fileName = $(this).val().split('\\').pop();

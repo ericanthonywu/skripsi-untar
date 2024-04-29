@@ -1,9 +1,14 @@
 const express = require('express');
-const {loginController, migrateController, logoutController, loginDosenController} = require("../../controller/api/authController");
+const {
+    loginController,
+    migrateController,
+    logoutController,
+    loginDosenController
+} = require("../../controller/api/authController");
 const {
     penelitianDatatableController,
     kategoriDatatableController,
-    subkategoriDatatableController,
+    subkategoriDatatableController, mahasiswaDatatableController,
 } = require("../../controller/api/datatableController");
 const {
     getSubKategoriByKategoriIdController,
@@ -17,9 +22,14 @@ const {
     updateSubkategoriController,
     ubahPenelitianController,
     cancelPenelitianController,
+    addMahasiswa,
+    addMahasiswaByExcel,
+    updateMahasiswa,
+    deleteMahasiswa,
+    checkNIMMahasiswaExists, checkNisnDosenExists,
 } = require("../../controller/api/ajaxApiController");
 const {multerMultipleFieldHandler, multerSingleFieldFileHandler} = require("../../middleware/fileMiddleware");
-const {authMiddleware} = require("../../middleware/authMiddleware");
+const {authMiddleware, dosenRoleMiddleware, adminRoleMiddleware} = require("../../middleware/authMiddleware");
 const {getPenelitian, getBiayaPenelitian} = require("../../controller/api/chartController");
 const router = express.Router();
 
@@ -28,6 +38,7 @@ router.post("/auth/login", loginDosenController)
 router.get("/auth/logout", logoutController)
 
 router.get("/table/penelitian", authMiddleware, penelitianDatatableController)
+router.get("/table/mahasiswa", authMiddleware, mahasiswaDatatableController)
 router.get("/table/kategori", authMiddleware, kategoriDatatableController)
 router.get("/table/subkategori/:id", authMiddleware, subkategoriDatatableController)
 
@@ -67,5 +78,12 @@ router.delete('/kategori/:id', authMiddleware, deleteKategoriController)
 router.post('/subkategori', authMiddleware, addSubkategoriController)
 router.patch('/subkategori', authMiddleware, updateSubkategoriController)
 router.delete('/subkategori/:id', authMiddleware, deleteSubkategoriController)
+
+router.post('/mahasiswa', authMiddleware, dosenRoleMiddleware, addMahasiswa)
+router.post('/mahasiswa/excel', authMiddleware, dosenRoleMiddleware, multerSingleFieldFileHandler('/excel', 'file'), addMahasiswaByExcel)
+router.patch('/mahasiswa', authMiddleware, dosenRoleMiddleware, updateMahasiswa)
+router.delete('/mahasiswa/:id', authMiddleware, dosenRoleMiddleware, deleteMahasiswa)
+router.post('/mahasiswa/check', authMiddleware, dosenRoleMiddleware, checkNIMMahasiswaExists)
+router.post('/dosen/check', authMiddleware, dosenRoleMiddleware, checkNisnDosenExists)
 
 module.exports = router;

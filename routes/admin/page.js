@@ -1,13 +1,13 @@
 const express = require('express');
 const {
-    indexPage, loginPage, penelitianPage, tambahPenelitianPage, kategoriPage, tambahKategoriPage, subkategoriPage,
+    indexPage, loginAdminPage, penelitianPage, tambahPenelitianPage, kategoriPage, tambahKategoriPage, subkategoriPage,
     tambahSubkategoriPage, ubahKategoriPage, ubahSubkategoriPage, dosenPage, mahasiswaPage, tambahDosenPage,
     ubahDosenPage, tambahMahasiswaPage, ubahMahasiswaPage, ubahPenelitianPage, adminPage, tambahAdminPage, ubahAdminPage
-} = require("../../controller/admin/pageController");
+} = require("../../controller/pageController");
 const {authMiddleware, adminRoleMiddleware} = require("../../middleware/authMiddleware");
 const router = express.Router();
 
-router.get('/login', loginPage);
+router.get('/login', loginAdminPage);
 
 router.get('/', authMiddleware, indexPage);
 

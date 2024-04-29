@@ -23,10 +23,10 @@ exports.getDosenDatatable = async (search, offset, limit, sort_column, sort_dire
     }
 }
 
-exports.getPenelitianDatatable = async (search, offset, limit, sort_column, sort_direction) => {
-    const data = await penelitianRepository.getPenelitian(search, offset, limit, sort_column, sort_direction)
+exports.getPenelitianDatatable = async (search, offset, limit, sort_column, sort_direction, dosen_id = 0) => {
+    const data = await penelitianRepository.getPenelitian(search, offset, limit, sort_column, sort_direction, dosen_id)
 
-    const total = await penelitianServices.getTotalPenelitian(0, search)
+    const total = await penelitianServices.getTotalPenelitian(dosen_id, search)
 
     return {
         data, total_data: total

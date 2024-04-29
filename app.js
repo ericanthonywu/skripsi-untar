@@ -82,7 +82,7 @@ app.use('/admin/api', require('./routes/admin/api'));
 
 // error handler
 app.use(async (req, res, next) => {
-    res.status(HTTP_STATUS.NOT_FOUND).render('notFound')
+    res.status(HTTP_STATUS.NOT_FOUND).render('page/notFound')
 });
 
 app.use((err, req, res, next) => {

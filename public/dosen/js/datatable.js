@@ -1,8 +1,86 @@
 $(document).ready(function () {
+    const dosenDatatable = $('#dosen-dataTable').DataTable({
+        processing: true,
+        serverSide: true,
+        language: {
+            emptyTable: "Data tidak tersedia",
+            zeroRecords: "Tidak ditemukan data yang cocok",
+            search: "Cari berdasarkan nama atau nidn dosen: "
+        },
+        ajax: {
+            url: `${base_table}dosen`,
+            data: d => {
+                if (d.order[0]) {
+                    d.sort_column = d.columns[d.order[0].column].data;
+                    d.sort_direction = d.order[0].dir;
+                }
+                // Delete the original order array as it's not needed anymore
+                delete d.columns;
+                delete d.order;
+            }
+        },
+        columns: [
+            {
+                data: 'id', title: 'No', orderable: false, searchable: false, render: (data, type, row, meta) =>
+                    meta.row + meta.settings._iDisplayStart + 1
+            },
+            {data: 'nama_dosen', title: 'Nama Dosen', searchable: true, orderable: true},
+            {
+                data: 'nomor_induk_dosen_nasional',
+                title: 'Nomor Induk Dosen Nasional',
+                searchable: true,
+                orderable: true
+            },
+            {data: 'nomor_induk_pegawai', title: 'Nomor Induk Pegawai', searchable: true, orderable: true},
+            {data: 'email', title: 'Email', searchable: true, orderable: true},
+            {
+                data: 'id', title: 'Aksi', orderable: false, searchable: false, render: data => {
+                    return `<a href="${base_url}dosen/ubah/${data}"  class="btn btn-primary"> Ubah </a> 
+                        <button data-id="${data}" class="btn btn-danger del" data-prefix-url="dosen" data-datatable-id="dosen-dataTable"> Hapus </button>`
+                }
+            }
+        ]
+    })
+
+    const mahasiswaDatatable = $('#mahasiswa-dataTable').DataTable({
+        processing: true,
+        serverSide: true,
+        language: {
+            emptyTable: "Data tidak tersedia",
+            zeroRecords: "Tidak ditemukan data yang cocok",
+            search: "Cari berdasarkan nama atau nim mahasiswa:"
+        },
+        ajax: {
+            url: `${base_table}mahasiswa`,
+            data: d => {
+                if (d.order[0]) {
+                    d.sort_column = d.columns[d.order[0].column].data;
+                    d.sort_direction = d.order[0].dir;
+                }
+                // Delete the original order array as it's not needed anymore
+                delete d.columns;
+                delete d.order;
+            }
+        },
+        columns: [
+            {
+                data: 'id', title: 'No', orderable: false, searchable: false, render: (data, type, row, meta) =>
+                    meta.row + meta.settings._iDisplayStart + 1
+            },
+            {data: 'nama_mahasiswa', title: 'Nama Mahasiswa', searchable: true, orderable: true},
+            {data: 'nomor_induk_mahasiswa', title: 'Nomor Induk Mahasiswa', searchable: true, orderable: true},
+            {
+                data: 'id', title: 'Aksi', orderable: false, searchable: false, render: data => {
+                    return `<a href="${base_url}mahasiswa/ubah/${data}"  class="btn btn-primary"> Ubah </a> 
+                        <button data-id="${data}" class="btn btn-danger del" data-prefix-url="mahasiswa" data-datatable-id="mahasiswa-dataTable"> Hapus </button>`
+                }
+            }
+        ]
+    })
+
     const penelitianDataTable = $('#penelitian-dataTable').DataTable({
         processing: true,
         serverSide: true,
-        order: [[1, "asc"]],
         dom: 'Bfrtip',
         buttons: [
             {
@@ -39,7 +117,7 @@ $(document).ready(function () {
         language: {
             emptyTable: "Data tidak tersedia",
             zeroRecords: "Tidak ditemukan data yang cocok",
-            search: "Cari berdasarkan judul penelitian: "
+            search: "Cari Berdasarkan Judul Proposal: "
         },
         ajax: {
             url: `${base_table}penelitian`,
@@ -60,7 +138,18 @@ $(document).ready(function () {
             },
             {data: 'nama_proposal', title: 'Judul Proposal', searchable: true, orderable: true},
             {
-                data: 'biaya',
+                data: 'biaya_yang_diajukan',
+                title: 'Biaya Yang Di Ajukan',
+                searchable: true,
+                orderable: true,
+                render: data => new Intl.NumberFormat('id-ID', {
+                    style: 'currency',
+                    currency: 'IDR',
+                    maximumFractionDigits: 0
+                }).format(data)
+            },
+            {
+                data: 'biaya_yang_disetujui',
                 title: 'Biaya Yang Di Setujui',
                 searchable: true,
                 orderable: true,
@@ -76,6 +165,13 @@ $(document).ready(function () {
                 searchable: true,
                 orderable: true,
                 render: (data, _type, row) => {
+                    switch (moment(data).month() + 1) {
+                        case 2:
+                            return `Periode 1 (${moment(row.periode_awal).format('MMM YYYY')} - ${moment(row.periode_akhir).format('MMM YYYY')})`
+                        case 8:
+                            return `Periode 2 (${moment(row.periode_awal).format('MMM YYYY')} - ${moment(row.periode_akhir).format('MMM YYYY')})`
+                    }
+
                     return `${moment(row.periode_awal).format('MMM YYYY')} - ${moment(row.periode_akhir).format('MMM YYYY')}`
                 }
             },
@@ -91,7 +187,6 @@ $(document).ready(function () {
                 title: 'Status',
                 searchable: true,
                 orderable: true,
-                render: (data, _type, row) => `${data} (${moment(row.status_updated_at).format('DD/MM/YYYY HH:mm:ss')})`
             },
             {
                 data: 'id', title: 'Aksi', orderable: false, searchable: false, render: (data, _type, row) => {
@@ -106,7 +201,6 @@ $(document).ready(function () {
     const kategoriDatatable = $('#kategori-dataTable').DataTable({
         processing: true,
         serverSide: false,
-        order: [[1, "asc"]],
         ajax: {
             url: `${base_table}kategori`,
         },
@@ -139,7 +233,6 @@ $(document).ready(function () {
     const subkategoriDatatable = $('#subkategori-dataTable').DataTable({
         processing: true,
         serverSide: false,
-        order: [[1, "asc"]],
         ajax: {
             url: `${base_table}subkategori/${lastPart}`,
         },
@@ -160,6 +253,34 @@ $(document).ready(function () {
                     return `
                     <a href="${base_url}kategori/detail/${lastPart}/ubah/${data}"  class="btn btn-primary"> Ubah </a> 
                      <button data-id="${data}" class="btn btn-danger del" data-prefix-url="subkategori" data-datatable-id="subkategori-dataTable"> Hapus </button>`
+                }
+            }
+        ]
+    });
+
+    const adminDatatable = $('#admin-dataTable').DataTable({
+        processing: true,
+        serverSide: false,
+        ajax: {
+            url: `${base_table}admin`,
+        },
+        language: {
+            emptyTable: "Data tidak tersedia",
+            zeroRecords: "Tidak ditemukan data yang cocok",
+            search: "Cari berdasarkan nama :"
+        },
+        columns: [
+            {
+                data: 'id', title: 'No', orderable: false, searchable: false, render: function (data, type, row, meta) {
+                    return meta.row + meta.settings._iDisplayStart + 1;
+                }
+            },
+            {data: 'username', title: 'Username', searchable: true, orderable: true},
+            {
+                data: 'id', title: 'Aksi', orderable: false, searchable: false, render: data => {
+                    return `
+                    <a href="${base_url}admin/ubah/${data}"  class="btn btn-primary"> Ubah </a> 
+                     <button data-id="${data}" class="btn btn-danger del" data-prefix-url="admin" data-datatable-id="admin-dataTable"> Hapus </button>`
                 }
             }
         ]
@@ -198,8 +319,57 @@ $(document).ready(function () {
             case 'subkategori-dataTable':
                 subkategoriDatatable.ajax.reload()
                 break
+            case 'dosen-dataTable':
+                dosenDatatable.ajax.reload()
+                break
+            case 'mahasiswa-dataTable':
+                mahasiswaDatatable.ajax.reload()
+                break
+            case 'admin-dataTable':
+                adminDatatable.ajax.reload()
+                break
         }
 
         toastr.success('Data berhasil di hapus', 'Sukses')
     })
+
+    if ($('form#mahasiswa-excel-dropzone').length > 0) {
+        new Dropzone('form#mahasiswa-excel-dropzone', {
+            acceptedFiles: '.xlsx,.xls',
+            init: function () {
+                this.on("addedfile", function (file) {
+                    if (!file.name.match(/(.xlsx|.xls)$/i)) {
+                        this.removeFile(file);
+                        toastr.error('Hanya file berekstensi .xlsx dan .xls yang diizinkan');
+                    }
+                });
+                this.on("error", function (file, response) {
+                    $(file.previewElement).addClass("dz-error").find('.dz-error-message').text(response.error.message);
+                });
+                this.on('success', function () {
+                    mahasiswaDatatable.ajax.reload()
+                })
+            }
+        });
+    }
+
+    if ($('form#dosen-excel-dropzone').length > 0) {
+        new Dropzone('form#dosen-excel-dropzone', {
+            acceptedFiles: '.xlsx,.xls',
+            init: function () {
+                this.on("addedfile", function (file) {
+                    if (!file.name.match(/(.xlsx|.xls)$/i)) {
+                        this.removeFile(file);
+                        toastr.error('Hanya file berekstensi .xlsx dan .xls yang diizinkan');
+                    }
+                });
+                this.on("error", function (file, response) {
+                    $(file.previewElement).addClass("dz-error").find('.dz-error-message').text(response.error.message);
+                });
+                this.on('success', function () {
+                    dosenDatatable.ajax.reload()
+                })
+            }
+        });
+    }
 });

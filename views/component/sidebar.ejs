@@ -12,34 +12,52 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item <%= path == "/admin/" ? "active" : "" %>">
+    <li class="nav-item <%= path === `/${user.role}` ? "active" : "" %>">
         <a class="nav-link" href="<%= APP_URL %>">
             <span>Dashboard</span></a>
     </li>
 
-    <% if (user.admin_role == "admin") { %>
+    <% if (user.admin_role === "admin" && user.role === "admin") { %>
         <!-- Nav Item - Pages Collapse Menu -->
-        <li class="nav-item <%= path == "/admin/penelitian" ? "active" : "" %>">
+        <li class="nav-item <%= path === `/${user.role}/penelitian` ? "active" : "" %>">
             <a class="nav-link" href="<%= APP_URL %>penelitian">
                 <span>Penelitian </span></a>
         </li>
 
-        <li class="nav-item <%= path == "/admin/kategori" ? "active" : "" %>">
+        <li class="nav-item <%= path === `/${user.role}/kategori` ? "active" : "" %>">
             <a class="nav-link" href="<%= APP_URL %>kategori">
                 <span>Kategori</span></a>
         </li>
 
-        <li class="nav-item <%= path == "/admin/dosen" ? "active" : "" %>">
-            <a class="nav-link" href="<%= APP_URL %>dosen">
-                <span>Dosen</span></a>
-        </li>
-        <li class="nav-item <%= path == "/admin/mahasiswa" ? "active" : "" %>">
+        <li class="nav-item <%= path === `/${user.role}/mahasiswa` ? "active" : "" %>">
             <a class="nav-link" href="<%= APP_URL %>mahasiswa">
                 <span>Mahasiswa</span></a>
         </li>
-        <li class="nav-item <%= path == "/admin/admin" ? "active" : "" %>">
+
+        <li class="nav-item <%= path === `/${user.role}/dosen` ? "active" : "" %>">
+            <a class="nav-link" href="<%= APP_URL %>dosen">
+                <span>Dosen</span></a>
+        </li>
+        <li class="nav-item <%= path === `/${user.role}/admin` ? "active" : "" %>">
             <a class="nav-link" href="<%= APP_URL %>admin">
                 <span>Admin</span></a>
+        </li>
+    <% } %>
+
+    <% if (user.role === 'dosen') { %>
+        <li class="nav-item <%= path === `/${user.role}/penelitian` ? "active" : "" %>">
+            <a class="nav-link" href="<%= APP_URL %>penelitian">
+                <span>Penelitian </span></a>
+        </li>
+
+        <li class="nav-item <%= path === `/${user.role}/kategori` ? "active" : "" %>">
+            <a class="nav-link" href="<%= APP_URL %>kategori">
+                <span>Kategori</span></a>
+        </li>
+
+        <li class="nav-item <%= path === `/${user.role}/mahasiswa` ? "active" : "" %>">
+            <a class="nav-link" href="<%= APP_URL %>mahasiswa">
+                <span>Mahasiswa</span></a>
         </li>
     <% } %>
 
