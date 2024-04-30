@@ -139,7 +139,7 @@ $(document).ready(function () {
             {data: 'nama_proposal', title: 'Judul Proposal', searchable: true, orderable: true},
             {
                 data: 'biaya_yang_diajukan',
-                title: 'Biaya Yang Di Ajukan',
+                title: 'Biaya yang Diajukan',
                 searchable: true,
                 orderable: true,
                 render: data => new Intl.NumberFormat('id-ID', {
@@ -150,7 +150,7 @@ $(document).ready(function () {
             },
             {
                 data: 'biaya_yang_disetujui',
-                title: 'Biaya Yang Di Setujui',
+                title: 'Biaya yang Disetujui',
                 searchable: true,
                 orderable: true,
                 render: data => new Intl.NumberFormat('id-ID', {
