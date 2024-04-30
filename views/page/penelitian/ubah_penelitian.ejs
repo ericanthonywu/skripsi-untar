@@ -117,7 +117,7 @@
                         <% } %>
                     </div>
                     <div class="col-sm-12 col-md-6 col-lg-3">
-                        <label for="file_monef">3. File Monef</label>
+                        <label for="file_monef">3. File Monev</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" accept=".pdf, .doc, .docx"
                                    name="file_monef" <%= data.status == "Batal" ? "disabled" : "" %>
@@ -142,9 +142,9 @@
                                    for="file_proposal"><%= list_proposal.file_laporan_akhir?.original_filename ?? 'Upload file' %></label>
                         </div>
                         <% if (list_proposal.file_laporan_akhir?.file) { %>
-                            <a href="<%= list_proposal.file_monef?.file %>" target="_blank"
+                            <a href="<%= list_proposal.file_laporan_akhir?.file %>" target="_blank"
                                class="small">Lihat File</a>
-                        <% } else if (!list_proposal.file_monef?.file) { %>
+                        <% } else if (!list_proposal.file_laporan_akhir?.file) { %>
                             <span class="text-danger small">Harus upload file sebelumnya terlebih dahulu</span>
                         <% } %>
                     </div>
