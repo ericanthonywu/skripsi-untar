@@ -21,13 +21,21 @@ exports.getPenelitian = (search, offset, limit, sort_column = 'created_at', sort
         .join('master_subkategori_penelitian', 'master_subkategori_penelitian.id', 'penelitian.id_subkategori_penelitian')
         .join('master_kategori_penelitian', 'master_kategori_penelitian.id', 'master_subkategori_penelitian.id_master_kategori_penelitian')
         .join('dosen', 'dosen.id', 'penelitian.ketua_dosen_penelitian')
-        .offset(offset)
-        .limit(limit)
         .orderBy(sort_column, sort_direction)
-        .where('nama_proposal', 'ILIKE', `${search}%`)
 
+    if (search) {
+        query.where(q =>
+            q.where('nama_proposal', 'ILIKE', `%${search}%`)
+                .orWhere('status', 'ILIKE', `%${search}%`)
+        )
+    }
     if (dosen_id) {
         query.where('ketua_dosen_penelitian', dosen_id)
+    }
+
+    if (limit != "-1") {
+        query.offset(offset)
+            .limit(limit)
     }
 
     return query
@@ -44,7 +52,10 @@ exports.getTotalPenelitian = async (dosen_id, search) => {
     }
 
     if (search) {
-        query.where('nama_proposal', 'ILIKE', `${search}%`)
+        query.where(q =>
+            q.where('nama_proposal', 'ILIKE', `%${search}%`)
+                .orWhere('status', 'ILIKE', `%${search}%`)
+        )
     }
 
     const data = await query

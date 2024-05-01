@@ -16,7 +16,7 @@ exports.getMahasiswaDatatable = async (search, offset, limit, sort_column, sort_
 
 exports.getDosenDatatable = async (search, offset, limit, sort_column, sort_direction) => {
     const data = await dosenRepository.getDosen(search, offset, limit, sort_column, sort_direction)
-    const {total: total_data} = await dosenRepository.getTotalDosen()
+    const {total: total_data} = await dosenRepository.getTotalDosen(search)
 
     return {
         data, total_data

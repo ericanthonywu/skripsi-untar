@@ -140,34 +140,6 @@ $(document).ready(function () {
         })
     })
 
-    $('form#submit_dosen').on('submit', function (e) {
-        e.preventDefault()
-        const data = $(this).serialize()
-        $.ajax({
-            url: `${base_api_url}dosen`,
-            method: 'POST',
-            data,
-            success: () => {
-                toastr.info('Data Dosen Berhasil Ditambah', 'Sukses')
-                setTimeout(() => location.href = `/dosen/dosen`, 1500)
-            }
-        })
-    })
-
-    $('form#ubah_dosen').on('submit', function (e) {
-        e.preventDefault()
-        const data = $(this).serialize()
-        $.ajax({
-            url: `${base_api_url}dosen`,
-            method: 'PATCH',
-            data,
-            success: () => {
-                toastr.info('Data Dosen Berhasil Diubah', 'Sukses')
-                setTimeout(() => location.href = `/dosen/dosen`, 1500)
-            }
-        })
-    })
-
     $('form#submit_mahasiswa').on('submit', function (e) {
         e.preventDefault()
         const data = $(this).serialize()
@@ -178,34 +150,6 @@ $(document).ready(function () {
             success: () => {
                 toastr.info('Data Mahasiswa Berhasil Ditambah', 'Sukses')
                 setTimeout(() => location.href = `/dosen/mahasiswa`, 1500)
-            }
-        })
-    })
-
-    $('form#submit_admin').on('submit', function (e) {
-        e.preventDefault()
-        const data = $(this).serialize()
-        $.ajax({
-            url: `${base_api_url}admin`,
-            method: 'POST',
-            data,
-            success: () => {
-                toastr.info('Data Admin Berhasil Ditambah', 'Sukses')
-                setTimeout(() => location.href = `/dosen/admin`, 1500)
-            }
-        })
-    })
-
-    $('form#ubah_admin').on('submit', function (e) {
-        e.preventDefault()
-        const data = $(this).serialize()
-        $.ajax({
-            url: `${base_api_url}admin`,
-            method: 'PATCH',
-            data,
-            success: () => {
-                toastr.info('Data Admin Berhasil Diubah', 'Sukses')
-                setTimeout(() => location.href = `/dosen/admin`, 1500)
             }
         })
     })

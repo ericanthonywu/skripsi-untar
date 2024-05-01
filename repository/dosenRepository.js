@@ -21,20 +21,37 @@ exports.getDosenById = async (id) =>
         .first("id", "nama_dosen", "nomor_induk_dosen_nasional", 'nomor_induk_pegawai', 'email')
         .where({id})
 
-exports.getDosen = async (search, offset, limit, sort_column, sort_direction) =>
-    await db("dosen")
+exports.getDosen = async (search, offset, limit, sort_column, sort_direction) => {
+    const query = db("dosen")
         .select("id", "nama_dosen", "nomor_induk_dosen_nasional", 'nomor_induk_pegawai', 'email')
-        .offset(offset)
-        .limit(limit)
         .orderBy(sort_column, sort_direction)
         .where(q => q.where('nama_dosen',
-            'ILIKE', `${search}%`)
+            'ILIKE', `%${search}%`)
             .orWhere('nomor_induk_dosen_nasional', 'ILIKE',
                 `%${search}%`)
+            .orWhere('nomor_induk_pegawai', 'ILIKE',
+                `%${search}%`)
+            .orWhere('email', 'ILIKE',
+                `%${search}%`)
         )
+    if (limit != "-1") {
+        query.offset(offset)
+            .limit(limit)
+    }
 
-exports.getTotalDosen = async () =>
-    await db("dosen").count("id as total").first()
+    return await query
+}
+
+exports.getTotalDosen = async (search) =>
+    await db("dosen").count("id as total").where(q => q.where('nama_dosen',
+        'ILIKE', `%${search}%`)
+        .orWhere('nomor_induk_dosen_nasional', 'ILIKE',
+            `%${search}%`)
+        .orWhere('nomor_induk_pegawai', 'ILIKE',
+            `%${search}%`)
+        .orWhere('email', 'ILIKE',
+            `%${search}%`)
+    ).first()
 
 exports.addDosen = async data => await db('dosen').insert(data)
 

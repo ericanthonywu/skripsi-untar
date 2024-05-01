@@ -5,7 +5,7 @@ $(document).ready(function () {
         language: {
             emptyTable: "Data tidak tersedia",
             zeroRecords: "Tidak ditemukan data yang cocok",
-            search: "Cari berdasarkan nama atau nidn dosen: "
+            search: "Cari: "
         },
         ajax: {
             url: `${base_table}dosen`,
@@ -19,6 +19,40 @@ $(document).ready(function () {
                 delete d.order;
             }
         },
+        dom: 'lBfrtip',
+        lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+        buttons: [
+            {
+                extend: 'excel',
+                exportOptions: {
+                    columns: ':not(:last)' // Exclude the last column
+                }
+            },
+            {
+                extend: 'copy',
+                exportOptions: {
+                    columns: ':not(:last)' // Exclude the last column
+                }
+            },
+            {
+                extend: 'csv',
+                exportOptions: {
+                    columns: ':not(:last)',
+                }
+            },
+            {
+                extend: 'pdf',
+                exportOptions: {
+                    columns: ':not(:last)',
+                }
+            },
+            {
+                extend: 'print',
+                exportOptions: {
+                    columns: ':not(:last)',
+                }
+            }
+        ],
         columns: [
             {
                 data: 'id', title: 'No', orderable: false, searchable: false, render: (data, type, row, meta) =>
@@ -81,7 +115,8 @@ $(document).ready(function () {
     const penelitianDataTable = $('#penelitian-dataTable').DataTable({
         processing: true,
         serverSide: true,
-        dom: 'Bfrtip',
+        dom: 'lBfrtip',
+        lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
         buttons: [
             {
                 extend: 'excel',
@@ -117,7 +152,7 @@ $(document).ready(function () {
         language: {
             emptyTable: "Data tidak tersedia",
             zeroRecords: "Tidak ditemukan data yang cocok",
-            search: "Cari Berdasarkan Judul Proposal: "
+            search: "Cari Berdasarkan Judul Proposal atau status: "
         },
         ajax: {
             url: `${base_table}penelitian`,
