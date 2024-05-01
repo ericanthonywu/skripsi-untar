@@ -31,7 +31,7 @@ exports.addDosen = async data => {
 exports.addMultipleDosen = async data => {
     const datas = []
     let i = 1
-    for (const {password, nama_dosen, nomor_induk_dosen_nasional, nomor_induk_pegawai} of data) {
+    for (const {password, nama_dosen, nomor_induk_dosen_nasional, nomor_induk_pegawai, email} of data) {
         if (!password) {
             throw new ServiceError(`password tidak terisi pada row ${i}`, HTTP_STATUS.BAD_REQUEST)
         }
@@ -52,6 +52,7 @@ exports.addMultipleDosen = async data => {
             nama_dosen,
             nomor_induk_dosen_nasional,
             nomor_induk_pegawai,
+            email,
             password: await bcrypt.hash(password, await bcrypt.genSalt())
         })
         i++
