@@ -286,6 +286,7 @@ $(document).ready(function () {
     })
 
     let mahasiswaTimeout = null
+
     $(document).on('keyup', '.input-mahasiswa', function (e) {
         clearTimeout(mahasiswaTimeout)
         const val = $(this).val()

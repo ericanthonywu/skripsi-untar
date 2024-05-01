@@ -57,13 +57,18 @@
                                 <%= data.status == "Batal" ? "disabled" : "" %>
                                 required>
                             <option value="">- Pilih Tipe Periode -</option>
-                            <option value="periode_1" <%= moment(data.periode_awal).month() + 1 === 2 ? "selected" : "" %>>Periode 1 (feb - juni)</option>
-                            <option value="periode_2" <%= moment(data.periode_awal).month() + 1 === 8 ? "selected" : "" %>>Periode 2 (agustus - januari)</option>
+                            <option value="periode_1" <%= moment(data.periode_awal).month() + 1 === 2 ? "selected" : "" %>>
+                                Periode 1 (feb - juni)
+                            </option>
+                            <option value="periode_2" <%= moment(data.periode_awal).month() + 1 === 8 ? "selected" : "" %>>
+                                Periode 2 (agustus - januari)
+                            </option>
                         </select>
                     </div>
                     <div class="col-sm-5">
-                        <input type="text" required name="periode_tahun" class="form-control year-picker" <%= data.status == "Batal" ? "disabled" : "" %>
-                                value="<%= moment(data.periode_awal).year() %>"
+                        <input type="text" required name="periode_tahun"
+                               class="form-control year-picker" <%= data.status == "Batal" ? "disabled" : "" %>
+                               value="<%= moment(data.periode_awal).year() %>"
                                id="periode_akhir" placeholder="Tahun Periode">
                     </div>
                 </div>
@@ -96,7 +101,8 @@
                     <div class="col-sm-12 col-md-6 col-lg-2">
                         <label for="file_proposal">1. File Proposal</label>
                         <div class="custom-file">
-                            <input type="file" accept=".pdf, .doc, .docx" class="custom-file-input" <%= data.status == "Batal" ? "disabled" : "" %>
+                            <input type="file" accept=".pdf, .doc, .docx"
+                                   class="custom-file-input" <%= data.status == "Batal" ? "disabled" : "" %>
                                    name="file_proposal" id="file_proposal">
                             <label class="custom-file-label"
                                    for="file_proposal"><%= list_proposal.file_proposal?.original_filename %></label>
@@ -106,7 +112,8 @@
                     <div class="col-sm-12 col-md-6 col-lg-3">
                         <label for="surat_perjanjian_kerjasama">2. Surat Perjanjian Kerjasama</label>
                         <div class="custom-file">
-                            <input type="file" accept=".pdf, .doc, .docx" class="custom-file-input" name="surat_perjanjian_kerjasama"
+                            <input type="file" accept=".pdf, .doc, .docx" class="custom-file-input"
+                                   name="surat_perjanjian_kerjasama"
                                    id="surat_perjanjian_kerjasama" <%= data.status == "Batal" ? "disabled" : "" %>>
                             <label class="custom-file-label"
                                    for="file_proposal"><%= list_proposal.surat_perjanjian_kerjasama?.original_filename ?? 'Upload file' %></label>
@@ -137,14 +144,14 @@
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" accept=".pdf, .doc, .docx"
                                    name="file_laporan_kemajuan" <%= data.status == "Batal" ? "readonly" : "" %>
-                                   id="file_laporan_kemajuan" <%= list_proposal.file_monef?.original_filename ? '' : 'disabled' %> <%= data.status == "Batal" ? "disabled" : "" %>>
+                                   id="file_laporan_kemajuan" <%= list_proposal.file_laporan_kemajuan?.original_filename ? '' : 'disabled' %> <%= data.status == "Batal" ? "disabled" : "" %>>
                             <label class="custom-file-label"
-                                   for="file_proposal"><%= list_proposal.file_laporan_akhir?.original_filename ?? 'Upload file' %></label>
+                                   for="file_proposal"><%= list_proposal.file_laporan_kemajuan?.original_filename ?? 'Upload file' %></label>
                         </div>
-                        <% if (list_proposal.file_laporan_akhir?.file) { %>
-                            <a href="<%= list_proposal.file_laporan_akhir?.file %>" target="_blank"
+                        <% if (list_proposal.file_laporan_kemajuan?.file) { %>
+                            <a href="<%= list_proposal.file_laporan_kemajuan?.file %>" target="_blank"
                                class="small">Lihat File</a>
-                        <% } else if (!list_proposal.file_laporan_akhir?.file) { %>
+                        <% } else if (!list_proposal.file_monef?.file) { %>
                             <span class="text-danger small">Harus upload file sebelumnya terlebih dahulu</span>
                         <% } %>
                     </div>
@@ -153,14 +160,14 @@
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" accept=".pdf, .doc, .docx"
                                    name="file_laporan_akhir" <%= data.status == "Batal" ? "readonly" : "" %>
-                                   id="file_laporan_akhir" <%= list_proposal.file_monef?.original_filename ? '' : 'disabled' %> <%= data.status == "Batal" ? "disabled" : "" %>>
+                                   id="file_laporan_akhir" <%= list_proposal.file_laporan_kemajuan?.original_filename ? '' : 'disabled' %> <%= data.status == "Batal" ? "disabled" : "" %>>
                             <label class="custom-file-label"
                                    for="file_proposal"><%= list_proposal.file_laporan_akhir?.original_filename ?? 'Upload file' %></label>
                         </div>
                         <% if (list_proposal.file_laporan_akhir?.file) { %>
                             <a href="<%= list_proposal.file_laporan_akhir?.file %>" target="_blank"
                                class="small">Lihat File</a>
-                        <% } else if (!list_proposal.file_laporan_akhir?.file) { %>
+                        <% } else if (!list_proposal.file_laporan_kemajuan?.file) { %>
                             <span class="text-danger small">Harus upload file sebelumnya terlebih dahulu</span>
                         <% } %>
                     </div>
@@ -172,7 +179,7 @@
                                class="form-control input-dosen"
                                placeholder="Masukkan NIDN Dosen Ketua Penelitian" <%= data.status == "Batal" ? "disabled" : "" %>
                                required value="<%= data.ketua_dosen_penelitian %>">
-                        <span class="small text-success">NIDN tersedia</span>
+                        <span class="small text-success">NIDN milik <%= data.nama_ketua_dosen_penelitian %></span>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -199,14 +206,14 @@
                             <%
                             }
                             let iDosen = 0;
-                                    for (const nisn of list_dosen) {
+                                    for (const {nidn, nama_dosen} of list_dosen) {
                             %>
                                 <div class="col-sm-10">
                                     <input type="text" name="list_dosen[]" class="form-control input-dosen"
                                            placeholder="Masukan NISN Dosen"
-                                           value="<%= nisn %>" <%= data.status == "Batal" ? "disabled" : "" %>
-                                           required>
-                                    <span class="small text-success">NIDN tersedia</span>
+                                           value="<%= nidn %>" <%= data.status == "Batal" ? "disabled" : "" %>
+                                    >
+                                    <span class="small text-success">NIDN milik <%= nama_dosen %></span>
                                 </div>
                                 <div class="col-sm-2">
                                     <% if (data.status !== "Batal") { %>
@@ -246,13 +253,13 @@
                             <%
                             }
                             let iMahasiswa = 0;
-                                    for (const nim of list_mahasiswa) {
+                                    for (const {nim, nama_mahasiswa} of list_mahasiswa) {
                             %>
                                 <div class="col-sm-10">
                                     <input type="text" name="list_mahasiswa[]"
                                            class="form-control input-mahasiswa" <%= data.status == "Batal" ? "disabled" : "" %>
-                                           placeholder="Masukan NIM Mahasiswa" value="<%= nim %>" required>
-                                    <span class="small text-success">NIM tersedia</span>
+                                           placeholder="Masukan NIM Mahasiswa" value="<%= nim %>">
+                                    <span class="small text-success">NIM milik <%= nama_mahasiswa %></span>
                                 </div>
                                 <div class="col-sm-2">
                                     <% if (data.status !== "Batal") { %>

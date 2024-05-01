@@ -8,9 +8,19 @@ exports.checkJudulPenelitian = async judul =>
 
 exports.getPenelitian = (search, offset, limit, sort_column = 'created_at', sort_direction = 'asc', dosen_id = 0) => {
     const query = db("penelitian")
-        .select("penelitian.id", "nama_proposal", "biaya_yang_disetujui", "biaya_yang_diajukan", 'periode_awal', 'periode_akhir', 'master_kategori_penelitian.nama as kategori_penelitian', 'master_subkategori_penelitian.nama as subkategori_penelitian', 'status', 'status_updated_at')
+        .select("penelitian.id",
+            "nama_proposal",
+            "biaya_yang_disetujui",
+            "biaya_yang_diajukan",
+            'periode_awal',
+            'periode_akhir',
+            'master_kategori_penelitian.nama as kategori_penelitian',
+            'master_subkategori_penelitian.nama as subkategori_penelitian',
+            'status',
+            'dosen.nama_dosen as ketua_penelitian')
         .join('master_subkategori_penelitian', 'master_subkategori_penelitian.id', 'penelitian.id_subkategori_penelitian')
         .join('master_kategori_penelitian', 'master_kategori_penelitian.id', 'master_subkategori_penelitian.id_master_kategori_penelitian')
+        .join('dosen', 'dosen.id', 'penelitian.ketua_dosen_penelitian')
         .offset(offset)
         .limit(limit)
         .orderBy(sort_column, sort_direction)
@@ -198,7 +208,8 @@ exports.getPenelitianById = async id =>
             'master_subkategori_penelitian.id as subkategori',
             'master_kategori_penelitian.id as kategori',
             'status',
-            'dosen.nomor_induk_dosen_nasional as ketua_dosen_penelitian'
+            'dosen.nomor_induk_dosen_nasional as ketua_dosen_penelitian',
+            'dosen.nama_dosen as nama_ketua_dosen_penelitian',
         )
         .where('penelitian.id', id)
         .join('master_subkategori_penelitian', 'master_subkategori_penelitian.id', 'penelitian.id_subkategori_penelitian')
@@ -208,14 +219,14 @@ exports.getPenelitianById = async id =>
 exports.getAnggotaDosenByPenelitianId = async id_penelitian =>
     await db('anggota_penelitian')
         .leftJoin('dosen', 'dosen.id', 'anggota_penelitian.id_dosen')
-        .pluck('dosen.nomor_induk_dosen_nasional')
+        .select('dosen.nomor_induk_dosen_nasional as nidn', 'nama_dosen')
         .where({id_penelitian})
         .whereNotNull('dosen.nomor_induk_dosen_nasional')
 
 exports.getAnggotaMahasiswaByPenelitianId = async id_penelitian =>
     await db('anggota_penelitian')
         .leftJoin('mahasiswa', 'mahasiswa.id', 'anggota_penelitian.id_mahasiswa')
-        .pluck('mahasiswa.nomor_induk_mahasiswa')
+        .select('mahasiswa.nomor_induk_mahasiswa as nim', 'nama_mahasiswa')
         .where({id_penelitian})
         .whereNotNull('mahasiswa.nomor_induk_mahasiswa')
 

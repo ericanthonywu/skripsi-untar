@@ -189,6 +189,12 @@ $(document).ready(function () {
                 orderable: true,
             },
             {
+                data: 'ketua_penelitian',
+                title: 'Ketua Dosen Penelitian',
+                searchable: true,
+                orderable: true,
+            },
+            {
                 data: 'id', title: 'Aksi', orderable: false, searchable: false, render: (data, _type, row) => {
                     return `
                          <a href="${base_url}penelitian/ubah/${data}"  class="btn btn-primary"> Ubah </a>

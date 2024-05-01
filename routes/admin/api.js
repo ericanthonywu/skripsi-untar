@@ -51,15 +51,23 @@ router.post('/penelitian', authMiddleware, adminRoleMiddleware, multerMultipleFi
         name: 'file_proposal',
         dest: 'file_proposal',
         maxCount: 1
-    }, {
+    },
+    {
         name: 'surat_perjanjian_kerjasama',
         dest: 'surat_perjanjian_kerjasama',
         maxCount: 1
-    }, {
+    },
+    {
         name: 'file_monef',
         dest: 'file_monef',
         maxCount: 1
-    }, {
+    },
+    {
+        name: 'file_laporan_kemajuan',
+        dest: 'file_laporan_kemajuan',
+        maxCount: 1
+    },
+    {
         name: 'file_laporan_akhir',
         dest: 'file_laporan_akhir',
         maxCount: 1
@@ -71,20 +79,27 @@ router.patch('/penelitian', authMiddleware, adminRoleMiddleware, multerMultipleF
         name: 'file_proposal',
         dest: 'file_proposal',
         maxCount: 1
-    }, {
+    },
+    {
         name: 'surat_perjanjian_kerjasama',
         dest: 'surat_perjanjian_kerjasama',
         maxCount: 1
-    }, {
+    },
+    {
         name: 'file_monef',
         dest: 'file_monef',
         maxCount: 1
-    }, {
+    },
+    {
+        name: 'file_laporan_kemajuan',
+        dest: 'file_laporan_kemajuan',
+        maxCount: 1
+    },
+    {
         name: 'file_laporan_akhir',
         dest: 'file_laporan_akhir',
         maxCount: 1
-    }
-]), ubahPenelitianController)
+    }]), ubahPenelitianController)
 
 router.patch('/penelitian/cancel/:id', authMiddleware, adminRoleMiddleware, cancelPenelitianController)
 
