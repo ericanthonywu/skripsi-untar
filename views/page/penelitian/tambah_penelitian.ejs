@@ -82,7 +82,7 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <div class="col-sm-12 col-md-6 col-lg-3">
+                    <div class="col-sm-12 col-md-6 col-lg-2">
                         <label for="file_proposal">1. File Proposal</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" name="file_proposal" id="file_proposal"
@@ -101,7 +101,7 @@
                         </div>
                         <span class="text-danger small">Harus upload file sebelumnya terlebih dahulu</span>
                     </div>
-                    <div class="col-sm-12 col-md-6 col-lg-3">
+                    <div class="col-sm-12 col-md-6 col-lg-2">
                         <label for="file_monef">3. File Monev</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" name="file_monef" id="file_monef"
@@ -111,7 +111,17 @@
                         <span class="text-danger small">Harus upload file sebelumnya terlebih dahulu</span>
                     </div>
                     <div class="col-sm-12 col-md-6 col-lg-3">
-                        <label for="file_laporan_akhir">4. File Laporan Akhir</label>
+                        <label for="file_laporan_kemajuan">4. File Laporan Kemajuan</label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" name="file_laporan_kemajuan"
+                                   accept=".pdf, .doc, .docx"
+                                   id="file_laporan_kemajuan" disabled>
+                            <label class="custom-file-label" for="file_proposal">Upload file</label>
+                        </div>
+                        <span class="text-danger small">Harus upload file sebelumnya terlebih dahulu</span>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-2">
+                        <label for="file_laporan_akhir">5. File Laporan Akhir</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" name="file_laporan_akhir"
                                    accept=".pdf, .doc, .docx"
@@ -130,7 +140,7 @@
                                value="<%= ketua_dosen_penelitian ? ketua_dosen_penelitian.nomor_induk_dosen_nasional : "" %>"
                                <%= ketua_dosen_penelitian ? "readonly" : "" %>
                                required>
-                        <%= !ketua_dosen_penelitian ? `<span class="text-danger">Mohon masukkan NIDN Dosen Ketua Penelitian</span>` : ""  %>
+                        <%- !ketua_dosen_penelitian ? `<span class="text-danger">Mohon masukkan NIDN Dosen Ketua Penelitian</span>` : ""  %>
                     </div>
                 </div>
                 <div class="form-group row">

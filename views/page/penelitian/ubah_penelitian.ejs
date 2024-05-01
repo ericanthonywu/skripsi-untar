@@ -93,7 +93,7 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <div class="col-sm-12 col-md-6 col-lg-3">
+                    <div class="col-sm-12 col-md-6 col-lg-2">
                         <label for="file_proposal">1. File Proposal</label>
                         <div class="custom-file">
                             <input type="file" accept=".pdf, .doc, .docx" class="custom-file-input" <%= data.status == "Batal" ? "disabled" : "" %>
@@ -116,7 +116,7 @@
                                class="small">Lihat File</a>
                         <% } %>
                     </div>
-                    <div class="col-sm-12 col-md-6 col-lg-3">
+                    <div class="col-sm-12 col-md-6 col-lg-2">
                         <label for="file_monef">3. File Monev</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" accept=".pdf, .doc, .docx"
@@ -133,7 +133,23 @@
                         <% } %>
                     </div>
                     <div class="col-sm-12 col-md-6 col-lg-3">
-                        <label for="file_laporan_akhir">4. File Laporan Akhir</label>
+                        <label for="file_laporan_kemajuan">4. File Laporan Kemajuan</label>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" accept=".pdf, .doc, .docx"
+                                   name="file_laporan_kemajuan" <%= data.status == "Batal" ? "readonly" : "" %>
+                                   id="file_laporan_kemajuan" <%= list_proposal.file_monef?.original_filename ? '' : 'disabled' %> <%= data.status == "Batal" ? "disabled" : "" %>>
+                            <label class="custom-file-label"
+                                   for="file_proposal"><%= list_proposal.file_laporan_akhir?.original_filename ?? 'Upload file' %></label>
+                        </div>
+                        <% if (list_proposal.file_laporan_akhir?.file) { %>
+                            <a href="<%= list_proposal.file_laporan_akhir?.file %>" target="_blank"
+                               class="small">Lihat File</a>
+                        <% } else if (!list_proposal.file_laporan_akhir?.file) { %>
+                            <span class="text-danger small">Harus upload file sebelumnya terlebih dahulu</span>
+                        <% } %>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-2">
+                        <label for="file_laporan_akhir">5. File Laporan Akhir</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" accept=".pdf, .doc, .docx"
                                    name="file_laporan_akhir" <%= data.status == "Batal" ? "readonly" : "" %>

@@ -1,5 +1,7 @@
 const db = require("../config/database/connection")
 const {checkExistsTable} = require("../util");
+const ServiceError = require("../exception/errorException");
+const {HTTP_STATUS} = require("../constant/httpStatusConstant");
 
 exports.checkJudulPenelitian = async judul =>
     await checkExistsTable(db("penelitian").where({nama_proposal: judul}))
@@ -135,17 +137,16 @@ exports.addPenelitian = async (data, anggota, dokumen) => {
                 data.status = 'Di Ajukan'
                 break
             case 2:
-                data.status = 'Di Setujui'
-                break
             case 3:
+            case 4:
                 data.status = 'Di Setujui'
                 break
-            case 4:
+            case 5:
                 data.status = 'Selesai'
                 break
             default:
                 await trx.rollback()
-                throw new Error(`dokumen length is ${dokumen.length}`)
+                throw new ServiceError(`dokumen length is ${dokumen.length}`, HTTP_STATUS.BAD_REQUEST)
         }
 
         data.status_updated_at = trx.raw('CURRENT_TIMESTAMP')
@@ -278,18 +279,14 @@ exports.ubahPenelitian = async (id, data, anggota, dokumen) => {
                 }).where({id})
                 break
             case 2:
-                await trx('penelitian').update({
-                    status: 'Di Setujui',
-                    status_updated_at: trx.raw('CURRENT_TIMESTAMP')
-                }).where({id})
-                break
             case 3:
+            case 4:
                 await trx('penelitian').update({
                     status: 'Di Setujui',
                     status_updated_at: trx.raw('CURRENT_TIMESTAMP')
                 }).where({id})
                 break
-            case 4:
+            case 5:
                 await trx('penelitian').update({
                     status: 'Selesai',
                     status_updated_at: trx.raw('CURRENT_TIMESTAMP')

@@ -14,6 +14,8 @@ const app = express();
 require('dotenv').config()
 
 const db = require('././config/database/sessionConnection')
+const axios = require("axios");
+const {sync} = require("./utils/syncDataDosenUtil");
 app.use(session({
     store: new KnexSessionStore({
         knex: db,
@@ -73,7 +75,7 @@ app.use((req, res, next) => {
         sendResponse(res, data, status, error)
     next()
 })
-
+sync()
 app.use('/dosen', require('./routes/dosen/page'));
 app.use('/dosen/api', require('./routes/dosen/api'));
 
