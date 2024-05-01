@@ -31,21 +31,43 @@ exports.addDosen = async data => {
 exports.addMultipleDosen = async data => {
     const datas = []
     let i = 1
+    const errorList = []
+
+    const nomorIndukDosenNasionalSet = new Set();
+    const nomorIndukPegawaiSet = new Set();
+    const emailSet = new Set();
+
     for (const {password, nama_dosen, nomor_induk_dosen_nasional, nomor_induk_pegawai, email} of data) {
         if (!password) {
-            throw new ServiceError(`password tidak terisi pada row ${i}`, HTTP_STATUS.BAD_REQUEST)
+            errorList.push(`password tidak terisi pada row ${i}`)
         }
 
         if (!nama_dosen) {
-            throw new ServiceError(`nama_dosen tidak terisi pada row ${i}`, HTTP_STATUS.BAD_REQUEST)
+            errorList.push(`nama_dosen tidak terisi pada row ${i}`)
         }
 
         if (!nomor_induk_dosen_nasional) {
-            throw new ServiceError(`nomor_induk_dosen_nasional tidak terisi pada row ${i}`, HTTP_STATUS.BAD_REQUEST)
+            errorList.push(`nomor_induk_dosen_nasional tidak terisi pada row ${i}`)
+        } else if (nomorIndukDosenNasionalSet.has(nomor_induk_dosen_nasional)) {
+            errorList.push(`Duplicate nomor_induk_dosen_nasional pada row ${i}`)
+        } else {
+            nomorIndukDosenNasionalSet.add(nomor_induk_dosen_nasional);
         }
 
         if (!nomor_induk_pegawai) {
-            throw new ServiceError(`nomor_induk_pegawai tidak terisi pada row ${i}`, HTTP_STATUS.BAD_REQUEST)
+            errorList.push(`nomor_induk_pegawai tidak terisi pada row ${i}`)
+        } else if (nomorIndukPegawaiSet.has(nomor_induk_pegawai)) {
+            errorList.push(`Duplicate nomor_induk_pegawai pada row ${i}`)
+        } else {
+            nomorIndukPegawaiSet.add(nomor_induk_pegawai);
+        }
+
+        if (!email) {
+            errorList.push(`email tidak terisi pada row ${i}`)
+        } else if (emailSet.has(email)) {
+            errorList.push(`Duplicate email pada row ${i}`)
+        } else {
+            emailSet.add(nomor_induk_pegawai);
         }
 
         datas.push({
@@ -58,6 +80,9 @@ exports.addMultipleDosen = async data => {
         i++
     }
 
+    if (errorList.length > 0) {
+        throw new ServiceError(errorList.join("\n"), HTTP_STATUS.BAD_REQUEST)
+    }
     await dosenRepository.addBulkDosen(datas)
 }
 

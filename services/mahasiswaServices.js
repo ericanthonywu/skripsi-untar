@@ -16,16 +16,32 @@ exports.addMahasiswa = async data =>
 
 exports.addMultipleMahasiswa = async data => {
     let i = 1
+    const errorList = []
+
+    const nomorIndukMahasiswaSet = new Set();
+
     for (const {nama_mahasiswa, nomor_induk_mahasiswa} of data) {
         if (!nama_mahasiswa) {
-            throw new ServiceError(`nama_mahasiswa tidak terisi pada row ${i}`, HTTP_STATUS.BAD_REQUEST)
+            errorList.push(`nama_mahasiswa tidak terisi pada row ${i}`)
         }
 
         if (!nomor_induk_mahasiswa) {
-            throw new ServiceError(`nomor_induk_mahasiswa tidak terisi pada row ${i}`, HTTP_STATUS.BAD_REQUEST)
+            errorList.push(`nomor_induk_mahasiswa tidak terisi pada row ${i}`)
+        } else if (nomorIndukMahasiswaSet.has(nomor_induk_mahasiswa)) {
+            errorList.push(`Duplicate nomor_induk_mahasiswa pada row ${i}`)
+        } else if (await mahasiswaRepository.checkNimMahasiswaExists(nomor_induk_mahasiswa)) {
+            errorList.push(`Duplicate nomor_induk_mahasiswa pada row ${i}`)
+        } else {
+            nomorIndukMahasiswaSet.add(nomor_induk_mahasiswa)
         }
+
         i++
     }
+
+    if (errorList.length > 0) {
+        throw new ServiceError(errorList.join("\n"), HTTP_STATUS.BAD_REQUEST)
+    }
+
     await mahasiswaRepository.addMultipleMahasiswa(data)
 }
 
