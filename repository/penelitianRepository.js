@@ -29,8 +29,14 @@ exports.getPenelitian = (search, offset, limit, sort_column = 'created_at', sort
                 .orWhere('status', 'ILIKE', `%${search}%`)
         )
     }
+
     if (dosen_id) {
-        query.where('ketua_dosen_penelitian', dosen_id)
+        query
+            .join('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
+            .where(q =>
+            q.where('ketua_dosen_penelitian', dosen_id)
+                .orWhere('anggota_penelitian.id_dosen', dosen_id)
+        )
     }
 
     if (limit != "-1") {
@@ -48,7 +54,12 @@ exports.getTotalPenelitian = async (dosen_id, search) => {
     const query = db("penelitian")
 
     if (dosen_id) {
-        query.where('ketua_dosen_penelitian', dosen_id)
+        query
+            .join('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
+            .where(q =>
+                q.where('ketua_dosen_penelitian', dosen_id)
+                    .orWhere('anggota_penelitian.id_dosen', dosen_id)
+            )
     }
 
     if (search) {
@@ -60,6 +71,7 @@ exports.getTotalPenelitian = async (dosen_id, search) => {
 
     const data = await query
         .count('penelitian.id as total')
+        .distinct()
         .first()
 
     return data || 0
@@ -72,7 +84,7 @@ exports.getAnalyticPenelitian = async (year, dosen_id) => {
             'status',
             db.raw('EXTRACT(MONTH FROM periode_awal) AS month'),
             db.raw('EXTRACT(year FROM periode_awal) AS year'),
-            db.raw('count(id) as total'),
+            db.raw('count(penelitian.id) as total'),
         )
         .whereIn('status', ['Di Setujui', 'Selesai'])
         .groupBy('status')
@@ -82,7 +94,12 @@ exports.getAnalyticPenelitian = async (year, dosen_id) => {
         .orderBy('year')
 
     if (dosen_id) {
-        query.where('ketua_dosen_penelitian', dosen_id)
+        query
+            .join('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
+            .where(q =>
+                q.where('ketua_dosen_penelitian', dosen_id)
+                    .orWhere('anggota_penelitian.id_dosen', dosen_id)
+            )
     }
 
     return query
@@ -105,7 +122,12 @@ exports.getBiayaPenelitian = async (year, dosen_id) => {
         .orderBy('year')
 
     if (dosen_id) {
-        query.where('ketua_dosen_penelitian', dosen_id)
+        query
+            .join('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
+            .where(q =>
+                q.where('ketua_dosen_penelitian', dosen_id)
+                    .orWhere('anggota_penelitian.id_dosen', dosen_id)
+            )
     }
 
     return query
@@ -118,7 +140,12 @@ exports.getTotalPenelitianSelesai = async (dosen_id) => {
         .where({status: "Selesai"})
 
     if (dosen_id) {
-        query.where('ketua_dosen_penelitian', dosen_id)
+        query
+            .join('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
+            .where(q =>
+                q.where('ketua_dosen_penelitian', dosen_id)
+                    .orWhere('anggota_penelitian.id_dosen', dosen_id)
+            )
     }
 
     return query
@@ -131,7 +158,12 @@ exports.getTotalPenelitianBatal = async (dosen_id) => {
         .where({status: "Batal"})
 
     if (dosen_id) {
-        query.where('ketua_dosen_penelitian', dosen_id)
+        query
+            .join('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
+            .where(q =>
+                q.where('ketua_dosen_penelitian', dosen_id)
+                    .orWhere('anggota_penelitian.id_dosen', dosen_id)
+            )
     }
 
     return query

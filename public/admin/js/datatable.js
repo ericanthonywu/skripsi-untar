@@ -152,7 +152,7 @@ $(document).ready(function () {
         language: {
             emptyTable: "Data tidak tersedia",
             zeroRecords: "Tidak ditemukan data yang cocok",
-            search: "Cari Berdasarkan Judul Proposal atau status: "
+            search: "Cari Berdasarkan Judul Proposal atau Status: "
         },
         ajax: {
             url: `${base_table}penelitian`,
