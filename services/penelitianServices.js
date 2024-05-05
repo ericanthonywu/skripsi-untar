@@ -32,7 +32,7 @@ exports.getPenelitianAnalytic = async (year, dosen_id) => {
                             case 'Selesai':
                                 obj.jumlah_penelitian_selesai += Number(item.total);
                                 break;
-                            case 'Di Setujui':
+                            case 'Disetujui':
                                 obj.jumlah_penelitian_yang_disetujui += Number(item.total);
                                 break;
                         }
@@ -81,7 +81,7 @@ exports.getBiayaPenelitianAnalytic = async (year, dosen_id) => {
                             case 'Selesai':
                                 obj.jumlah_penelitian_selesai += Number(item.total);
                                 break;
-                            case 'Di Setujui':
+                            case 'Disetujui':
                                 obj.jumlah_penelitian_yang_disetujui += Number(item.total);
                                 break;
                         }

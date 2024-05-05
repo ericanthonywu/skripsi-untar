@@ -49,7 +49,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use('/admin/templates', express.static(path.join(__dirname, 'templates')));
+app.use('/templates', express.static(path.join(__dirname, 'templates')));
 
 app.use((req, res, next) => {
     const {user} = req.session

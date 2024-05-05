@@ -8,6 +8,9 @@ exports.checkNISNDosenExists = async nisn =>
 exports.checkEmailDosenExists = async email =>
     await checkExistsTable(db('dosen').where({email}))
 
+exports.checkNIPDosenExists = async nip =>
+    await checkExistsTable(db('dosen').where({nomor_induk_pegawai: nip}))
+
 exports.getDosenByEmail = async email =>
     await db('dosen').where({email})
         .first('id', 'password')

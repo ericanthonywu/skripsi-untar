@@ -1027,9 +1027,9 @@ COPY public.master_tipe_penelitian_dokumen (id, nama) FROM stdin;
 --
 
 COPY public.penelitian (id, nama_proposal, biaya_yang_disetujui, periode_awal, created_at, id_subkategori_penelitian, periode_akhir, status, status_updated_at, ketua_dosen_penelitian, biaya_yang_diajukan) FROM stdin;
-44	Pengenalan Karakter LED pada Alat Ukur Grip Analyzer menggunakan Connected Component Labeling dan KNN 	29950000	2019-02-01	2024-05-02 01:30:01.083551	1	2019-06-01	Di Setujui	2024-05-02 01:52:20.886411	989	30000000
-45	Sistem Pendeteksian Dan Pengenalan Ekspresi Wajah Dengan Algoritma Yolo Dan Convolutional Neural Network	10500000	2020-02-01	2024-05-02 01:53:45.115044	1	2020-06-01	Di Setujui	2024-05-02 01:53:45.115044	995	11000000
-46	Pembuatan Game Adventure “Detective Adventure”Menggunakan Unity Virtual Reality	8000000	2020-02-01	2024-05-02 01:54:59.400772	1	2020-06-01	Di Ajukan	2024-05-02 01:56:00.853327	997	10000000
+44	Pengenalan Karakter LED pada Alat Ukur Grip Analyzer menggunakan Connected Component Labeling dan KNN 	29950000	2019-02-01	2024-05-02 01:30:01.083551	1	2019-06-01	Disetujui	2024-05-02 01:52:20.886411	989	30000000
+45	Sistem Pendeteksian Dan Pengenalan Ekspresi Wajah Dengan Algoritma Yolo Dan Convolutional Neural Network	10500000	2020-02-01	2024-05-02 01:53:45.115044	1	2020-06-01	Disetujui	2024-05-02 01:53:45.115044	995	11000000
+46	Pembuatan Game Adventure “Detective Adventure”Menggunakan Unity Virtual Reality	8000000	2020-02-01	2024-05-02 01:54:59.400772	1	2020-06-01	Diajukan	2024-05-02 01:56:00.853327	997	10000000
 \.
 
 

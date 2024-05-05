@@ -11,8 +11,13 @@ exports.getAllMahasiswa = async () =>
 exports.getMahasiswaById = async (id) =>
     await mahasiswaRepository.getMahasiswaById(id)
 
-exports.addMahasiswa = async data =>
+exports.addMahasiswa = async data => {
+    if (await mahasiswaRepository.checkNimMahasiswaExists(data.nomor_induk_mahasiswa)) {
+        throw new ServiceError("Nomor Induk Mahasiswa sudah tersedia", HTTP_STATUS.BAD_REQUEST)
+    }
+
     await mahasiswaRepository.addMahasiswa(data)
+}
 
 exports.addMultipleMahasiswa = async data => {
     let i = 1
@@ -45,8 +50,15 @@ exports.addMultipleMahasiswa = async data => {
     await mahasiswaRepository.addMultipleMahasiswa(data)
 }
 
-exports.updateMahasiswa = async data =>
+exports.updateMahasiswa = async data => {
+    const {nomor_induk_mahasiswa} = await mahasiswaRepository.getMahasiswaById(data.id)
+    if (nomor_induk_mahasiswa !== data.nomor_induk_mahasiswa) {
+        if (await mahasiswaRepository.checkNimMahasiswaExists(data.nomor_induk_mahasiswa)) {
+            throw new ServiceError("Nomor Induk Mahasiswa sudah tersedia", HTTP_STATUS.BAD_REQUEST)
+        }
+    }
     await mahasiswaRepository.updateMahasiswa(data)
+}
 
 exports.deleteMahasiswa = async id =>
     await mahasiswaRepository.deleteMahasiswa(id)

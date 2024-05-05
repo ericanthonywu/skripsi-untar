@@ -102,7 +102,7 @@ $(document).ready(async function () {
                 }
 
                 makeSeries("Jumlah Penelitian yang Selesai", "jumlah_penelitian_selesai", data, root.interfaceColors.get("positive"));
-                makeSeries("Jumlah Penelitian yang Di Setujui", "jumlah_penelitian_yang_disetujui", data, root.interfaceColors.get("primaryButton"));
+                makeSeries("Jumlah Penelitian yang Disetujui", "jumlah_penelitian_yang_disetujui", data, root.interfaceColors.get("primaryButton"));
             }
 
             generateChart(data, tahun)
@@ -207,7 +207,7 @@ $(document).ready(async function () {
                 }
 
                 makeSeries("Jumlah Penelitian yang Selesai", "jumlah_penelitian_selesai", biayaData, rootBiayaChart.interfaceColors.get("positive"));
-                makeSeries("Jumlah Penelitian yang Sedang Di Setujui", "jumlah_penelitian_yang_disetujui", biayaData, rootBiayaChart.interfaceColors.get("primaryButton"));
+                makeSeries("Jumlah Penelitian yang Sedang Disetujui", "jumlah_penelitian_yang_disetujui", biayaData, rootBiayaChart.interfaceColors.get("primaryButton"));
             }
             generateBiayaChart(data, tahun)
 

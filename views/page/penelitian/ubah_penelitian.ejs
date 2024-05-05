@@ -21,14 +21,14 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="biaya_yang_diajukan" class="col-sm-2 col-form-label">Biaya Yang di Ajukan</label>
+                    <label for="biaya_yang_diajukan" class="col-sm-2 col-form-label">Biaya Yang Diajukan</label>
                     <div class="col-sm-10 input-group-prepend">
                         <span class="input-group-text"
                               style="border-bottom-right-radius: 0; border-top-right-radius: 0">Rp</span>
                         <input type="text"
                                class="form-control number ribuan" <%= data.status == "Batal" ? "readonly" : "" %>
                                id="biaya_yang_diajukan" data-id="biaya_yang_diajukan-value"
-                               placeholder="Masukan Biaya yang di Ajukan ..."
+                               placeholder="Masukan Biaya yang Diajukan ..."
                                value="<%= data.biaya_yang_diajukan.toLocaleString("id-ID") %>"
                                style="border-bottom-left-radius: 0; border-top-left-radius: 0" required>
                         <input type="hidden" class="form-control number" id="biaya_yang_diajukan-value"
@@ -36,14 +36,14 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="biaya_yang_disetujui" class="col-sm-2 col-form-label">Biaya Yang di Setujui</label>
+                    <label for="biaya_yang_disetujui" class="col-sm-2 col-form-label">Biaya Yang Disetujui</label>
                     <div class="col-sm-10 input-group-prepend">
                         <span class="input-group-text"
                               style="border-bottom-right-radius: 0; border-top-right-radius: 0">Rp</span>
                         <input type="text"
                                class="form-control number ribuan" <%= data.status == "Batal" ? "readonly" : "" %>
                                id="biaya_yang_disetujui" data-id="biaya_yang_disetujui-value"
-                               placeholder="Masukan Biaya yang di Setujui ..."
+                               placeholder="Masukan Biaya yang Disetujui ..."
                                value="<%= data.biaya_yang_disetujui.toLocaleString("id-ID") %>"
                                style="border-bottom-left-radius: 0; border-top-left-radius: 0" required>
                         <input type="hidden" class="form-control number" id="biaya_yang_disetujui-value"
@@ -144,7 +144,7 @@
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" accept=".pdf, .doc, .docx"
                                    name="file_laporan_kemajuan" <%= data.status == "Batal" ? "readonly" : "" %>
-                                   id="file_laporan_kemajuan" <%= list_proposal.file_laporan_kemajuan?.original_filename ? '' : 'disabled' %> <%= data.status == "Batal" ? "disabled" : "" %>>
+                                   id="file_laporan_kemajuan" <%= list_proposal.surat_perjanjian_kerjasama?.original_filename ? '' : 'disabled' %> <%= data.status == "Batal" ? "disabled" : "" %>>
                             <label class="custom-file-label"
                                    for="file_proposal"><%= list_proposal.file_laporan_kemajuan?.original_filename ?? 'Upload file' %></label>
                         </div>

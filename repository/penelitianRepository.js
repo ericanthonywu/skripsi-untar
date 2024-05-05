@@ -86,7 +86,7 @@ exports.getAnalyticPenelitian = async (year, dosen_id) => {
             db.raw('EXTRACT(year FROM periode_awal) AS year'),
             db.raw('count(penelitian.id) as total'),
         )
-        .whereIn('status', ['Di Setujui', 'Selesai'])
+        .whereIn('status', ['Disetujui', 'Selesai'])
         .groupBy('status')
         .groupBy('month')
         .groupBy('year')
@@ -114,7 +114,7 @@ exports.getBiayaPenelitian = async (year, dosen_id) => {
             db.raw('EXTRACT(year FROM periode_awal) AS year'),
             db.raw('sum(biaya_yang_disetujui) as total')
         )
-        .whereIn('status', ['Di Setujui', 'Selesai'])
+        .whereIn('status', ['Disetujui', 'Selesai'])
         .groupBy('status')
         .groupBy('month')
         .groupBy('year')
@@ -187,12 +187,12 @@ exports.addPenelitian = async (data, anggota, dokumen) => {
     try {
         switch (dokumen.length) {
             case 1:
-                data.status = 'Di Ajukan'
+                data.status = 'Diajukan'
                 break
             case 2:
             case 3:
             case 4:
-                data.status = 'Di Setujui'
+                data.status = 'Disetujui'
                 break
             case 5:
                 data.status = 'Selesai'
@@ -328,7 +328,7 @@ exports.ubahPenelitian = async (id, data, anggota, dokumen) => {
         switch (parseInt(total)) {
             case 1:
                 await trx('penelitian').update({
-                    status: 'Di Ajukan',
+                    status: 'Diajukan',
                     status_updated_at: trx.raw('CURRENT_TIMESTAMP')
                 }).where({id})
                 break
@@ -336,7 +336,7 @@ exports.ubahPenelitian = async (id, data, anggota, dokumen) => {
             case 3:
             case 4:
                 await trx('penelitian').update({
-                    status: 'Di Setujui',
+                    status: 'Disetujui',
                     status_updated_at: trx.raw('CURRENT_TIMESTAMP')
                 }).where({id})
                 break
