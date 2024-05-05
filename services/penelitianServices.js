@@ -3,7 +3,6 @@ const moment = require("moment");
 const fs = require("fs");
 const path = require("node:path");
 const _ = require("lodash");
-const {del} = require("express/lib/application");
 const ServiceError = require("../exception/errorException");
 const {HTTP_STATUS} = require("../constant/httpStatusConstant");
 
@@ -27,7 +26,7 @@ exports.getPenelitianAnalytic = async (year, dosen_id) => {
                         jumlah_penelitian_yang_disetujui: 0
                     };
 
-                    monthValue.forEach(item => {
+                    for (let item of monthValue) {
                         switch (item.status) {
                             case 'Selesai':
                                 obj.jumlah_penelitian_selesai += Number(item.total);
@@ -36,7 +35,7 @@ exports.getPenelitianAnalytic = async (year, dosen_id) => {
                                 obj.jumlah_penelitian_yang_disetujui += Number(item.total);
                                 break;
                         }
-                    });
+                    }
 
                     switch (monthKey) {
                         case '2':
@@ -76,7 +75,7 @@ exports.getBiayaPenelitianAnalytic = async (year, dosen_id) => {
                         jumlah_penelitian_yang_disetujui: 0,
                     };
 
-                    monthValue.forEach(item => {
+                    for (let item of monthValue) {
                         switch (item.status) {
                             case 'Selesai':
                                 obj.jumlah_penelitian_selesai += Number(item.total);
@@ -85,7 +84,7 @@ exports.getBiayaPenelitianAnalytic = async (year, dosen_id) => {
                                 obj.jumlah_penelitian_yang_disetujui += Number(item.total);
                                 break;
                         }
-                    });
+                    }
 
                     switch (monthKey) {
                         case '2':

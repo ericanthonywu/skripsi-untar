@@ -284,6 +284,7 @@ exports.ubahPenelitian = async (id, data, anggota, dokumen) => {
     const trx = await db.transaction()
     try {
         data.ketua_dosen_penelitian = trx('dosen').where({nomor_induk_dosen_nasional: data.ketua_dosen_penelitian}).first('id')
+        data.updated_at = trx.raw('current_timestamp')
 
         await trx('penelitian').update(data).where({id})
         await trx('anggota_penelitian')
@@ -312,13 +313,13 @@ exports.ubahPenelitian = async (id, data, anggota, dokumen) => {
                 original_filename: originalname
             }).where({
                 id_penelitian: id,
-                tipe_dokumen: db('master_tipe_penelitian_dokumen').where({nama: fieldname}).first('id'),
+                tipe_dokumen: trx('master_tipe_penelitian_dokumen').where({nama: fieldname}).first('id'),
             }) === 0) {
                 await trx('dokumen_penelitian').insert({
                     file: `/uploads/${fieldname}/${filename}`,
                     original_filename: originalname,
                     id_penelitian: id,
-                    tipe_dokumen: db('master_tipe_penelitian_dokumen').where({nama: fieldname}).first('id'),
+                    tipe_dokumen: trx('master_tipe_penelitian_dokumen').where({nama: fieldname}).first('id'),
                 });
             }
         }
