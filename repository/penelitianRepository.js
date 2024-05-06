@@ -36,9 +36,9 @@ exports.getPenelitian = (search, offset, limit, sort_column = 'created_at', sort
         query
             .join('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
             .where(q =>
-            q.where('ketua_dosen_penelitian', dosen_id)
-                .orWhere('anggota_penelitian.id_dosen', dosen_id)
-        )
+                q.where('ketua_dosen_penelitian', dosen_id)
+                    .orWhere('anggota_penelitian.id_dosen', dosen_id)
+            )
     }
 
     if (limit != "-1") {
@@ -308,23 +308,34 @@ exports.ubahPenelitian = async (id, data, anggota, dokumen) => {
         }
 
         for (const {fieldname, filename, originalname} of dokumen) {
-            const file = `/uploads/${fieldname}/${filename}`
-            if (await trx('dokumen_penelitian').update({
-                file,
-                original_filename: originalname
-            }).where({
+
+            const documentData = await trx('dokumen_penelitian').first(
+                'file'
+            ).where({
                 id_penelitian: id,
                 tipe_dokumen: trx('master_tipe_penelitian_dokumen').where({nama: fieldname}).first('id'),
-            }) === 0) {
+            })
+
+            if (documentData) {
+                try {
+                    fs.unlinkSync(path.join(__dirname, "../", documentData.file))
+                } catch (e) {
+                    console.log(e)
+                }
+                await trx('dokumen_penelitian').update({
+                    file: `/uploads/${fieldname}/${filename}`,
+                    original_filename: originalname
+                }).where({
+                    id_penelitian: id,
+                    tipe_dokumen: trx('master_tipe_penelitian_dokumen').where({nama: fieldname}).first('id'),
+                })
+            } else {
                 await trx('dokumen_penelitian').insert({
-                    file,
+                    file: `/uploads/${fieldname}/${filename}`,
                     original_filename: originalname,
                     id_penelitian: id,
                     tipe_dokumen: trx('master_tipe_penelitian_dokumen').where({nama: fieldname}).first('id'),
                 });
-            } else {
-                const paths = path.join(__dirname, `../`, file)
-                fs.unlinkSync(paths)
             }
         }
 
