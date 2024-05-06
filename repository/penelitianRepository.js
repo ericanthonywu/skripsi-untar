@@ -39,6 +39,7 @@ exports.getPenelitian = (search, offset, limit, sort_column = 'created_at', sort
                 q.where('ketua_dosen_penelitian', dosen_id)
                     .orWhere('anggota_penelitian.id_dosen', dosen_id)
             )
+            .distinct()
     }
 
     if (limit != "-1") {
@@ -62,6 +63,7 @@ exports.getTotalPenelitian = async (dosen_id, search) => {
                 q.where('ketua_dosen_penelitian', dosen_id)
                     .orWhere('anggota_penelitian.id_dosen', dosen_id)
             )
+
     }
 
     if (search) {
@@ -72,8 +74,7 @@ exports.getTotalPenelitian = async (dosen_id, search) => {
     }
 
     const data = await query
-        .count('penelitian.id as total')
-        .distinct()
+        .countDistinct('penelitian.id as total')
         .first()
 
     return data || 0
@@ -383,8 +384,30 @@ exports.deletePenelitian = async id => {
     await db('penelitian').where({id}).del()
 }
 
-exports.getMaxYear = async () =>
-    await db('penelitian').first().max(db.raw('EXTRACT(YEAR FROM periode_awal)')).as('max_year')
+exports.getMaxYear = async (dosen_id) => {
+    const query = db('penelitian').first().max(db.raw('EXTRACT(YEAR FROM periode_awal)')).as('max_year')
+    if (dosen_id) {
+        query
+            .join('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
+            .where(q =>
+                q.where('ketua_dosen_penelitian', dosen_id)
+                    .orWhere('anggota_penelitian.id_dosen', dosen_id)
+            )
+    }
 
-exports.getMinYear = async () =>
-    await db('penelitian').first().min(db.raw('EXTRACT(YEAR FROM periode_awal)')).as('min_year')
+    return query;
+}
+
+exports.getMinYear = async (dosen_id) => {
+    const query = db('penelitian').first().min(db.raw('EXTRACT(YEAR FROM periode_awal)')).as('min_year')
+    if (dosen_id) {
+        query
+            .join('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
+            .where(q =>
+                q.where('ketua_dosen_penelitian', dosen_id)
+                    .orWhere('anggota_penelitian.id_dosen', dosen_id)
+            )
+    }
+
+    return query;
+}

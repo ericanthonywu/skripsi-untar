@@ -29,7 +29,7 @@ const {
     checkNIMMahasiswaExists, checkNisnDosenExists,
 } = require("../../controller/api/ajaxApiController");
 const {multerMultipleFieldHandler, multerSingleFieldFileHandler} = require("../../middleware/fileMiddleware");
-const {authMiddleware, dosenRoleMiddleware, adminRoleMiddleware} = require("../../middleware/authMiddleware");
+const {authMiddleware, dosenRoleMiddleware} = require("../../middleware/authMiddleware");
 const {getPenelitian, getBiayaPenelitian} = require("../../controller/api/chartController");
 const router = express.Router();
 
@@ -37,17 +37,17 @@ router.get("/auth/migrate", migrateController)
 router.post("/auth/login", loginDosenController)
 router.get("/auth/logout", logoutController)
 
-router.get("/table/penelitian", authMiddleware, penelitianDatatableController)
-router.get("/table/mahasiswa", authMiddleware, mahasiswaDatatableController)
-router.get("/table/kategori", authMiddleware, kategoriDatatableController)
-router.get("/table/subkategori/:id", authMiddleware, subkategoriDatatableController)
+router.get("/table/penelitian", authMiddleware, dosenRoleMiddleware, penelitianDatatableController)
+router.get("/table/mahasiswa", authMiddleware, dosenRoleMiddleware, mahasiswaDatatableController)
+router.get("/table/kategori", authMiddleware, dosenRoleMiddleware, kategoriDatatableController)
+router.get("/table/subkategori/:id", authMiddleware, dosenRoleMiddleware, subkategoriDatatableController)
 
-router.get('/chart/penelitian/all/:year', authMiddleware, getPenelitian)
-router.get('/chart/penelitian/biaya/:year', authMiddleware, getBiayaPenelitian)
+router.get('/chart/penelitian/all/:year', authMiddleware, dosenRoleMiddleware, getPenelitian)
+router.get('/chart/penelitian/biaya/:year', authMiddleware, dosenRoleMiddleware, getBiayaPenelitian)
 
-router.get('/subkategori/:kategoriId', authMiddleware, getSubKategoriByKategoriIdController)
+router.get('/subkategori/:kategoriId', authMiddleware, dosenRoleMiddleware, getSubKategoriByKategoriIdController)
 
-router.post('/penelitian', authMiddleware, adminRoleMiddleware, multerMultipleFieldHandler([
+router.post('/penelitian', authMiddleware, dosenRoleMiddleware, multerMultipleFieldHandler([
     {
         name: 'file_proposal',
         dest: 'file_proposal',
@@ -101,17 +101,17 @@ router.patch('/penelitian', authMiddleware, multerMultipleFieldHandler([
         maxCount: 1
     }]), ubahPenelitianController)
 
-router.patch('/penelitian/cancel/:id', authMiddleware, cancelPenelitianController)
+router.patch('/penelitian/cancel/:id', authMiddleware, dosenRoleMiddleware, cancelPenelitianController)
 
-router.delete('/penelitian/:id', authMiddleware, deletePenelitianController)
+router.delete('/penelitian/:id', authMiddleware, dosenRoleMiddleware, deletePenelitianController)
 
-router.post('/kategori', authMiddleware, addKategoriController)
-router.patch('/kategori', authMiddleware, ubahKategoriController)
-router.delete('/kategori/:id', authMiddleware, deleteKategoriController)
+router.post('/kategori', authMiddleware, dosenRoleMiddleware, addKategoriController)
+router.patch('/kategori', authMiddleware, dosenRoleMiddleware, ubahKategoriController)
+router.delete('/kategori/:id', authMiddleware, dosenRoleMiddleware, deleteKategoriController)
 
-router.post('/subkategori', authMiddleware, addSubkategoriController)
-router.patch('/subkategori', authMiddleware, updateSubkategoriController)
-router.delete('/subkategori/:id', authMiddleware, deleteSubkategoriController)
+router.post('/subkategori', authMiddleware, dosenRoleMiddleware, addSubkategoriController)
+router.patch('/subkategori', authMiddleware, dosenRoleMiddleware, updateSubkategoriController)
+router.delete('/subkategori/:id', authMiddleware, dosenRoleMiddleware, deleteSubkategoriController)
 
 router.post('/mahasiswa', authMiddleware, dosenRoleMiddleware, addMahasiswa)
 router.post('/mahasiswa/excel', authMiddleware, dosenRoleMiddleware, multerSingleFieldFileHandler('/excel', 'file'), addMahasiswaByExcel)

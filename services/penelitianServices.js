@@ -166,9 +166,9 @@ exports.deletePenelitianServices = async id => {
     }
 }
 
-exports.getMaxAndMinYearServices = async () => {
-    const maxYear = await penelitianRepository.getMaxYear();
-    const minYear = await penelitianRepository.getMinYear();
+exports.getMaxAndMinYearServices = async (dosen_id) => {
+    const maxYear = await penelitianRepository.getMaxYear(dosen_id);
+    const minYear = await penelitianRepository.getMinYear(dosen_id);
     return {
         maxYear: maxYear.max,
         minYear: minYear.min

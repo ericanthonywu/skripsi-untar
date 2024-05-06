@@ -413,4 +413,24 @@ $(document).ready(function () {
             }
         });
     }
+
+    if ($('form#penelitian-excel-dropzone').length > 0) {
+        new Dropzone('form#penelitian-excel-dropzone', {
+            acceptedFiles: '.xlsx,.xls',
+            init: function () {
+                this.on("addedfile", function (file) {
+                    if (!file.name.match(/(.xlsx|.xls)$/i)) {
+                        this.removeFile(file);
+                        toastr.error('Hanya file berekstensi .xlsx dan .xls yang diizinkan');
+                    }
+                });
+                this.on("error", function (file, response) {
+                    $(file.previewElement).addClass("dz-error").find('.dz-error-message').text(response.error.message);
+                });
+                this.on('success', function () {
+                    penelitianDataTable.ajax.reload()
+                })
+            }
+        });
+    }
 });

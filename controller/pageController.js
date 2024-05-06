@@ -94,6 +94,7 @@ exports.ubahPenelitianPage = async (req, res, next) => {
             subkategori_list: await getSubKategoriByKategoriId(data.data.kategori),
             moment: require('moment'),
             ...data,
+            ketua_dosen_penelitian: res.locals.user.role === "dosen" ? res.locals.user.id : undefined
         })
     } catch (e) {
         console.log(e)

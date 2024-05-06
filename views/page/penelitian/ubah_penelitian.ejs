@@ -178,6 +178,7 @@
                         <input id="ketua_penelitian" name="ketua_dosen_penelitian" type="text"
                                class="form-control input-dosen"
                                placeholder="Masukkan NIDN Dosen Ketua Penelitian" <%= data.status == "Batal" ? "disabled" : "" %>
+                                <%= ketua_dosen_penelitian ? "readonly" : "" %>
                                required value="<%= data.ketua_dosen_penelitian %>">
                         <span class="small text-success">NIDN milik <%= data.nama_ketua_dosen_penelitian %></span>
                     </div>

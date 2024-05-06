@@ -14,7 +14,8 @@
                 </div>
                 <div class="modal-body">
                     <p>Tarik atau klik di bawah untuk mengupload file excel</p>
-                    <form action="<%= APP_URL %>api/dosen/excel" class="dropzone" id="dosen-excel-dropzone"></form>
+                    <form action="<%= APP_URL %>api/penelitian/excel" class="dropzone"
+                          id="penelitian-excel-dropzone"></form>
                     <span class="small text-danger">*jika ada logo X di file yang di upload, maka mohon cek kembali file di karenakan ada data yang duplikat atau data yang di file sudah pernah di masukkan</span>
                 </div>
                 <div class="modal-footer">
@@ -27,11 +28,20 @@
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Master Data Penelitian</h1>
-        <a href="<%= APP_URL %>penelitian/tambah" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Tambah Penelitian</a>
+        <a href="<%= APP_URL %>penelitian/tambah" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">Tambah
+            Penelitian</a>
     </div>
 
-    <a href="<%= BASE_URL %>templates/mahasiswa_template.xlsx" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" target="_blank" >Download Template</a>
-    <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" type="button"  data-toggle="modal" data-target="#upload-dosen">Import By Excel</button>
+    <% if (user.role === "dosen") { %>
+        <a href="<%= BASE_URL %>templates/penelitian_dosen_template.xlsx"
+           class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" target="_blank">Download Template</a>
+    <% } else { %>
+        <a href="<%= BASE_URL %>templates/penelitian_admin_template.xlsx"
+           class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" target="_blank">Download Template</a>
+    <% } %>
+    <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" type="button" data-toggle="modal"
+            data-target="#upload-dosen">Import By Excel
+    </button>
 
     <div class="card shadow mb-4">
         <div class="card-body">
