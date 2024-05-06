@@ -249,7 +249,7 @@ exports.addDosen = async (req, res, next) => {
 exports.addDosenByExcel = async (req, res, next) => {
     try {
         const workbook = XLSX.readFile(req.files.file[0].path);
-
+        fs.unlink(req.files.file[0].path)
         const xlData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
 
         await dosenServices.addMultipleDosen(xlData)
@@ -263,7 +263,7 @@ exports.addDosenByExcel = async (req, res, next) => {
 exports.addMahasiswaByExcel = async (req, res, next) => {
     try {
         const workbook = XLSX.readFile(req.files.file[0].path);
-
+        fs.unlink(req.files.file[0].path)
         const xlData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
 
         await mahasiswaServices.addMultipleMahasiswa(xlData)
