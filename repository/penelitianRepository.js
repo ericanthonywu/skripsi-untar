@@ -2,6 +2,8 @@ const db = require("../config/database/connection")
 const {checkExistsTable} = require("../util");
 const ServiceError = require("../exception/errorException");
 const {HTTP_STATUS} = require("../constant/httpStatusConstant");
+const fs = require("fs");
+const path = require("node:path");
 
 exports.checkJudulPenelitian = async judul =>
     await checkExistsTable(db("penelitian").where({nama_proposal: judul}))
@@ -298,29 +300,31 @@ exports.ubahPenelitian = async (id, data, anggota, dokumen) => {
             })
         }
 
-        let i = 0
         for (const nisn_dosen of anggota.list_dosen) {
             await trx('anggota_penelitian').insert({
                 id_penelitian: id,
                 id_dosen: trx('dosen').where({nomor_induk_dosen_nasional: nisn_dosen}).first('id'),
             })
-            i++
         }
 
         for (const {fieldname, filename, originalname} of dokumen) {
+            const file = `/uploads/${fieldname}/${filename}`
             if (await trx('dokumen_penelitian').update({
-                file: `/uploads/${fieldname}/${filename}`,
+                file,
                 original_filename: originalname
             }).where({
                 id_penelitian: id,
                 tipe_dokumen: trx('master_tipe_penelitian_dokumen').where({nama: fieldname}).first('id'),
             }) === 0) {
                 await trx('dokumen_penelitian').insert({
-                    file: `/uploads/${fieldname}/${filename}`,
+                    file,
                     original_filename: originalname,
                     id_penelitian: id,
                     tipe_dokumen: trx('master_tipe_penelitian_dokumen').where({nama: fieldname}).first('id'),
                 });
+            } else {
+                const paths = path.join(__dirname, `../`, file)
+                fs.unlinkSync(paths)
             }
         }
 
