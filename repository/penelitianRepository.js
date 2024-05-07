@@ -39,6 +39,7 @@ exports.getPenelitian = (search, offset, limit, sort_column = 'created_at', sort
                 q.where('ketua_dosen_penelitian', dosen_id)
                     .orWhere('anggota_penelitian.id_dosen', dosen_id)
             )
+            .distinct()
     }
 
     if (limit != "-1") {
@@ -86,8 +87,8 @@ exports.getAnalyticPenelitian = async (year, dosen_id) => {
             'status',
             db.raw('EXTRACT(MONTH FROM periode_awal) AS month'),
             db.raw('EXTRACT(year FROM periode_awal) AS year'),
-            db.raw('count(penelitian.id) as total'),
         )
+        .countDistinct("penelitian.id as total")
         .whereIn('status', ['Disetujui', 'Selesai'])
         .groupBy('status')
         .groupBy('month')
@@ -114,8 +115,8 @@ exports.getBiayaPenelitian = async (year, dosen_id) => {
             'status',
             db.raw('EXTRACT(MONTH FROM periode_awal) AS month'),
             db.raw('EXTRACT(year FROM periode_awal) AS year'),
-            db.raw('sum(biaya_yang_disetujui) as total')
         )
+        .sumDistinct("biaya_yang_disetujui as total")
         .whereIn('status', ['Disetujui', 'Selesai'])
         .groupBy('status')
         .groupBy('month')

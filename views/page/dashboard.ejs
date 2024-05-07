@@ -103,7 +103,7 @@
                             <input type="text" class="form-control year-picker"
                                    data-max-year="<%= data.maxYear %>"
                                    data-min-year="<%= data.minYear %>"
-                                   value="<%= data.maxYear %>"
+                                   value="<%= data.maxYear || new Date().getFullYear() %>"
                                    id="filter-tahun-rekap-penelitian">
                         </div>
                     </div>
