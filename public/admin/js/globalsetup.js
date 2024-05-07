@@ -1,6 +1,4 @@
 $(document).ready(function () {
-    $('select').selectpicker();
-
     bindSelectPicker()
     function bindSelectPicker() {
         if ($('select').length > 0) {
