@@ -385,7 +385,7 @@ exports.deletePenelitian = async id => {
 }
 
 exports.getMaxYear = async (dosen_id) => {
-    const query = db('penelitian').first().max(db.raw('EXTRACT(YEAR FROM periode_awal)')).as('max_year')
+    const query = db('penelitian').first().max(db.raw('EXTRACT(YEAR FROM periode_awal)')).whereIn('status', ['Disetujui', 'Selesai']).as('max_year')
     if (dosen_id) {
         query
             .join('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
@@ -399,7 +399,7 @@ exports.getMaxYear = async (dosen_id) => {
 }
 
 exports.getMinYear = async (dosen_id) => {
-    const query = db('penelitian').first().min(db.raw('EXTRACT(YEAR FROM periode_awal)')).as('min_year')
+    const query = db('penelitian').first().min(db.raw('EXTRACT(YEAR FROM periode_awal)')).whereIn('status', ['Disetujui', 'Selesai']).as('min_year')
     if (dosen_id) {
         query
             .join('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')

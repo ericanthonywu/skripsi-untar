@@ -10,7 +10,7 @@ exports.getAdminById = async id =>
         .first('id', 'username')
         .where({id})
 
-exports.register = async (username, password, role = 'admin') => {
+exports.register = async (username, password, role) => {
     await db("admin")
         .insert({
             username,
