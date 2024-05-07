@@ -105,15 +105,18 @@
                                    class="custom-file-input" <%= data.status == "Batal" ? "disabled" : "" %>
                                    name="file_proposal" id="file_proposal">
                             <label class="custom-file-label"
-                                   for="file_proposal"><%= list_proposal.file_proposal?.original_filename %></label>
+                                   for="file_proposal"><%= list_proposal.file_proposal?.original_filename ?? "Upload file" %></label>
                         </div>
-                        <a href="<%= list_proposal.file_proposal?.file %>" target="_blank" class="small">Lihat File</a>
+                        <% if (list_proposal.file_proposal?.file) { %>
+                            <a href="<%= list_proposal.file_proposal?.file %>" target="_blank" class="small">Lihat File</a>
+                        <% } %>
                     </div>
                     <div class="col-sm-12 col-md-6 col-lg-3">
                         <label for="surat_perjanjian_kerjasama">2. Surat Perjanjian Kerjasama</label>
                         <div class="custom-file">
                             <input type="file" accept=".pdf, .doc, .docx" class="custom-file-input"
                                    name="surat_perjanjian_kerjasama"
+                                    <%= !list_proposal.file_proposal?.file ? 'disabled' : '' %>
                                    id="surat_perjanjian_kerjasama" <%= data.status == "Batal" ? "disabled" : "" %>>
                             <label class="custom-file-label"
                                    for="file_proposal"><%= list_proposal.surat_perjanjian_kerjasama?.original_filename ?? 'Upload file' %></label>
@@ -121,6 +124,8 @@
                         <% if (list_proposal.surat_perjanjian_kerjasama?.file) { %>
                             <a href="<%= list_proposal.surat_perjanjian_kerjasama?.file %>" target="_blank"
                                class="small">Lihat File</a>
+                        <% } else if (!list_proposal.file_proposal?.file) { %>
+                            <span class="text-danger small">Harus upload file sebelumnya terlebih dahulu</span>
                         <% } %>
                     </div>
                     <div class="col-sm-12 col-md-6 col-lg-2">
