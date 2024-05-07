@@ -78,6 +78,26 @@ exports.addPenelitianController = async (req, res, next) => {
     }
 }
 
+exports.addPenelitianExcelController = async (req, res, next) => {
+    try {
+        const workbook = XLSX.readFile(req.files.file[0].path);
+        fs.unlinkSync(req.files.file[0].path)
+        const xlData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+
+        let dosen_id = 0
+        if (res.locals.user.role === "dosen") {
+            dosen_id = res.locals.user.id
+        }
+
+        console.log(xlData)
+        await penelitianServices.addMultiplePenelitianServices(xlData, dosen_id)
+
+        res.sendStatus(HTTP_STATUS.OK)
+    } catch (e) {
+        next(e)
+    }
+}
+
 exports.ubahPenelitianController = async (req, res, next) => {
     try {
         console.log('body: ', req.body)

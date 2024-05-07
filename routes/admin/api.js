@@ -23,7 +23,7 @@ const {
     deleteMahasiswa,
     checkNisnDosenExists,
     checkNIMMahasiswaExists, ubahPenelitianController, addDosenByExcel, addMahasiswaByExcel, cancelPenelitianController,
-    addAdmin, updateAdmin, deleteAdmin
+    addAdmin, updateAdmin, deleteAdmin, addPenelitianExcelController
 } = require("../../controller/api/ajaxApiController");
 const {multerMultipleFieldHandler, multerSingleFieldFileHandler} = require("../../middleware/fileMiddleware");
 const {authMiddleware, adminRoleMiddleware} = require("../../middleware/authMiddleware");
@@ -47,6 +47,7 @@ router.get('/chart/penelitian/biaya/:year', authMiddleware, getBiayaPenelitian)
 
 router.get('/subkategori/:kategoriId', authMiddleware, adminRoleMiddleware, getSubKategoriByKategoriIdController)
 
+router.post('/penelitian/excel', authMiddleware, adminRoleMiddleware, multerSingleFieldFileHandler('/excel', 'file'), addPenelitianExcelController);
 router.post('/penelitian', authMiddleware, adminRoleMiddleware, multerMultipleFieldHandler([
     {
         name: 'file_proposal',

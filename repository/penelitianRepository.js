@@ -34,12 +34,11 @@ exports.getPenelitian = (search, offset, limit, sort_column = 'created_at', sort
 
     if (dosen_id) {
         query
-            .join('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
+            .leftJoin('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
             .where(q =>
                 q.where('ketua_dosen_penelitian', dosen_id)
                     .orWhere('anggota_penelitian.id_dosen', dosen_id)
             )
-            .distinct()
     }
 
     if (limit != "-1") {
@@ -58,7 +57,7 @@ exports.getTotalPenelitian = async (dosen_id, search) => {
 
     if (dosen_id) {
         query
-            .join('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
+            .leftJoin('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
             .where(q =>
                 q.where('ketua_dosen_penelitian', dosen_id)
                     .orWhere('anggota_penelitian.id_dosen', dosen_id)
@@ -98,7 +97,7 @@ exports.getAnalyticPenelitian = async (year, dosen_id) => {
 
     if (dosen_id) {
         query
-            .join('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
+            .leftJoin('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
             .where(q =>
                 q.where('ketua_dosen_penelitian', dosen_id)
                     .orWhere('anggota_penelitian.id_dosen', dosen_id)
@@ -126,7 +125,7 @@ exports.getBiayaPenelitian = async (year, dosen_id) => {
 
     if (dosen_id) {
         query
-            .join('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
+            .leftJoin('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
             .where(q =>
                 q.where('ketua_dosen_penelitian', dosen_id)
                     .orWhere('anggota_penelitian.id_dosen', dosen_id)
@@ -144,7 +143,7 @@ exports.getTotalPenelitianSelesai = async (dosen_id) => {
 
     if (dosen_id) {
         query
-            .join('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
+            .leftJoin('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
             .where(q =>
                 q.where('ketua_dosen_penelitian', dosen_id)
                     .orWhere('anggota_penelitian.id_dosen', dosen_id)
@@ -162,7 +161,7 @@ exports.getTotalPenelitianBatal = async (dosen_id) => {
 
     if (dosen_id) {
         query
-            .join('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
+            .leftJoin('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
             .where(q =>
                 q.where('ketua_dosen_penelitian', dosen_id)
                     .orWhere('anggota_penelitian.id_dosen', dosen_id)
@@ -179,7 +178,12 @@ exports.getTotalPenelitianSedangBerlangsung = async (dosen_id) => {
         .whereBetween(db.raw('current_date'), [db.raw('periode_awal'), db.raw('periode_akhir')])
 
     if (dosen_id) {
-        query.where('ketua_dosen_penelitian', dosen_id)
+        query
+            .leftJoin('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
+            .where(q =>
+                q.where('ketua_dosen_penelitian', dosen_id)
+                    .orWhere('anggota_penelitian.id_dosen', dosen_id)
+            )
     }
 
     return query
@@ -189,6 +193,9 @@ exports.addPenelitian = async (data, anggota, dokumen) => {
     const trx = await db.transaction()
     try {
         switch (dokumen.length) {
+            case 0:
+                data.status = 'Draft'
+                break
             case 1:
                 data.status = 'Diajukan'
                 break
@@ -388,7 +395,7 @@ exports.getMaxYear = async (dosen_id) => {
     const query = db('penelitian').first().max(db.raw('EXTRACT(YEAR FROM periode_awal)')).whereIn('status', ['Disetujui', 'Selesai']).as('max_year')
     if (dosen_id) {
         query
-            .join('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
+            .leftJoin('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
             .where(q =>
                 q.where('ketua_dosen_penelitian', dosen_id)
                     .orWhere('anggota_penelitian.id_dosen', dosen_id)
@@ -402,7 +409,7 @@ exports.getMinYear = async (dosen_id) => {
     const query = db('penelitian').first().min(db.raw('EXTRACT(YEAR FROM periode_awal)')).whereIn('status', ['Disetujui', 'Selesai']).as('min_year')
     if (dosen_id) {
         query
-            .join('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
+            .leftJoin('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
             .where(q =>
                 q.where('ketua_dosen_penelitian', dosen_id)
                     .orWhere('anggota_penelitian.id_dosen', dosen_id)

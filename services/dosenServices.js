@@ -30,7 +30,6 @@ exports.addDosen = async data => {
 }
 
 exports.addMultipleDosen = async data => {
-    const datas = []
     let i = 1
     const errorList = []
 
@@ -41,6 +40,8 @@ exports.addMultipleDosen = async data => {
     for (const {password, nama_dosen, nomor_induk_dosen_nasional, nomor_induk_pegawai, email} of data) {
         if (!password) {
             errorList.push(`password tidak terisi pada row ${i}`)
+        } else {
+            data[i].password = await bcrypt.hash(password, await bcrypt.genSalt())
         }
 
         if (!nama_dosen) {
@@ -76,21 +77,13 @@ exports.addMultipleDosen = async data => {
         } else {
             emailSet.add(nomor_induk_pegawai);
         }
-
-        datas.push({
-            nama_dosen,
-            nomor_induk_dosen_nasional,
-            nomor_induk_pegawai,
-            email,
-            password: await bcrypt.hash(password, await bcrypt.genSalt())
-        })
         i++
     }
 
     if (errorList.length > 0) {
         throw new ServiceError(errorList.join("\n"), HTTP_STATUS.BAD_REQUEST)
     }
-    await dosenRepository.addBulkDosen(datas)
+    await dosenRepository.addBulkDosen(data)
 }
 
 exports.updateDosen = async data => {

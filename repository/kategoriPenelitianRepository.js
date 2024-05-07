@@ -1,7 +1,12 @@
 const db = require("../config/database/connection")
 
-exports.getAllKategori = async () => await db('master_kategori_penelitian')
+exports.getKategoriIdByNama = async nama =>
+    await db("master_kategori_penelitian").where({nama}).first('id')
 
+exports.getSubkategoriIdByNama = async (id, nama) =>
+    await db("master_subkategori_penelitian").where({nama, id_master_kategori_penelitian: id}).first('id')
+
+exports.getAllKategori = async () => await db('master_kategori_penelitian')
 exports.getKategoriById = async id => await db('master_kategori_penelitian').where({id}).first('nama','id')
 
 exports.addKategori = async nama => await db('master_kategori_penelitian').insert({nama})
