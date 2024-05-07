@@ -19,12 +19,9 @@ exports.register = async (username, password, role = 'admin') => {
         })
 }
 
-exports.updateAdminData = async (id, username, password) => {
+exports.updateAdminData = async (id, data) => {
     await db("admin")
-        .update({
-            username,
-            password,
-        }).where({id})
+        .update(data).where({id})
 }
 
 exports.deleteAdminData = async id =>

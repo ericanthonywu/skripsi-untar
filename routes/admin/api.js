@@ -1,5 +1,5 @@
 const express = require('express');
-const {loginController, migrateController, logoutController} = require("../../controller/api/authController");
+const {loginController, migrateController, logoutController, changeAdminPassword} = require("../../controller/api/authController");
 const {
     penelitianDatatableController,
     kategoriDatatableController, subkategoriDatatableController, mahasiswaDatatableController, dosenDatatableController,
@@ -33,6 +33,7 @@ const router = express.Router();
 router.get("/auth/migrate", migrateController)
 router.post("/auth/login", loginController)
 router.get("/auth/logout", logoutController)
+router.post("/auth/change-password", authMiddleware, adminRoleMiddleware, changeAdminPassword)
 
 router.get("/table/mahasiswa", authMiddleware, adminRoleMiddleware, mahasiswaDatatableController)
 router.get("/table/dosen", authMiddleware, adminRoleMiddleware, dosenDatatableController)

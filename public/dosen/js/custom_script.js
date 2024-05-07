@@ -291,4 +291,18 @@ $(document).ready(function () {
 
         location.href = `${base_url}penelitian`
     });
+
+    $('#form-ubah-password').on('submit', function (e) {
+        e.preventDefault()
+        const data = $(this).serialize()
+        $.ajax({
+            url: `${base_api_url}auth/change-password`,
+            data,
+            success: () => {
+                $('#form-ubah-password input').val("")
+                toastr.success('Password berhasil diubah', 'Success')
+                $('#changePasswordModal').modal('hide')
+            }
+        })
+    })
 })

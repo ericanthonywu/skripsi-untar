@@ -14,7 +14,7 @@ exports.updateAdmin = async (id, data) => {
     } else {
         delete data.password
     }
-    await adminRepository.updateAdminData(id, data.username, data.password)
+    await adminRepository.updateAdminData(id, data)
 }
 
 exports.deleteAdmin = async id => {

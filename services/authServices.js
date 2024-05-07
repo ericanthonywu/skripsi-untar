@@ -40,3 +40,14 @@ exports.loginDosen = async (email, password) => {
         id
     }
 }
+
+exports.changeAdminPassword = async (id, password) => {
+    await adminRepository.updateAdminData(id, {password: await bcrypt.hash(password, await bcrypt.genSalt())})
+}
+
+exports.changeDosenPassword = async (id, password) => {
+    await dosenServices.updateDosen({
+        id,
+        password: await bcrypt.hash(password, await bcrypt.genSalt())
+    })
+}

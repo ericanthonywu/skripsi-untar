@@ -50,3 +50,31 @@ exports.migrateController = async (req, res, next) => {
         next(e)
     }
 }
+
+exports.changeAdminPassword = async (req, res, next) => {
+    try {
+        const {id} = req.session.user
+        if (!req.body.password) {
+            res.sendResponse(null, HTTP_STATUS.BAD_REQUEST, "mohon isi field password")
+        }
+        await authServices.changeAdminPassword(id, req.body.password)
+
+        res.sendStatus(HTTP_STATUS.OK)
+    } catch (e) {
+        next(e)
+    }
+}
+
+exports.changeDosenPassword = async (req, res, next) => {
+    try {
+        const {id} = req.session.user
+        if (!req.body.password) {
+            res.sendResponse(null, HTTP_STATUS.BAD_REQUEST, "mohon isi field password")
+        }
+        await authServices.changeDosenPassword(id, req.body.password)
+
+        res.sendStatus(HTTP_STATUS.OK)
+    } catch (e) {
+        next(e)
+    }
+}

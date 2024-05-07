@@ -1,9 +1,8 @@
 const express = require('express');
 const {
-    loginController,
     migrateController,
     logoutController,
-    loginDosenController
+    loginDosenController, changeDosenPassword
 } = require("../../controller/api/authController");
 const {
     penelitianDatatableController,
@@ -36,6 +35,7 @@ const router = express.Router();
 router.get("/auth/migrate", migrateController)
 router.post("/auth/login", loginDosenController)
 router.get("/auth/logout", logoutController)
+router.post("/auth/change-password", authMiddleware, dosenRoleMiddleware, changeDosenPassword)
 
 router.get("/table/penelitian", authMiddleware, dosenRoleMiddleware, penelitianDatatableController)
 router.get("/table/mahasiswa", authMiddleware, dosenRoleMiddleware, mahasiswaDatatableController)
@@ -47,6 +47,7 @@ router.get('/chart/penelitian/biaya/:year', authMiddleware, dosenRoleMiddleware,
 
 router.get('/subkategori/:kategoriId', authMiddleware, dosenRoleMiddleware, getSubKategoriByKategoriIdController)
 
+router.post('/penelitian/excel', authMiddleware, dosenRoleMiddleware)
 router.post('/penelitian', authMiddleware, dosenRoleMiddleware, multerMultipleFieldHandler([
     {
         name: 'file_proposal',
