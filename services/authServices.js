@@ -1,12 +1,13 @@
-const adminRepository = require("../repository/adminRepository")
 const dosenServices = require("../services/dosenServices")
+const adminServices = require("../services/adminServices")
+const adminRepository = require("../repository/adminRepository")
 const bcrypt = require("bcrypt")
 const ServiceError = require("../exception/errorException");
 const {HTTP_STATUS} = require("../constant/httpStatusConstant");
 
 exports.migrate = async () => {
     const password = await bcrypt.hash("password", await bcrypt.genSalt())
-    await adminRepository.register("admin", password)
+    await adminServices.addAdmin("admin", password, "admin")
 }
 
 exports.login = async (username, password) => {
@@ -42,12 +43,14 @@ exports.loginDosen = async (email, password) => {
 }
 
 exports.changeAdminPassword = async (id, password) => {
-    await adminRepository.updateAdminData(id, {password: await bcrypt.hash(password, await bcrypt.genSalt())})
+    await adminServices.updateAdmin(id, {
+        password
+    })
 }
 
 exports.changeDosenPassword = async (id, password) => {
     await dosenServices.updateDosen({
         id,
-        password: await bcrypt.hash(password, await bcrypt.genSalt())
+        password,
     })
 }

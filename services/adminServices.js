@@ -4,8 +4,8 @@ const bcrypt = require("bcrypt");
 exports.getAdminById = async id =>
     await adminRepository.getAdminById(id)
 
-exports.addAdmin = async (username, password) => {
-    await adminRepository.register(username, password, "viewer")
+exports.addAdmin = async (username, password, role = "viewer") => {
+    await adminRepository.register(username, password, role)
 }
 
 exports.updateAdmin = async (id, data) => {
