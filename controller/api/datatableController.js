@@ -7,7 +7,7 @@ exports.penelitianDatatableController = async (req, res, next) => {
         if (res.locals.user.role === "dosen") {
             dosen_id = res.locals.user.id
         }
-        const {data, total_data} = await datatableService.getPenelitianDatatable(search.value, offset, limit, sort_column, sort_direction, dosen_id)
+        const {data, total_data} = await datatableService.getPenelitianDatatable(search, offset, limit, sort_column, sort_direction, dosen_id)
 
         res.json({
             draw: parseInt(draw),

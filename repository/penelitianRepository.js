@@ -4,6 +4,7 @@ const ServiceError = require("../exception/errorException");
 const {HTTP_STATUS} = require("../constant/httpStatusConstant");
 const fs = require("fs");
 const path = require("node:path");
+const sea = require("node:sea");
 
 exports.checkJudulPenelitian = async judul =>
     await checkExistsTable(db("penelitian").where({nama_proposal: judul}))
@@ -26,10 +27,36 @@ exports.getPenelitian = (search, offset, limit, sort_column = 'created_at', sort
         .orderBy(sort_column, sort_direction)
 
     if (search) {
-        query.where(q =>
-            q.where('nama_proposal', 'ILIKE', `%${search}%`)
-                .orWhere('status', 'ILIKE', `%${search}%`)
-        )
+        if (search.judul) {
+            query.where('nama_proposal', 'ILIKE', `%${search.judul}%`)
+        }
+
+        if (search.status) {
+            query.where('status', 'ILIKE', `%${search.status}%`)
+        }
+
+        if (search.tahun) {
+            query.where(db.raw('EXTRACT(YEAR FROM periode_awal)'), search.tahun)
+        }
+
+        if (search.periode) {
+            switch (parseInt(search.periode)) {
+                case 1:
+                    query.where(db.raw('EXTRACT(MONTH FROM periode_awal)'), 2)
+                    break
+                case 2:
+                    query.where(db.raw('EXTRACT(MONTH FROM periode_awal)'), 8)
+                    break
+            }
+        }
+
+        if (search.kategori) {
+            query.where('master_kategori_penelitian.id', search.kategori)
+        }
+
+        if (search.subkategori) {
+            query.where('master_subkategori_penelitian.id', search.subkategori)
+        }
     }
 
     if (dosen_id) {

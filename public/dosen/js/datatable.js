@@ -76,7 +76,7 @@ $(document).ready(function () {
         language: {
             emptyTable: "Data tidak tersedia",
             zeroRecords: "Tidak ditemukan data yang cocok",
-            search: "Cari Berdasarkan Judul Proposal atau Status: "
+            search: "Cari Berdasarkan Judul Proposal: "
         },
         ajax: {
             url: `${base_table}penelitian`,
@@ -88,6 +88,15 @@ $(document).ready(function () {
                 // Delete the original order array as it's not needed anymore
                 delete d.columns;
                 delete d.order;
+
+                d.search = {
+                    judul: d.search.value,
+                    kategori: $('#datatable-filter-kategori').val(),
+                    subkategori: $('#datatable-filter-subkategori').val(),
+                    status: $('#datatable-filter-status').val(),
+                    periode: $('#datatable-filter-periode').val(),
+                    tahun: $('#datatable-filter-tahun').val(),
+                }
             }
         },
         columns: [
@@ -162,6 +171,81 @@ $(document).ready(function () {
             }
         ]
     });
+
+    $('#penelitian-dataTable_filter input').addClass('form-control')
+    $.ajax({
+        method: 'GET',
+        url: `${base_table}kategori`,
+        success: ({data}) => {
+            let html = `<select class="form-control" id="datatable-filter-kategori">`
+            html += "<option value=''>Semua</option>"
+            for (const {id, nama} of data) {
+                html += `<option value='${id}'>${nama}</option>`
+            }
+            html += "</select>"
+            $('#penelitian-dataTable_filter').append(`<label> Cari berdasarkan kategori penelitian: <br> ${html}</label>`)
+                .append(`
+    <label class="px-3">Cari berdasarkan subkategori: <br>
+      <select class="form-control" id="datatable-filter-subkategori"><option value="">Pilih Kategori Terlebih Dahulu</option></select>
+    </label>`)
+        }
+    })
+    $('#penelitian-dataTable_filter').append(`
+    <label class="px-3">Cari berdasarkan status: <br>
+        <select class="form-control" id="datatable-filter-status">
+            <option value="">Semua</option>
+            <option value="Draft">Draft</option>
+            <option value="Diajukan">Diajukan</option>
+            <option value="Disetujui">Disetujui</option>
+            <option value="Selesai">Selesai</option>
+            <option value="Batal">Batal</option>
+        </select> 
+    </label>`)
+
+    $('#penelitian-dataTable_filter').append(`
+    <label class="px-3">Cari berdasarkan periode: <br>
+        <select class="form-control" id="datatable-filter-periode">
+            <option value="">Semua</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+        </select> 
+    </label>`)
+
+    $('#penelitian-dataTable_filter').append(`
+    <label class="px-3">Cari berdasarkan tahun: <br>
+      <input type="search" class="year-picker form-control" id="datatable-filter-tahun">
+    </label>`)
+
+    $(document).on('change', '#datatable-filter-kategori', function (e) {
+        const val = $(this).val()
+        if (!val){
+            $('#datatable-filter-subkategori').html(`<option value="">Pilih Kategori Terlebih Dahulu</option>`)
+            $('#datatable-filter-subkategori').selectpicker('destroy');
+            $('#datatable-filter-subkategori').selectpicker();
+            return
+        }
+        $.ajax({
+            url: `${base_table}subkategori/${val}`,
+            method: "GET",
+            success: ({data}) => {
+                let html = "<option value=''>Semua</option>"
+                for (const {id, nama} of data) {
+                    html += `<option value='${id}'>${nama}</option>`
+                }
+                $('#datatable-filter-subkategori').html(html)
+                $('#datatable-filter-subkategori').selectpicker('destroy');
+                $('#datatable-filter-subkategori').selectpicker();
+            }
+        })
+    })
+
+    $(document).on('change', '#penelitian-dataTable_filter select', function (e) {
+        penelitianDataTable.ajax.reload()
+    })
+
+    $('#penelitian-dataTable_filter input').on('change', function (e) {
+        penelitianDataTable.ajax.reload()
+    })
 
     const kategoriDatatable = $('#kategori-dataTable').DataTable({
         processing: true,

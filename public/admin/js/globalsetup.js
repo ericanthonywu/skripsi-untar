@@ -1,6 +1,16 @@
 $(document).ready(function () {
     $('select').selectpicker();
 
+    bindSelectPicker()
+    function bindSelectPicker() {
+        if ($('select').length > 0) {
+            $('select').selectpicker();
+        } else {
+            //console.log("Waiting for elements to exist");
+            setTimeout(bindSelectPicker, 300);
+        }
+    }
+
     $('.month-picker').datepicker({
         format: "MM yyyy",
         startView: "months",
@@ -30,13 +40,21 @@ $(document).ready(function () {
     })
 
 
-    $('.year-picker').datepicker({
-        format: "yyyy",
-        startView: "years",
-        minViewMode: "years",
-        autoclose: true,
-        language: "id",
-    })
+    bindDatePicker()
+    function bindDatePicker() {
+        if ($('.year-picker').length > 0) {
+            $('.year-picker').datepicker({
+                format: "yyyy",
+                startView: "years",
+                minViewMode: "years",
+                autoclose: true,
+                language: "id",
+            });
+        } else {
+            //console.log("Waiting for elements to exist");
+            setTimeout(bindDatePicker, 300);
+        }
+    }
 
     $('input[type="file"]').on('change', function () {
         const fileName = $(this).val().split('\\').pop();
