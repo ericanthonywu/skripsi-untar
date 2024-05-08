@@ -287,9 +287,9 @@ $(document).ready(function () {
     $(document).on('change', '#datatable-filter-kategori', function (e) {
         const val = $(this).val()
         if (!val){
-            $('#datatable-filter-subkategori .row').html(`<option value="">Pilih Kategori Terlebih Dahulu</option>`)
-            $('#datatable-filter-subkategori .row').selectpicker('destroy');
-            $('#datatable-filter-subkategori .row').selectpicker();
+            $('#datatable-filter-subkategori').html(`<option value="">Pilih Kategori Terlebih Dahulu</option>`)
+            $('#datatable-filter-subkategori').selectpicker('destroy');
+            $('#datatable-filter-subkategori').selectpicker();
             return
         }
         $.ajax({
@@ -300,9 +300,9 @@ $(document).ready(function () {
                 for (const {id, nama} of data) {
                     html += `<option value='${id}'>${nama}</option>`
                 }
-                $('#datatable-filter-subkategori .row').html(html)
-                $('#datatable-filter-subkategori .row').selectpicker('destroy');
-                $('#datatable-filter-subkategori .row').selectpicker();
+                $('#datatable-filter-subkategori').html(html)
+                $('#datatable-filter-subkategori').selectpicker('destroy');
+                $('#datatable-filter-subkategori').selectpicker();
                 penelitianDataTable.ajax.reload()
             }
         })

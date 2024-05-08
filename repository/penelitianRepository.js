@@ -145,6 +145,9 @@ exports.getJudulPenelitianById = async id =>
 
 exports.getTotalPenelitian = async (dosen_id, search) => {
     const query = db("penelitian")
+        .join('master_subkategori_penelitian', 'master_subkategori_penelitian.id', 'penelitian.id_subkategori_penelitian')
+        .join('master_kategori_penelitian', 'master_kategori_penelitian.id', 'master_subkategori_penelitian.id_master_kategori_penelitian')
+        .join('dosen', 'dosen.id', 'penelitian.ketua_dosen_penelitian')
         .leftJoin('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
         .leftJoin('dosen as dosen_anggota', 'anggota_penelitian.id_dosen', 'dosen_anggota.id')
         .leftJoin('mahasiswa as mahasiswa_anggota', 'anggota_penelitian.id_mahasiswa', 'mahasiswa_anggota.id')
