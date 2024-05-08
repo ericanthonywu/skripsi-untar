@@ -11,7 +11,7 @@ exports.checkJudulPenelitian = async judul =>
 
 exports.getPenelitian = (search, offset, limit, sort_column = 'created_at', sort_direction = 'asc', dosen_id = 0) => {
     const query = db("penelitian")
-        .select("penelitian.id",
+        .distinct("penelitian.id",
             "nama_proposal",
             "biaya_yang_disetujui",
             "biaya_yang_diajukan",
@@ -24,6 +24,9 @@ exports.getPenelitian = (search, offset, limit, sort_column = 'created_at', sort
         .join('master_subkategori_penelitian', 'master_subkategori_penelitian.id', 'penelitian.id_subkategori_penelitian')
         .join('master_kategori_penelitian', 'master_kategori_penelitian.id', 'master_subkategori_penelitian.id_master_kategori_penelitian')
         .join('dosen', 'dosen.id', 'penelitian.ketua_dosen_penelitian')
+        .leftJoin('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
+        .leftJoin('dosen as dosen_anggota', 'anggota_penelitian.id_dosen', 'dosen_anggota.id')
+        .leftJoin('mahasiswa as mahasiswa_anggota', 'anggota_penelitian.id_mahasiswa', 'mahasiswa_anggota.id')
         .orderBy(sort_column, sort_direction)
 
     if (search) {
@@ -79,15 +82,39 @@ exports.getPenelitian = (search, offset, limit, sort_column = 'created_at', sort
         }
 
         if (search.ketua_dosen_penelitian) {
-            query.where('dosen.nama_dosen', 'ILIKE', `%${search.ketua_dosen_penelitian}%`)
+            query.where(q => {
+                if (isNaN(search.ketua_dosen_penelitian)) {
+                    q.where('dosen.nama_dosen', 'ILIKE', `%${search.ketua_dosen_penelitian}%`)
+                } else {
+                    q.where('dosen.nomor_induk_dosen_nasional', search.ketua_dosen_penelitian)
+                }
+            })
+        }
+
+        if (search.anggota_dosen_penelitian) {
+            query.where(q => {
+                if (isNaN(search.anggota_dosen_penelitian)) {
+                    q.where('dosen_anggota.nama_dosen', 'ILIKE', `%${search.anggota_dosen_penelitian}%`)
+                } else {
+                    q.where('dosen_anggota.nomor_induk_dosen_nasional', search.anggota_dosen_penelitian)
+                }
+            })
+        }
+
+        if (search.anggota_mahasiswa_penelitian) {
+            query.orWhere(q => {
+                if (isNaN(search.anggota_mahasiswa_penelitian)) {
+                    q.where('mahasiswa_anggota.nama_mahasiswa', 'ILIKE', `%${search.anggota_mahasiswa_penelitian}%`)
+                } else {
+                    q.where('mahasiswa_anggota.nomor_induk_mahasiswa', search.anggota_mahasiswa_penelitian)
+                }
+            })
         }
     }
 
     if (dosen_id) {
         query
-            .leftJoin('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
             .where(q => {
-
                     switch (search.status_dosen) {
                         case "ketua":
                             q.where('ketua_dosen_penelitian', dosen_id)
@@ -100,11 +127,9 @@ exports.getPenelitian = (search, offset, limit, sort_column = 'created_at', sort
                                 .orWhere('anggota_penelitian.id_dosen', dosen_id)
                     }
 
-
                     return q
                 }
             )
-            .distinct()
     }
 
     if (limit != "-1") {
@@ -120,22 +145,111 @@ exports.getJudulPenelitianById = async id =>
 
 exports.getTotalPenelitian = async (dosen_id, search) => {
     const query = db("penelitian")
+        .leftJoin('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
+        .leftJoin('dosen as dosen_anggota', 'anggota_penelitian.id_dosen', 'dosen_anggota.id')
+        .leftJoin('mahasiswa as mahasiswa_anggota', 'anggota_penelitian.id_mahasiswa', 'mahasiswa_anggota.id')
+
+    if (search) {
+        if (search.judul) {
+            query.where(q => {
+                for (const splitElement of search.judul.split(" ")) {
+                    q.orWhere('nama_proposal', 'ILIKE', `%${splitElement}%`)
+                }
+            })
+        }
+
+        if (search.status) {
+            query.where('status', 'ILIKE', `%${search.status}%`)
+        }
+
+        if (search.tahun) {
+            query.where(db.raw('EXTRACT(YEAR FROM periode_awal)'), search.tahun)
+        }
+
+        if (search.periode) {
+            switch (parseInt(search.periode)) {
+                case 1:
+                    query.where(db.raw('EXTRACT(MONTH FROM periode_awal)'), 2)
+                    break
+                case 2:
+                    query.where(db.raw('EXTRACT(MONTH FROM periode_awal)'), 8)
+                    break
+            }
+        }
+
+        if (search.kategori) {
+            query.where('master_kategori_penelitian.id', search.kategori)
+        }
+
+        if (search.subkategori) {
+            query.where('master_subkategori_penelitian.id', search.subkategori)
+        }
+
+        if (search.minBiayaDiajukan) {
+            query.where('biaya_yang_diajukan', '>=', search.minBiayaDiajukan)
+        }
+
+        if (search.maxBiayaDiajukan) {
+            query.where('biaya_yang_diajukan', '<=', search.maxBiayaDiajukan)
+        }
+
+        if (search.minBiayaDisetujui) {
+            query.where('biaya_yang_disetujui', '>=', search.minBiayaDisetujui)
+        }
+
+        if (search.maxBiayaDisetujui) {
+            query.where('biaya_yang_disetujui', '<=', search.maxBiayaDisetujui)
+        }
+
+        if (search.ketua_dosen_penelitian) {
+            query.where(q => {
+                if (isNaN(search.ketua_dosen_penelitian)) {
+                    q.where('dosen.nama_dosen', 'ILIKE', `%${search.ketua_dosen_penelitian}%`)
+                } else {
+                    q.where('dosen.nomor_induk_dosen_nasional', search.ketua_dosen_penelitian)
+                }
+            })
+        }
+
+        if (search.anggota_dosen_penelitian) {
+            query.where(q => {
+                if (isNaN(search.anggota_dosen_penelitian)) {
+                    q.where('dosen_anggota.nama_dosen', 'ILIKE', `%${search.anggota_dosen_penelitian}%`)
+                } else {
+                    q.where('dosen_anggota.nomor_induk_dosen_nasional', search.anggota_dosen_penelitian)
+                }
+            })
+        }
+
+        if (search.anggota_mahasiswa_penelitian) {
+            query.where(q => {
+                if (isNaN(search.anggota_mahasiswa_penelitian)) {
+                    q.where('mahasiswa_anggota.nama_mahasiswa', 'ILIKE', `%${search.anggota_mahasiswa_penelitian}%`)
+                } else {
+                    q.where('mahasiswa_anggota.nomor_induk_mahasiswa', search.anggota_mahasiswa_penelitian)
+                }
+            })
+        }
+    }
 
     if (dosen_id) {
         query
-            .leftJoin('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
-            .where(q =>
-                q.where('ketua_dosen_penelitian', dosen_id)
-                    .orWhere('anggota_penelitian.id_dosen', dosen_id)
+            .where(q => {
+                    switch (search.status_dosen) {
+                        case "ketua":
+                            q.where('ketua_dosen_penelitian', dosen_id)
+                            break
+                        case "anggota":
+                            q.where('anggota_penelitian.id_dosen', dosen_id)
+                            break
+                        default:
+                            q.where('ketua_dosen_penelitian', dosen_id)
+                                .orWhere('anggota_penelitian.id_dosen', dosen_id)
+                    }
+
+                    return q
+                }
             )
-
-    }
-
-    if (search) {
-        query.where(q =>
-            q.where('nama_proposal', 'ILIKE', `%${search}%`)
-                .orWhere('status', 'ILIKE', `%${search}%`)
-        )
     }
 
     const data = await query

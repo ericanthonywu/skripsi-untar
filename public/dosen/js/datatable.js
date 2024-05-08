@@ -101,6 +101,8 @@ $(document).ready(function () {
                     minBiayaDisetujui: $('#datatable-filter-min-biaya-disetujui').val(),
                     maxBiayaDisetujui: $('#datatable-filter-max-biaya-disetujui').val(),
                     ketua_dosen_penelitian: $('#datatable-filter-ketua-dosen').val(),
+                    anggota_dosen_penelitian: $('#datatable-filter-anggota-dosen').val(),
+                    anggota_mahasiswa_penelitian: $('#datatable-filter-anggota-mahasiswa').val(),
                     status_dosen: $('#datatable-filter-status-dosen').val(),
                 }
             }
@@ -228,7 +230,7 @@ $(document).ready(function () {
     </div>`)
         .append(`
 <div class="px-3 col-sm-12 col-md-6 col-lg-3">
-    <label>Cari berdasarkan nama ketua penelitian: </label>
+    <label>Cari berdasarkan nama atau nidn ketua penelitian: </label>
       <input type="search" class="form-control" id="datatable-filter-ketua-dosen">
     </div>`)
         .append(`
@@ -261,6 +263,16 @@ $(document).ready(function () {
       <input type="hidden" class="form-control number" id="datatable-filter-max-biaya-disetujui"
                                ></div>
         `)
+        .append(`
+<div class="px-3 col-sm-12 col-md-6 col-lg-3">
+    <label>Cari berdasarkan nama atau nidn anggota dosen penelitian: </label>
+      <input type="search" class="form-control" id="datatable-filter-anggota-dosen">
+    </div>`)
+        .append(`
+<div class="px-3 col-sm-12 col-md-6 col-lg-3">
+    <label>Cari berdasarkan nama atau nim anggota mahasiswa: </label>
+      <input type="search" class="form-control" id="datatable-filter-anggota-mahasiswa">
+    </div>`)
         .append(`
         <div class="px-3 col-sm-12 col-md-6 col-lg-3">
     <label>Cari berdasarkan status dosen: </label>
