@@ -197,7 +197,7 @@ $(document).ready(function () {
             $('#penelitian-dataTable_filter .row').append(`<div class="px-3 col-sm-12 col-md-6 col-lg-3"> <label> Cari berdasarkan kategori penelitian: </label> ${html}</div>`)
                 .append(`
 <div class="px-3 col-sm-12 col-md-6 col-lg-3">
-    <label>Cari berdasarkan subkategori: </label>
+    <label>Cari berdasarkan subkategori penelitian: </label>
       <select class="form-control" id="datatable-filter-subkategori"><option value="">Pilih Kategori Terlebih Dahulu</option></select>
     </div>`)
         }
