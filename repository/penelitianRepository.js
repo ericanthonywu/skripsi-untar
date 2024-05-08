@@ -28,7 +28,11 @@ exports.getPenelitian = (search, offset, limit, sort_column = 'created_at', sort
 
     if (search) {
         if (search.judul) {
-            query.where('nama_proposal', 'ILIKE', `%${search.judul}%`)
+            query.where(q => {
+                for (const splitElement of search.judul.split(" ")) {
+                    q.orWhere('nama_proposal', 'ILIKE', `%${splitElement}%`)
+                }
+            })
         }
 
         if (search.status) {
@@ -57,14 +61,48 @@ exports.getPenelitian = (search, offset, limit, sort_column = 'created_at', sort
         if (search.subkategori) {
             query.where('master_subkategori_penelitian.id', search.subkategori)
         }
+
+        if (search.minBiayaDiajukan) {
+            query.where('biaya_yang_diajukan', '>=', search.minBiayaDiajukan)
+        }
+
+        if (search.maxBiayaDiajukan) {
+            query.where('biaya_yang_diajukan', '<=', search.maxBiayaDiajukan)
+        }
+
+        if (search.minBiayaDisetujui) {
+            query.where('biaya_yang_disetujui', '>=', search.minBiayaDisetujui)
+        }
+
+        if (search.maxBiayaDisetujui) {
+            query.where('biaya_yang_disetujui', '<=', search.maxBiayaDisetujui)
+        }
+
+        if (search.ketua_dosen_penelitian) {
+            query.where('dosen.nama_dosen', 'ILIKE', `%${search.ketua_dosen_penelitian}%`)
+        }
     }
 
     if (dosen_id) {
         query
             .leftJoin('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
-            .where(q =>
-                q.where('ketua_dosen_penelitian', dosen_id)
-                    .orWhere('anggota_penelitian.id_dosen', dosen_id)
+            .where(q => {
+
+                    switch (search.status_dosen) {
+                        case "ketua":
+                            q.where('ketua_dosen_penelitian', dosen_id)
+                            break
+                        case "anggota":
+                            q.where('anggota_penelitian.id_dosen', dosen_id)
+                            break
+                        default:
+                            q.where('ketua_dosen_penelitian', dosen_id)
+                                .orWhere('anggota_penelitian.id_dosen', dosen_id)
+                    }
+
+
+                    return q
+                }
             )
             .distinct()
     }

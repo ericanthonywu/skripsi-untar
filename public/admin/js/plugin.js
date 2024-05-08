@@ -43,14 +43,36 @@ $(document).ready(function () {
     $("#preventdef").click(function (e) {
         e.preventDefault();
     });
-    $('.number').bind('keypress', function (event) {
-        var regex = new RegExp("^[0-9]+$");
-        var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-        if (!regex.test(key)) {
-            event.preventDefault();
-            return false;
-        }
-    });
+
+    function bindRibuan() {
+        setTimeout(function () {
+            $('.number').bind('keypress', function (event) {
+                var regex = new RegExp("^[0-9]+$");
+                var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+                if (!regex.test(key)) {
+                    event.preventDefault();
+                    return false;
+                }
+            });
+
+            $('.ribuan').keyup(function (event) {
+                if (event.which >= 37 && event.which <= 40) return;
+                // format number
+                $(this).val(function (index, value) {
+                    return value
+                        .replace(/\D/g, "")
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                        ;
+                });
+                var id = $(this).data("id");
+                var value = $(this).val();
+                var noCommas = value.replace(/,/g, "");
+                $('#' + id).val(noCommas);
+            });
+        }, 300)
+    }
+    bindRibuan()
+
     $('.alphanumeric').keypress(function (event) {
         var regex = new RegExp("^[a-zA-Z0-9]$");
         var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
@@ -88,21 +110,6 @@ $(document).ready(function () {
             }
             $(this).val(value.substring(0, max));
         }
-    });
-
-    $('.ribuan').keyup(function (event) {
-        if (event.which >= 37 && event.which <= 40) return;
-        // format number
-        $(this).val(function (index, value) {
-            return value
-                .replace(/\D/g, "")
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                ;
-        });
-        var id = $(this).data("id");
-        var value = $(this).val();
-        var noCommas = value.replace(/,/g, "");
-        $('#' + id).val(noCommas);
     });
 
 

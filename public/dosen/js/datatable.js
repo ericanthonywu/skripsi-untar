@@ -96,6 +96,12 @@ $(document).ready(function () {
                     status: $('#datatable-filter-status').val(),
                     periode: $('#datatable-filter-periode').val(),
                     tahun: $('#datatable-filter-tahun').val(),
+                    minBiayaDiajukan: $('#datatable-filter-min-biaya-diajukan').val(),
+                    maxBiayaDiajukan: $('#datatable-filter-max-biaya-diajukan').val(),
+                    minBiayaDisetujui: $('#datatable-filter-min-biaya-disetujui').val(),
+                    maxBiayaDisetujui: $('#datatable-filter-max-biaya-disetujui').val(),
+                    ketua_dosen_penelitian: $('#datatable-filter-ketua-dosen').val(),
+                    status_dosen: $('#datatable-filter-status-dosen').val(),
                 }
             }
         },
@@ -172,7 +178,10 @@ $(document).ready(function () {
         ]
     });
 
-    $('#penelitian-dataTable_filter input').addClass('form-control')
+    $('#penelitian-dataTable_filter').addClass('container')
+        .append('<div class="row" style="float: left; text-align: left"> </div>')
+    $('#penelitian-dataTable_filter .row input').addClass('form-control')
+
     $.ajax({
         method: 'GET',
         url: `${base_table}kategori`,
@@ -183,15 +192,17 @@ $(document).ready(function () {
                 html += `<option value='${id}'>${nama}</option>`
             }
             html += "</select>"
-            $('#penelitian-dataTable_filter').append(`<label> Cari berdasarkan kategori penelitian: <br> ${html}</label>`)
+            $('#penelitian-dataTable_filter .row').append(`<div class="px-3 col-sm-12 col-md-6 col-lg-3"> <label> Cari berdasarkan kategori penelitian: </label> ${html}</div>`)
                 .append(`
-    <label class="px-3">Cari berdasarkan subkategori: <br>
+<div class="px-3 col-sm-12 col-md-6 col-lg-3">
+    <label>Cari berdasarkan subkategori: </label>
       <select class="form-control" id="datatable-filter-subkategori"><option value="">Pilih Kategori Terlebih Dahulu</option></select>
-    </label>`)
+    </div>`)
         }
     })
-    $('#penelitian-dataTable_filter').append(`
-    <label class="px-3">Cari berdasarkan status: <br>
+    $('#penelitian-dataTable_filter .row').append(`
+<div class="px-3 col-sm-12 col-md-6 col-lg-3">
+    <label>Cari berdasarkan status: </label>
         <select class="form-control" id="datatable-filter-status">
             <option value="">Semua</option>
             <option value="Draft">Draft</option>
@@ -200,28 +211,73 @@ $(document).ready(function () {
             <option value="Selesai">Selesai</option>
             <option value="Batal">Batal</option>
         </select> 
-    </label>`)
-
-    $('#penelitian-dataTable_filter').append(`
-    <label class="px-3">Cari berdasarkan periode: <br>
+    </div>`)
+        .append(`
+<div class="px-3 col-sm-12 col-md-6 col-lg-3">
+    <label>Cari berdasarkan periode: </label>
         <select class="form-control" id="datatable-filter-periode">
             <option value="">Semua</option>
             <option value="1">1</option>
             <option value="2">2</option>
         </select> 
-    </label>`)
-
-    $('#penelitian-dataTable_filter').append(`
-    <label class="px-3">Cari berdasarkan tahun: <br>
+    </div>`)
+        .append(`
+<div class="px-3 col-sm-12 col-md-6 col-lg-3">
+    <label>Cari berdasarkan tahun: </label>
       <input type="search" class="year-picker form-control" id="datatable-filter-tahun">
-    </label>`)
+    </div>`)
+        .append(`
+<div class="px-3 col-sm-12 col-md-6 col-lg-3">
+    <label>Cari berdasarkan nama ketua penelitian: </label>
+      <input type="search" class="form-control" id="datatable-filter-ketua-dosen">
+    </div>`)
+        .append(`
+        <div class="px-3 col-sm-12 col-md-6 col-lg-3">
+    <label>Cari berdasarkan minimum biaya diajukan: </label>
+      <input type="text" class="number ribuan form-control" data-id="datatable-filter-min-biaya-diajukan">
+      <input type="hidden" class="form-control number" id="datatable-filter-min-biaya-diajukan"
+                               >
+    </div>
+        `)
+        .append(`
+        <div class="px-3 col-sm-12 col-md-6 col-lg-3">
+    <label>Cari berdasarkan maksimal biaya diajukan: </label>
+      <input type="text" class="number ribuan form-control" data-id="datatable-filter-max-biaya-diajukan">
+      <input type="hidden" class="form-control number" id="datatable-filter-max-biaya-diajukan"
+                               ></div>
+        `)
+        .append(`
+        <div class="px-3 col-sm-12 col-md-6 col-lg-3">
+    <label>Cari berdasarkan minimum biaya disetujui: </label>
+      <input type="text" class="number ribuan form-control" data-id="datatable-filter-min-biaya-disetujui">
+      <input type="hidden" class="form-control number" id="datatable-filter-min-biaya-disetujui"
+                               >
+    </div>
+        `)
+        .append(`
+        <div class="px-3 col-sm-12 col-md-6 col-lg-3">
+    <label>Cari berdasarkan maksimal biaya disetujui: </label>
+      <input type="text" class="number ribuan form-control" data-id="datatable-filter-max-biaya-disetujui">
+      <input type="hidden" class="form-control number" id="datatable-filter-max-biaya-disetujui"
+                               ></div>
+        `)
+        .append(`
+        <div class="px-3 col-sm-12 col-md-6 col-lg-3">
+    <label>Cari berdasarkan status dosen: </label>
+      <select class="form-control" id="datatable-filter-status-dosen">
+      <option value="">Semua</option>
+      <option value="ketua">Ketua</option>
+      <option value="anggota">Anggota</option>
+</select>
+      </div>
+        `)
 
     $(document).on('change', '#datatable-filter-kategori', function (e) {
         const val = $(this).val()
         if (!val){
-            $('#datatable-filter-subkategori').html(`<option value="">Pilih Kategori Terlebih Dahulu</option>`)
-            $('#datatable-filter-subkategori').selectpicker('destroy');
-            $('#datatable-filter-subkategori').selectpicker();
+            $('#datatable-filter-subkategori .row').html(`<option value="">Pilih Kategori Terlebih Dahulu</option>`)
+            $('#datatable-filter-subkategori .row').selectpicker('destroy');
+            $('#datatable-filter-subkategori .row').selectpicker();
             return
         }
         $.ajax({
@@ -232,9 +288,10 @@ $(document).ready(function () {
                 for (const {id, nama} of data) {
                     html += `<option value='${id}'>${nama}</option>`
                 }
-                $('#datatable-filter-subkategori').html(html)
-                $('#datatable-filter-subkategori').selectpicker('destroy');
-                $('#datatable-filter-subkategori').selectpicker();
+                $('#datatable-filter-subkategori .row').html(html)
+                $('#datatable-filter-subkategori .row').selectpicker('destroy');
+                $('#datatable-filter-subkategori .row').selectpicker();
+                penelitianDataTable.ajax.reload()
             }
         })
     })
@@ -243,8 +300,10 @@ $(document).ready(function () {
         penelitianDataTable.ajax.reload()
     })
 
-    $('#penelitian-dataTable_filter input').on('change', function (e) {
-        penelitianDataTable.ajax.reload()
+    let datatableFilterTimeout = null
+    $('#penelitian-dataTable_filter input').bind('keyup keydown keypress change', function (e) {
+        clearTimeout(datatableFilterTimeout)
+        datatableFilterTimeout = setTimeout(() => penelitianDataTable.ajax.reload(), 300)
     })
 
     const kategoriDatatable = $('#kategori-dataTable').DataTable({

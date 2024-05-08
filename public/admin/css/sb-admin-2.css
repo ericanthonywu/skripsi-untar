@@ -20,6 +20,10 @@
   height: 100%;
 }
 
+div.dataTables_filter label {
+  white-space: normal !important;
+}
+
 :root {
   --blue: #4e73df;
   --indigo: #6610f2;
