@@ -238,7 +238,7 @@ exports.getTotalPenelitian = async (dosen_id, search) => {
     if (dosen_id) {
         query
             .where(q => {
-                    switch (search.status_dosen) {
+                    switch (search?.status_dosen) {
                         case "ketua":
                             q.where('ketua_dosen_penelitian', dosen_id)
                             break

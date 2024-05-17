@@ -104,7 +104,7 @@ $(document).ready(function () {
             method: 'PATCH',
             data,
             success: () => {
-                toastr.info('Data Kategori Berhasil Ditambah', 'Sukses')
+                toastr.info('Data Kategori Berhasil Diubah', 'Sukses')
                 setTimeout(() => location.href = "/admin/kategori", 1500)
             }
         })
