@@ -14,11 +14,13 @@ exports.addAdmin = async (username, password, role = "viewer") => {
 }
 
 exports.updateAdmin = async (id, data) => {
-    const {username} = await adminRepository.getAdminById(id)
+    if (data.username) {
+        const {username} = await adminRepository.getAdminById(id)
 
-    if (username !== data.username) {
-        if (await adminRepository.checkAdminExists(username)) {
-            throw new ServiceError('username sudah pernah terdaftar', HTTP_STATUS.BAD_REQUEST)
+        if (username !== data.username) {
+            if (await adminRepository.checkAdminExists(username)) {
+                throw new ServiceError('username sudah pernah terdaftar', HTTP_STATUS.BAD_REQUEST)
+            }
         }
     }
 

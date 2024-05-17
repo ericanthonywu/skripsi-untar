@@ -33,12 +33,12 @@ const router = express.Router();
 router.get("/auth/migrate", migrateController)
 router.post("/auth/login", loginController)
 router.get("/auth/logout", logoutController)
-router.post("/auth/change-password", authMiddleware, adminRoleMiddleware, changeAdminPassword)
+router.post("/auth/change-password", authMiddleware, changeAdminPassword)
 
 router.get("/table/mahasiswa", authMiddleware, adminRoleMiddleware, mahasiswaDatatableController)
 router.get("/table/dosen", authMiddleware, adminRoleMiddleware, dosenDatatableController)
 router.get("/table/penelitian", authMiddleware, adminRoleMiddleware, penelitianDatatableController)
-router.get("/table/kategori", authMiddleware, adminRoleMiddleware, kategoriDatatableController)
+router.get("/table/kategori", authMiddleware, kategoriDatatableController)
 router.get("/table/subkategori/:id", authMiddleware, adminRoleMiddleware, subkategoriDatatableController)
 router.get("/table/admin", authMiddleware, adminRoleMiddleware, adminDatatableController)
 

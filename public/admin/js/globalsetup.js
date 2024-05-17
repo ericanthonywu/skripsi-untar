@@ -96,7 +96,6 @@ $.ajaxSetup({
     type: "POST",
     cache: false,
     error: xhr => {
-        console.log(xhr.responseJSON)
         switch (xhr.status) {
             case 404:
                 toastr.error('api not found', 'Error');
@@ -104,6 +103,8 @@ $.ajaxSetup({
             case 419:
                 sessionStorage.setItem('nextURL', window.location.href);
                 location.href = base_url;
+                break
+            case 0:
                 break
             default:
                 toastr.error(xhr.responseJSON?.error?.message || 'unknown error', 'Error');
