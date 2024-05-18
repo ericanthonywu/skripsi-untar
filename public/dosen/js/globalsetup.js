@@ -1,13 +1,5 @@
 $(document).ready(function () {
-    bindSelectPicker()
-    function bindSelectPicker() {
-        if ($('select').length > 0) {
-            $('select').selectpicker();
-        } else {
-            //console.log("Waiting for elements to exist");
-            setTimeout(bindSelectPicker, 300);
-        }
-    }
+    $('select').selectpicker();
 
     $('.month-picker').datepicker({
         format: "MM yyyy",
@@ -37,22 +29,13 @@ $(document).ready(function () {
         endDate: $('#filter-tahun-rekap-penelitian').data('max-year')?.toString()
     })
 
-
-    bindDatePicker()
-    function bindDatePicker() {
-        if ($('.year-picker').length > 0) {
-            $('.year-picker').datepicker({
-                format: "yyyy",
-                startView: "years",
-                minViewMode: "years",
-                autoclose: true,
-                language: "id",
-            });
-        } else {
-            //console.log("Waiting for elements to exist");
-            setTimeout(bindDatePicker, 300);
-        }
-    }
+    $('.year-picker').datepicker({
+        format: "yyyy",
+        startView: "years",
+        minViewMode: "years",
+        autoclose: true,
+        language: "id",
+    });
 
     $('input[type="file"]').on('change', function () {
         const fileName = $(this).val().split('\\').pop();

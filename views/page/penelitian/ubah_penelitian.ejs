@@ -108,7 +108,8 @@
                                    for="file_proposal"><%= list_proposal.file_proposal?.original_filename ?? "Upload file" %></label>
                         </div>
                         <% if (list_proposal.file_proposal?.file) { %>
-                            <a href="<%= list_proposal.file_proposal?.file %>" target="_blank" class="small">Lihat File</a>
+                            <a href="<%= list_proposal.file_proposal?.file %>" target="_blank" class="small">Lihat
+                                File</a>
                         <% } %>
                     </div>
                     <div class="col-sm-12 col-md-6 col-lg-3">
@@ -262,24 +263,28 @@
                             let iMahasiswa = 0;
                                     for (const {nim, nama_mahasiswa} of list_mahasiswa) {
                             %>
-                                <div class="col-sm-10">
-                                    <input type="text" name="list_mahasiswa[]"
-                                           class="form-control input-mahasiswa" <%= data.status == "Batal" ? "disabled" : "" %>
-                                           placeholder="Masukan NIM Mahasiswa" value="<%= nim %>">
-                                    <span class="small text-success">NIM milik <%= nama_mahasiswa %></span>
-                                </div>
-                                <div class="col-sm-2">
-                                    <% if (data.status !== "Batal") { %>
-                                        <% if (iMahasiswa === 0) { %>
-                                            <button type="button" class="btn btn-outline-primary" id="add-mahasiswa">
-                                                <i class="fa fa-plus"></i>
-                                            </button>
-                                        <% } else { %>
-                                            <button type="button" class="btn btn-outline-danger delete-dynamic-form">
-                                                <i class="fa fa-trash"></i>
-                                            </button>
+                                <div class="col-sm-12 row">
+                                    <div class="col-sm-10">
+                                        <input type="text" name="list_mahasiswa[]"
+                                               class="form-control input-mahasiswa" <%= data.status == "Batal" ? "disabled" : "" %>
+                                               placeholder="Masukan NIM Mahasiswa" value="<%= nim %>">
+                                        <span class="small text-success">NIM milik <%= nama_mahasiswa %></span>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <% if (data.status !== "Batal") { %>
+                                            <% if (iMahasiswa === 0) { %>
+                                                <button type="button" class="btn btn-outline-primary"
+                                                        id="add-mahasiswa">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                            <% } else { %>
+                                                <button type="button"
+                                                        class="btn btn-outline-danger delete-dynamic-form">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            <% } %>
                                         <% } %>
-                                    <% } %>
+                                    </div>
                                 </div>
                             <%
                                 iMahasiswa++;

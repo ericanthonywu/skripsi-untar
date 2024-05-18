@@ -18,7 +18,7 @@ exports.updateAdmin = async (id, data) => {
         const {username} = await adminRepository.getAdminById(id)
 
         if (username !== data.username) {
-            if (await adminRepository.checkAdminExists(username)) {
+            if (await adminRepository.checkAdminExists(data.username)) {
                 throw new ServiceError('username sudah pernah terdaftar', HTTP_STATUS.BAD_REQUEST)
             }
         }

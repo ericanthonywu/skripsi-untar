@@ -34,17 +34,90 @@
 
     <% if (user.role === "dosen") { %>
         <a href="<%= BASE_URL %>templates/penelitian_dosen_template.xlsx"
-           class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" target="_blank">Download Template</a>
+           class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mb-3" target="_blank">Download Template</a>
     <% } else { %>
         <a href="<%= BASE_URL %>templates/penelitian_admin_template.xlsx"
-           class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" target="_blank">Download Template</a>
+           class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mb-3" target="_blank">Download Template</a>
     <% } %>
-    <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" type="button" data-toggle="modal"
+    <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm mb-3" type="button" data-toggle="modal"
             data-target="#upload-penelitian">Import By Excel
     </button>
 
     <div class="card shadow mb-4">
         <div class="card-body">
+            <button class="btn btn-primary mb-3" type="button" data-toggle="collapse" data-target="#advanced-search-container"
+                    aria-expanded="false" aria-controls="collapseExample">
+                Advanced Search
+            </button>
+            <div class="collapse mb-3" id="advanced-search-container">
+                <div class="card card-body" id="advanced-search">
+                    <div class="row">
+                        <div class="px-3 col-sm-12 col-md-6 col-lg-3">
+                            <label>Cari berdasarkan status: </label>
+                            <select class="form-control" id="datatable-filter-status">
+                                <option value="">Semua</option>
+                                <option value="Draft">Draft</option>
+                                <option value="Diajukan">Diajukan</option>
+                                <option value="Disetujui">Disetujui</option>
+                                <option value="Selesai">Selesai</option>
+                                <option value="Batal">Batal</option>
+                            </select>
+                        </div>
+                        <div class="px-3 col-sm-12 col-md-6 col-lg-3">
+                            <label>Cari berdasarkan periode: </label>
+                            <select class="form-control" id="datatable-filter-periode">
+                                <option value="">Semua</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                            </select>
+                        </div>
+                        <div class="px-3 col-sm-12 col-md-6 col-lg-3">
+                            <label>Cari berdasarkan tahun: </label>
+                            <input type="search" class="year-picker form-control" id="datatable-filter-tahun">
+                        </div>
+                        <div class="px-3 col-sm-12 col-md-6 col-lg-3">
+                            <label>Cari berdasarkan nama atau nidn ketua penelitian: </label>
+                            <input type="search" class="form-control" id="datatable-filter-ketua-dosen">
+                        </div>
+                        <div class="px-3 col-sm-12 col-md-6 col-lg-3">
+                            <label>Cari berdasarkan minimum biaya diajukan: </label>
+                            <input type="text" class="number ribuan form-control"
+                                   data-id="datatable-filter-min-biaya-diajukan">
+                            <input type="hidden" class="form-control number" id="datatable-filter-min-biaya-diajukan">
+                        </div>
+
+                        <div class="px-3 col-sm-12 col-md-6 col-lg-3">
+                            <label>Cari berdasarkan maksimal biaya diajukan: </label>
+                            <input type="text" class="number ribuan form-control"
+                                   data-id="datatable-filter-max-biaya-diajukan">
+                            <input type="hidden" class="form-control number" id="datatable-filter-max-biaya-diajukan">
+                        </div>
+
+                        <div class="px-3 col-sm-12 col-md-6 col-lg-3">
+                            <label>Cari berdasarkan minimum biaya disetujui: </label>
+                            <input type="text" class="number ribuan form-control"
+                                   data-id="datatable-filter-min-biaya-disetujui">
+                            <input type="hidden" class="form-control number" id="datatable-filter-min-biaya-disetujui">
+                        </div>
+
+                        <div class="px-3 col-sm-12 col-md-6 col-lg-3">
+                            <label>Cari berdasarkan maksimal biaya disetujui: </label>
+                            <input type="text" class="number ribuan form-control"
+                                   data-id="datatable-filter-max-biaya-disetujui">
+                            <input type="hidden" class="form-control number" id="datatable-filter-max-biaya-disetujui">
+                        </div>
+
+                        <div class="px-3 col-sm-12 col-md-6 col-lg-3">
+                            <label>Cari berdasarkan nama atau nidn anggota dosen penelitian: </label>
+                            <input type="search" class="form-control" id="datatable-filter-anggota-dosen">
+                        </div>
+                        <div class="px-3 col-sm-12 col-md-6 col-lg-3">
+                            <label>Cari berdasarkan nama atau nim anggota mahasiswa: </label>
+                            <input type="search" class="form-control" id="datatable-filter-anggota-mahasiswa">
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="table-responsive">
                 <table class="table table-bordered" id="penelitian-dataTable" width="100%" cellspacing="0"></table>
             </div>
