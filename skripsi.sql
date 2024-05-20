@@ -300,7 +300,8 @@ CREATE TABLE public.penelitian (
     status character varying DEFAULT 'Sedang Berlanjut'::character varying NOT NULL,
     status_updated_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     ketua_dosen_penelitian bigint NOT NULL,
-    biaya_yang_diajukan integer DEFAULT 0 NOT NULL
+    biaya_yang_diajukan integer DEFAULT 0 NOT NULL,
+    updated_at timestamp without time zone
 );
 
 
@@ -457,8 +458,9 @@ ALTER TABLE ONLY public.penelitian ALTER COLUMN id SET DEFAULT nextval('public.p
 --
 
 COPY public.admin (id, username, password, role) FROM stdin;
-2	admin	$2b$10$w0G8l2KMpgJhLDXApU6NWupJE4bPzdwOAf0eyg/Jy1h1TnVuPKSPG	admin
-3	adminviewer1	$2b$10$UHXkQv.SKGnUJjx61XK7WOtEiWhOgGgB52OYXPXDd7spLi/pIO4PO	viewer
+2	admin	$2b$10$pCsQVP2qoTqdXDVrO0sPuOz90Xd/PeJU5in3nVUxIvLFKWj8pQEWu	admin
+5	adminviewer2	test	viewer
+3	adminviewer1	$2b$10$BhE6rZwYGZqJIE4MF3RLdOkf4ivlW5zF2XiFY5UEWdP5uVfh0z.6.	viewer
 \.
 
 
@@ -467,13 +469,28 @@ COPY public.admin (id, username, password, role) FROM stdin;
 --
 
 COPY public.anggota_penelitian (id, id_penelitian, id_dosen, id_mahasiswa) FROM stdin;
-144	44	\N	\N
-145	44	898	\N
-146	44	963	\N
+198	47	991	\N
+199	47	\N	66
+206	50	993	\N
+207	50	\N	65
+208	50	\N	66
 147	45	964	\N
 148	45	\N	\N
-155	46	\N	\N
-156	46	993	\N
+210	59	998	\N
+213	56	\N	\N
+214	56	\N	\N
+215	60	993	\N
+216	60	\N	65
+217	60	\N	66
+220	61	\N	65
+221	61	964	\N
+233	62	\N	\N
+234	62	\N	\N
+181	46	\N	\N
+182	46	993	\N
+195	44	\N	\N
+196	44	898	\N
+197	44	963	\N
 \.
 
 
@@ -482,13 +499,23 @@ COPY public.anggota_penelitian (id, id_penelitian, id_dosen, id_mahasiswa) FROM 
 --
 
 COPY public.dokumen_penelitian (id, id_penelitian, tipe_dokumen, created_at, updated_at, file, original_filename) FROM stdin;
-51	44	1	2024-05-02 01:30:01.083551	\N	/uploads/file_proposal/0c464b1c-753d-4b1a-8284-6f362ac856ba.pdf	2465-Article Text-13366-1-10-20231011.pdf
 52	44	2	2024-05-02 01:30:01.083551	\N	/uploads/surat_perjanjian_kerjasama/be64d373-b653-4604-8219-11e82f4daf10.pdf	2465-Article Text-13366-1-10-20231011.pdf
 53	44	3	2024-05-02 01:30:01.083551	\N	/uploads/file_monef/3971f3c7-dc99-46ed-9a2c-0761af497c16.pdf	2465-Article Text-13366-1-10-20231011.pdf
-54	44	4	2024-05-02 01:30:01.083551	\N	/uploads/file_laporan_kemajuan/3cc0de23-4955-45ac-a321-d600842144d1.pdf	2465-Article Text-13366-1-10-20231011.pdf
 55	45	1	2024-05-02 01:53:45.115044	\N	/uploads/file_proposal/b4845e71-8d8a-4e03-9ed5-8a0a1ba6c4d0.pdf	2465-Article Text-13366-1-10-20231011.pdf
 56	45	2	2024-05-02 01:53:45.115044	\N	/uploads/surat_perjanjian_kerjasama/cea61238-9e94-4587-8b4c-f2dde264ed62.PDF	10005438.PDF
 57	46	1	2024-05-02 01:54:59.400772	\N	/uploads/file_proposal/1a046229-d4b4-4da5-a2dc-f6eabb5226c8.pdf	825200057_Frencent Kinselton_Proposal_Skripsi 1.pdf
+58	46	2	2024-05-02 14:45:50.733609	\N	/uploads/surat_perjanjian_kerjasama/b8f37bff-a360-4b0d-be9e-3d349a198f6d.pdf	CV Eric Anthony 2023.pdf
+59	46	3	2024-05-02 14:45:58.203005	\N	/uploads/file_monef/5b3ba05e-29a9-400d-9093-dfc2f0746ef9.docx	Perancangan Aplikasi Manajemen Data Publikasi dan Penelitian.docx
+61	46	5	2024-05-02 14:46:59.477039	\N	/uploads/file_laporan_akhir/863f63f0-b748-4bd0-a9d6-3f8176c13f9b.pdf	2465-Article Text-13366-1-10-20231011.pdf
+60	46	4	2024-05-02 14:46:34.66961	\N	/uploads/file_laporan_kemajuan/0062afae-dfd0-4f5a-b767-50f3d8eb1ee6.pdf	825200057_Frencent Kinselton_Proposal_Skripsi 1.pdf
+51	44	1	2024-05-02 01:30:01.083551	\N	/uploads/file_proposal/121464fb-3d14-457a-adce-72fa6a445d9d.pdf	825200057_Frencent Kinselton_Proposal_Skripsi 1.pdf
+54	44	4	2024-05-02 01:30:01.083551	\N	/uploads/file_laporan_kemajuan/e060332e-13ad-4fad-a388-1249192b38d9.PDF	10005438.PDF
+62	47	1	2024-05-06 17:23:50.805568	\N	/uploads/file_proposal/5fddffa2-cca2-4103-987e-e8313a13fd34.pdf	2465-Article Text-13366-1-10-20231011.pdf
+63	56	1	2024-05-07 20:25:59.112989	\N	/uploads/file_proposal/46980194-4ab3-4355-86a9-2157a7e8bb09.docx	Perancangan Aplikasi Manajemen Data Publikasi dan Penelitian.docx
+64	56	2	2024-05-07 20:29:39.183047	\N	/uploads/surat_perjanjian_kerjasama/14d77d09-932c-458d-8851-5e97412ac6bf.pdf	CV Eric Anthony 2023.pdf
+65	61	1	2024-05-17 14:29:18.611883	\N	/uploads/file_proposal/adfbea09-73fb-4f17-99c9-1f0bdd238207.pdf	2465-Article Text-13366-1-10-20231011.pdf
+66	62	1	2024-05-17 15:49:49.656198	\N	/uploads/file_proposal/76223fa0-e9c4-4a6d-bf85-6532b5206f29.pdf	825200050-Eric Anthony.pdf
+67	62	2	2024-05-17 15:50:14.862668	\N	/uploads/surat_perjanjian_kerjasama/56bc6605-a6a9-40d2-b10c-30d292939c32.pdf	CV Eric Anthony 2023.pdf
 \.
 
 
@@ -834,7 +861,6 @@ COPY public.dosen (id, nama_dosen, nomor_induk_dosen_nasional, password, nomor_i
 958	WILLY TASDIN	8845980018	$2b$10$R3Mrx2qqInZwKuPrqQsdz.PZFPvf8Wfd2a38G3NSGN/iXjwMsuWY.	0335	willyt@fpsi.untar.ac.id
 959	SANTY YANUAR PRANAWATI	8877980018	$2b$10$7Dy0tIwLXeLlvONWgt8q4eEOPjETcrORo2xZJZdxmBEuqfLkxOQh.	0336	santyyanuar@fpsi.untar.ac.id
 960	DEDI TRISNAWARMAN	0309077202	$2b$10$6FW/rYOCPTJmKl8sUmIzAuDgNfg2SZ44dDWTjdme0HROiCiwy1Iti	0337	dedit@fti.untar.ac.id
-961	TONY	0310088201	$2b$10$Q1hq2E/Rc9KNzuhn5IAZZ.T.ilvLfyKCdU.Wan8YoujWEZeOzdQpW	0338	tony@fti.untar.ac.id
 962	JAP TJI BENG	8943220021	$2b$10$BUpgIIl0IHboYk1Pi/ncNuYKYTkq.AQb2SdVVWuKQH3OIvkBz18p6	0339	t.jap@untar.ac.id
 963	DESI ARISANDI	0308128101	$2b$10$D5FPAL5JkZWsDtDCXU8LU.DHbQZ83mZf9uZjTMm0EgC74QPQDxQrW	0340	desia@fti.untar.ac.id
 964	NOVARIO JAYA PERDANA	8856970018	$2b$10$4p.uXnukbf2Q.ugjh.uxcuAq/aeyjB5FRta1iO28EX46/zE60yhTi	0341	novariojp@fti.untar.ac.id
@@ -975,6 +1001,8 @@ COPY public.dosen (id, nama_dosen, nomor_induk_dosen_nasional, password, nomor_i
 1099	AGUSTINUS PURNA IRAWAN	0328087102	$2b$10$al11HsduxnqQpb38.aaoSe0SeikcFdmHzKkZkhWUU9fwAwdJWIEzK	0476	agustinus@untar.ac.id
 1100	ALFRED JONATHAN SUSILO	0323068304	$2b$10$y2JE0NLuhvyB/67HR.AD1ON3FBILhWsp.t7wIf83/4760dvetXTQi	0477	alfred@ft.untar.ac.id
 1101	ROESDIMAN SOEGIARSO	8841050017	$2b$10$tPAEei7LX11ErEf1Emnw2.cO2NKeOOSHmf6/TSQNCOupx0skNUS9m	0478	roesdimans@pps.untar.ac.id
+961	TONY	0310088201	$2b$10$OXYpVbFiLU0B1Cy/j32zG.5U88T0A0qe9hnN5hGo6MXw3nyBJFfp.	0338	tony@fti.untar.ac.id
+1102	Eric Anthony	1111111	$2b$10$FC5XjIM7mZbxHU0iVh3K/uQRFIaUEfU.MvxpmN.NVJzBmQQOMh9dW	1111111	eric.825200050@stu.untar.ac.id
 \.
 
 
@@ -983,8 +1011,21 @@ COPY public.dosen (id, nama_dosen, nomor_induk_dosen_nasional, password, nomor_i
 --
 
 COPY public.mahasiswa (id, nama_mahasiswa, nomor_induk_mahasiswa) FROM stdin;
-65	Eric Anthony	825200050
 66	Afina Putri	825200049
+65	Eric Anthony	825200050
+81	mahasiswa 1	MHS-0001
+82	mahasiswa 2	MHS-0002
+83	mahasiswa 3	MHS-0003
+84	mahasiswa 4	MHS-0004
+85	mahasiswa 5	MHS-0005
+86	mahasiswa 6	MHS-0006
+87	mahasiswa 7	MHS-0007
+88	mahasiswa 8	MHS-0008
+89	mahasiswa 9	MHS-0009
+90	mahasiswa 10	MHS-0010
+91	mahasiswa 11	MHS-0011
+92	mahasiswa baru	MHS-1313
+93	mahasiswa baru 2	MHS-1212
 \.
 
 
@@ -1006,6 +1047,7 @@ COPY public.master_subkategori_penelitian (id, id_master_kategori_penelitian, na
 1	1	subkategori kategori - 1
 4	2	subkategori penelitian 2
 3	1	Subkategori 6
+7	1	subkategori baru
 \.
 
 
@@ -1026,10 +1068,19 @@ COPY public.master_tipe_penelitian_dokumen (id, nama) FROM stdin;
 -- Data for Name: penelitian; Type: TABLE DATA; Schema: public; Owner: ericanthony
 --
 
-COPY public.penelitian (id, nama_proposal, biaya_yang_disetujui, periode_awal, created_at, id_subkategori_penelitian, periode_akhir, status, status_updated_at, ketua_dosen_penelitian, biaya_yang_diajukan) FROM stdin;
-44	Pengenalan Karakter LED pada Alat Ukur Grip Analyzer menggunakan Connected Component Labeling dan KNN 	29950000	2019-02-01	2024-05-02 01:30:01.083551	1	2019-06-01	Disetujui	2024-05-02 01:52:20.886411	989	30000000
-45	Sistem Pendeteksian Dan Pengenalan Ekspresi Wajah Dengan Algoritma Yolo Dan Convolutional Neural Network	10500000	2020-02-01	2024-05-02 01:53:45.115044	1	2020-06-01	Disetujui	2024-05-02 01:53:45.115044	995	11000000
-46	Pembuatan Game Adventure “Detective Adventure”Menggunakan Unity Virtual Reality	8000000	2020-02-01	2024-05-02 01:54:59.400772	1	2020-06-01	Diajukan	2024-05-02 01:56:00.853327	997	10000000
+COPY public.penelitian (id, nama_proposal, biaya_yang_disetujui, periode_awal, created_at, id_subkategori_penelitian, periode_akhir, status, status_updated_at, ketua_dosen_penelitian, biaya_yang_diajukan, updated_at) FROM stdin;
+60	Test Penelitian	133860000	2021-02-01	2024-05-17 14:28:34.356202	4	2021-06-01	Draft	2024-05-17 14:28:34.356202	968	133860000	\N
+61	Test proposal 2 file	10500000	2023-02-01	2024-05-17 14:29:18.611883	3	2023-06-01	Diajukan	2024-05-17 14:33:21.389621	968	7000000	2024-05-17 14:33:21.389621
+46	Pembuatan Game Adventure “Detective Adventure”Menggunakan Unity Virtual Reality	8000000	2020-02-01	2024-05-02 01:54:59.400772	1	2020-06-01	Selesai	2024-05-06 16:54:40.036002	997	10000000	2024-05-06 16:54:40.036002
+45	Sistem Pendeteksian Dan Pengenalan Ekspresi Wajah Dengan Algoritma Yolo Dan Convolutional Neural Network	10500000	2020-02-01	2024-05-02 01:53:45.115044	1	2020-06-01	Disetujui	2024-05-02 01:53:45.115044	995	11000000	\N
+44	Pengenalan Karakter LED pada Alat Ukur Grip Analyzer menggunakan Connected Component Labeling dan KNN.	29950000	2019-02-01	2024-05-02 01:30:01.083551	1	2019-06-01	Disetujui	2024-05-06 16:57:13.538381	989	30000000	2024-05-06 16:57:13.538381
+47	Perancangan Dashboard Untuk Monitor Jumlah Mahasiswa Fakultas Teknologi Informasi Universitas Tarumanagara	6000000	2022-02-01	2024-05-06 17:23:50.805568	1	2022-06-01	Diajukan	2024-05-06 17:23:50.805568	961	6000000	\N
+50	Segmentasi Area Sel Darah Putih Secara Otomatis Melalui Citra Preparat Tanpa Pewarnaan.	133860000	2021-02-01	2024-05-07 17:37:58.192715	4	2021-06-01	Draft	2024-05-07 17:37:58.192715	989	133860000	\N
+62	Proposal Jurnal Ilmiah Baru UAT	2000000	2024-02-01	2024-05-17 15:49:49.656198	1	2024-06-01	Batal	2024-05-17 15:54:34.648395	995	10000000	2024-05-17 15:54:01.23648
+57	Pengembangan Educational Data Warehouse Architecture Berbasis Business Intelligence Technology	24000000	2022-08-01	2024-05-07 19:12:34.582463	1	2023-01-01	Draft	2024-05-07 19:12:34.582463	968	24000000	\N
+58	Aplikasi Penyelesaian Numerik Pencarian Akar Persamaan Non Linier Dan Penerapannya Dalam Menyelesaikan Analisis Break Even	6500000	2022-02-01	2024-05-07 19:12:34.587533	3	2022-06-01	Draft	2024-05-07 19:12:34.587533	968	6500000	\N
+59	Impelementasi Educational Data Mining Untuk Evaluasi Kinerja Perguruan Tinggi: Sebuah Studi Pendahuluan	9000000	2021-02-01	2024-05-07 19:12:34.589543	3	2021-06-01	Draft	2024-05-07 19:12:34.589543	968	9000000	\N
+56	Pengembangan Model Business Intelligence untuk Evaluasi Kinerja Perguruan Tinggi	115096000	2022-02-01	2024-05-07 19:12:34.57821	4	2022-06-01	Disetujui	2024-05-07 20:29:39.183047	968	115096000	2024-05-07 20:29:39.183047
 \.
 
 
@@ -1038,58 +1089,65 @@ COPY public.penelitian (id, nama_proposal, biaya_yang_disetujui, periode_awal, c
 --
 
 COPY public.session_table (sid, sess, expired) FROM stdin;
-Vyim_d3Pr7OhEOtQMcUaallYX37Ijy7m	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-12T11:24:13.643Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-12 18:24:13.643+07
+I5PhZf49JxoIiOo5mz2_WX74TCF6rJQ5	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-16T04:41:41.014Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-16 11:41:41.014+07
 eIdXhUwtcWOFE35Xz3IDRsmmcqLyAZgF	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-24T06:02:39.342Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-24 13:02:39.342+07
-SvQcynakUrfpz-xpgigCDE7rdD9YjB7H	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-10T14:43:11.604Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-10 21:43:11.604+07
-rsWxe4uONKWXRtCuDOzk2TrCKA1Q37TF	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-08T10:59:20.880Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-08 18:14:42.273+07
-W594I6MaQKrjBTdb1RVu6rY2Tu5kRIiu	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-08T11:16:21.688Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-08 18:16:21.688+07
-D7_9yXfSw_S9q4L0x9RwxVi5_5SviuAn	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-08T11:16:21.692Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-08 18:16:21.692+07
-YZZ1UpZ5pV2t6U0808ULLHaODQwJFVWC	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-08T11:16:21.694Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-08 18:16:21.694+07
-KrNL2ycGDkGT46ntFpDO1lYSxDuL0P-5	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-10T14:43:11.607Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-10 21:43:11.607+07
--pkx4nzmP0QF003pbbnG2-N9rgSP2_Pn	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-04T10:06:06.495Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-04 17:06:14.552+07
-P3Pyd6cLyna9VZE-s-K9N7P7JYFRqjgg	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-10T14:43:11.605Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-10 21:43:11.605+07
-iA0L1w0gAoQh1uldOQkhXOP9VSYXM-HT	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-10T14:43:11.610Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-10 21:43:11.61+07
-N0CLw_I4owDSc529Ro-Xjmxprah5-tBr	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-10T14:43:11.611Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-10 21:43:11.611+07
-ysHnKQpF-RsOnrbWEo6_Gl_0K87MTTdv	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-10T14:43:11.612Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-10 21:43:11.612+07
+6MRpVpJb76ne3hM5uIiQN_UQ5wwWRaGw	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-14T14:50:47.278Z","secure":false,"httpOnly":true,"path":"/"},"user":{"id":"2","username":"admin","role":"admin","admin_role":"admin"}}	2024-06-15 01:20:59.723+07
+DcA7amKML_OLAAMqrWPt9h8AXEO4mBwc	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-24T06:02:39.354Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-05 13:21:13.467+07
 l10wZfLle4fEEeaVsY9DcBvtH78kD6id	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-29T13:46:43.349Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-29 20:46:43.349+07
-DcA7amKML_OLAAMqrWPt9h8AXEO4mBwc	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-24T06:02:39.354Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-24 15:27:43.895+07
-kRnZX8JK6b9Q2BAxe1PweVn75xijwmCG	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-12T11:24:13.643Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-12 18:24:13.667+07
-7NePwsQKDOPt_wHqAhijVoYVPI8Ka1qi	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-12T11:24:13.648Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-12 18:24:13.669+07
+xf42rP8zvGB3v1FgdcjulSqav6esEsOm	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-13T12:58:08.166Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-13 19:58:08.166+07
+opgYv4MRg7s_Y8GzoTZKHrLkRJchpmB9	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-13T12:58:10.145Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-13 19:58:10.145+07
 AC08rzMwjjotsM5TJR8ni4q4Ck_Cyx_V	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-30T09:04:32.686Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-30 16:04:32.686+07
+zyIw1Nhs0IN6VBR8LqmKlvAfJD4_Degf	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-02T04:37:11.509Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-02 11:37:11.509+07
+kxP6I6DE9XuLfsifU0ACQB5BgtaVPyVY	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-02T04:37:12.219Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-02 11:37:12.219+07
+BsiQNGvjlLAXEv-Oe21EomfhQmR1VF6w	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-13T12:58:09.384Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-13 19:58:09.384+07
+NCPvHrYUGflYDcafKynjXO-O2DD4WeBU	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-01T03:06:28.637Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-01 10:06:28.656+07
+sGoDJtKzguLzVa5a0LpnAzXcjA8DjobJ	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-01T03:06:28.641Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-01 10:06:28.66+07
+UoWeCzAraGWWV-_3xBH5sWeIEDDOc1r7	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-01T03:06:28.646Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-01 10:06:28.669+07
 rxg1wWwl0oO8B4UdclfC5pU58oJ9s4U5	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-30T09:04:01.338Z","secure":false,"httpOnly":true,"path":"/"},"user":{"id":"2","username":"admin","role":"admin","admin_role":"admin"}}	2024-05-30 16:31:41.376+07
 VISgLrrlwwd_W4o5LEs7OW1iAxwvSvJd	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-29T14:06:14.809Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-29 21:06:24.503+07
 _wR9PDnXBzGQdCaEgxm2dvA93lBOqqot	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-29T14:06:11.089Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-29 23:52:23.013+07
-7RVvzEZsAp6TMu2D-DLBBUzvb3hftFTC	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-04T08:32:17.218Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-04 15:32:17.218+07
-WOa7HS3A17Zwlxf0w34BPG15XN63kiWa	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-04T08:32:17.217Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-04 15:32:17.217+07
 3UH5dhjyDi8dVWzZuhmHa0Qxo0U4LAtb	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-29T16:24:47.730Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-29 23:24:50.253+07
-2mRdK5YHYZsnxWp_JDJEZGZ45pv3t2hJ	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-04T08:32:17.219Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-04 15:32:17.219+07
-Mm8A_pIXiR7drtHWVMN9koUJ-ONPD_Z1	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-04T08:32:17.217Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-04 15:32:17.217+07
 -7IKRG-vf7g7K6WXf9DiEdqMo5FE77Cd	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-29T13:40:48.645Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-29 20:40:48.645+07
-sV6hRZK3O-fx72n1sqkepkoDHUGdXKyb	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-04T08:32:17.216Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-04 15:32:17.231+07
 L8TfUU30gyUz8ouQ4YsSURCs8-5vYQxZ	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-29T13:40:50.876Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-29 20:40:50.876+07
-Zwhj3qwpFzu-D5zu6jF6Nkd7IXwoWSIi	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-08T11:06:44.856Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-08 18:06:44.874+07
-iuqo52JgRcdSd0-EgYBIviCZTlNNHV-S	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-10T14:43:09.958Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-10 21:46:38.873+07
+5wAOrG33Ef6BsW_2jzqz1uf5_5TcNWCA	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-17T16:50:38.245Z","secure":false,"httpOnly":true,"path":"/"},"user":{"id":"2","username":"admin","role":"admin","admin_role":"admin"}}	2024-06-19 10:19:02.456+07
+3-ZDY8xL5O3eXjzu0sjiVJmEgj8IPhVu	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-06T04:57:03.866Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-06 11:57:03.866+07
+iyV3lROwVmGOb-MmbQZkikSPZGOk8br0	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-06T04:57:03.868Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-06 11:57:03.887+07
+Xx_QfkSMzHOnC-6UfJpN3vGrHML6wuve	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-07T04:04:51.464Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-07 11:04:51.519+07
 I0_aY3gb52fB-D4UjAICZPJtyZ590_KT	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-30T09:03:59.220Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-30 16:03:59.22+07
-ZtTxTJT7wsUiBIwC1RhhZXfbjJtYBZtm	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-08T11:06:44.855Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-08 18:06:44.855+07
-ucgHDYkpBYEDbQL6dIeCHsTlcaI2qTRI	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-08T11:06:44.863Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-08 18:06:44.863+07
--pRxEHwKMmWt_PsFnHL7iEQGr_qmXhTa	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-08T11:06:44.840Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-08 18:06:44.868+07
-84fpaOeTGyNaZdzyfSd9IC2v2e38Dakg	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-08T11:06:44.858Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-08 18:06:44.885+07
--dTXpTTbwK3IA7v-sl3LtE9Ze7WOPuBs	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-12T11:24:13.648Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-12 18:24:13.648+07
-uKTdlBvtpiAOOZSugjzZ5wV-wEH4_8UR	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-12T11:24:13.643Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-12 18:24:13.666+07
-w5LpRAVgRWIaWkyfWpnMf7_OkiNAKBHX	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-12T11:24:13.645Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-12 18:24:13.667+07
+vCtfyTGwaCqdDyFA5n5v7naUFL8X5ISO	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-14T15:53:43.980Z","secure":false,"httpOnly":true,"path":"/"},"user":{"id":"2","username":"admin","role":"admin","admin_role":"admin"}}	2024-06-14 22:54:34.416+07
+ZrdtvGTrVo5ngjSXli6_qmCNLbFZuC_Q	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-01T03:06:28.636Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-01 10:06:28.636+07
+NNW7dHUYien3_f7ApqFw9u2Kkz9yQMQ6	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-16T04:41:41.007Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-16 11:41:41.007+07
+68CToItIavH5mAp7i4J1TgrdL-ldR_XL	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-16T06:22:22.333Z","secure":false,"httpOnly":true,"path":"/"},"user":{"id":"2","username":"admin","role":"admin","admin_role":"admin"}}	2024-06-16 13:25:39.43+07
+71tLpVVQNdr77QQAij7q7Ks9OZaMBLLw	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-14T14:50:31.384Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-14 21:50:31.384+07
+4lx_li3i9cxvR6LpCvZyjs8dZa0tE41V	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-14T14:50:31.942Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-14 21:50:31.942+07
+JjV3yftB2b868T2cO9aJUNP9XQonAoyZ	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-14T14:50:32.005Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-14 21:50:32.005+07
+ZhvwdGgS4jpjzoO5WK4WobZk9TYrjv5h	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-01T03:06:28.637Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-01 10:06:28.652+07
+Gen0Lztxo8TOfJ3grVE6_brM5sDCIYaL	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-01T03:06:28.648Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-01 10:06:28.667+07
 nMOduSABM_0pLR184rs06Snx0Mk7UaOo	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-30T09:01:04.809Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-30 16:01:46.283+07
+ov1V1svfTE0x4CvLeCfaip-UdO77L6Ak	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-14T14:50:32.917Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-14 21:50:32.917+07
 BtQgoNZ2PyQPArextB8pQDlGSE9qjOFg	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-30T09:31:41.323Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-30 16:31:41.323+07
 VhO0H3V0Ti7qbQDE6esjfL7ND2X4vsO0	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-30T09:31:41.907Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-30 16:31:41.907+07
+oKiZWsGDlTds8ipIdZXmtTEWh3dUpzEq	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-06T04:57:03.867Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-06 11:57:03.867+07
 2-4TQBGnJ3J0-ef1FWF3GZ3e4cw7om2v	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-29T13:47:20.666Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-29 20:47:21.283+07
-7OlKhgdY_VELjVJdpO5E4axSpnsD37DH	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-30T09:56:23.646Z","secure":false,"httpOnly":true,"path":"/"},"user":{"id":"2","username":"admin","role":"admin","admin_role":"admin"}}	2024-06-01 02:16:15.266+07
 8zAq-2XP8DKu8ZajxkPweOKN2-6SHbqa	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-30T09:04:42.730Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-30 16:04:42.73+07
-pNW1JpVzniN57rqpeE1QDpeiTFkJ76w4	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-24T05:53:50.634Z","secure":false,"httpOnly":true,"path":"/"},"user":{"id":"2","username":"admin","role":"admin","admin_role":"admin"}}	2024-05-28 10:53:33.345+07
+uS_CO59Mrc3OHhJEgO1R3_wSm6WwoZjI	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-02T04:37:46.151Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-02 11:37:46.151+07
+OgY_OZXX1Dd1cmFafCyfwjhJ2Nt1bBy5	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-02T04:37:47.421Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-02 11:37:47.421+07
+D2RwREJEL8njUJGgYAhQFxNYW8D7pjfR	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-02T04:37:48.161Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-02 11:37:48.161+07
+S3WR5v-OEQkSF9v9QzlMPMSVrkNrhpan	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-02T04:37:49.805Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-02 11:37:49.805+07
+yitzPn_S5gjuUGgAtj7wMcwRI3wzE6K_	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-02T04:37:49.888Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-02 11:37:49.888+07
+h7WWwo1hGOXmEBHyv1SEGIa4HRpSLIx0	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-02T04:37:49.987Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-02 11:37:49.987+07
+3auIS55t1a-8IBkqS0akLfCU-2vBgggV	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-02T04:37:50.633Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-02 11:37:50.633+07
 lKQtQOs_lU9XjUC9ZpmNy_Q2Erk_GiJl	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-29T17:45:12.483Z","secure":false,"httpOnly":true,"path":"/"},"user":{"id":"132","username":"dosen3@stu.untar.ac.id","role":"dosen"}}	2024-05-30 01:34:49.604+07
 A-Z0b7BKh6kjIWfrSSpkT4Kn3m6fITeg	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-30T09:01:53.390Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-30 16:01:53.39+07
 r8LCwzFk6p6JtubixQf9jlS2zSPOXhNM	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-30T09:04:50.905Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-30 16:04:50.905+07
 gsPfTiI5yFFavCpnJIn4K3tZh8JVzmXB	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-30T09:02:27.567Z","secure":false,"httpOnly":true,"path":"/"},"user":{"id":"2","username":"admin","role":"admin","admin_role":"admin"}}	2024-05-30 16:03:36.585+07
 FcatQdR0ilsjPEhdfIbvhnPKgIBghegW	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-30T09:04:08.311Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-30 16:04:08.311+07
 U26b7vGr6EXGTm64AXkt0wKtpp7OPRxx	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-05-30T09:04:11.360Z","secure":false,"httpOnly":true,"path":"/"}}	2024-05-30 16:04:11.36+07
+d6Nl475--h-3GZwkCi3_1K1Br5LowMtv	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-06T04:57:03.868Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-06 11:57:03.868+07
+TMPAIYoU-bchTMfpn0KMPfX8lViMT-Jq	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-02T04:37:22.801Z","secure":false,"httpOnly":true,"path":"/"},"user":{"id":"2","username":"admin","role":"admin","admin_role":"admin"}}	2024-06-02 13:52:05.865+07
+9aqc9pY8E7iYuxVrsyMh2cpQ6ldr2KAb	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-06T04:57:03.866Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-06 11:57:03.887+07
+ZtYBwjhirHkz0tKn9IKJ146i4KjwB0aZ	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-06T04:57:03.873Z","secure":false,"httpOnly":true,"path":"/"}}	2024-06-06 11:57:03.892+07
+wHtn3ZMjiDSj2bJVpVMaRMJm_9NprBxa	{"cookie":{"originalMaxAge":2592000000,"expires":"2024-06-02T04:37:35.639Z","secure":false,"httpOnly":true,"path":"/"},"user":{"id":"2","username":"admin","role":"admin","admin_role":"admin"}}	2024-06-02 11:41:14.629+07
 \.
 
 
@@ -1097,28 +1155,28 @@ U26b7vGr6EXGTm64AXkt0wKtpp7OPRxx	{"cookie":{"originalMaxAge":2592000000,"expires
 -- Name: admin_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ericanthony
 --
 
-SELECT pg_catalog.setval('public.admin_id_seq', 4, true);
+SELECT pg_catalog.setval('public.admin_id_seq', 6, true);
 
 
 --
 -- Name: dosen_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ericanthony
 --
 
-SELECT pg_catalog.setval('public.dosen_id_seq', 1101, true);
+SELECT pg_catalog.setval('public.dosen_id_seq', 1105, true);
 
 
 --
 -- Name: mahasiswa_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ericanthony
 --
 
-SELECT pg_catalog.setval('public.mahasiswa_id_seq', 66, true);
+SELECT pg_catalog.setval('public.mahasiswa_id_seq', 94, true);
 
 
 --
 -- Name: master_kategori_proposal_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ericanthony
 --
 
-SELECT pg_catalog.setval('public.master_kategori_proposal_id_seq', 7, true);
+SELECT pg_catalog.setval('public.master_kategori_proposal_id_seq', 8, true);
 
 
 --
@@ -1132,28 +1190,28 @@ SELECT pg_catalog.setval('public.master_proposal_dokumen_id_seq', 5, true);
 -- Name: master_subkategori_proposal_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ericanthony
 --
 
-SELECT pg_catalog.setval('public.master_subkategori_proposal_id_seq', 6, true);
+SELECT pg_catalog.setval('public.master_subkategori_proposal_id_seq', 7, true);
 
 
 --
 -- Name: proposal_anggota_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ericanthony
 --
 
-SELECT pg_catalog.setval('public.proposal_anggota_id_seq', 156, true);
+SELECT pg_catalog.setval('public.proposal_anggota_id_seq', 234, true);
 
 
 --
 -- Name: proposal_dokumen_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ericanthony
 --
 
-SELECT pg_catalog.setval('public.proposal_dokumen_id_seq', 57, true);
+SELECT pg_catalog.setval('public.proposal_dokumen_id_seq', 67, true);
 
 
 --
 -- Name: proposal_id_seq; Type: SEQUENCE SET; Schema: public; Owner: ericanthony
 --
 
-SELECT pg_catalog.setval('public.proposal_id_seq', 46, true);
+SELECT pg_catalog.setval('public.proposal_id_seq', 62, true);
 
 
 --
