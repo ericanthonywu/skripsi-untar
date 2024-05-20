@@ -104,15 +104,11 @@ router.patch('/penelitian', authMiddleware, multerMultipleFieldHandler([
 
 router.patch('/penelitian/cancel/:id', authMiddleware, dosenRoleMiddleware, cancelPenelitianController)
 
-router.delete('/penelitian/:id', authMiddleware, dosenRoleMiddleware, deletePenelitianController)
-
 router.post('/kategori', authMiddleware, dosenRoleMiddleware, addKategoriController)
 router.patch('/kategori', authMiddleware, dosenRoleMiddleware, ubahKategoriController)
-router.delete('/kategori/:id', authMiddleware, dosenRoleMiddleware, deleteKategoriController)
 
 router.post('/subkategori', authMiddleware, dosenRoleMiddleware, addSubkategoriController)
 router.patch('/subkategori', authMiddleware, dosenRoleMiddleware, updateSubkategoriController)
-router.delete('/subkategori/:id', authMiddleware, dosenRoleMiddleware, deleteSubkategoriController)
 
 router.post('/mahasiswa', authMiddleware, dosenRoleMiddleware, addMahasiswa)
 router.post('/mahasiswa/excel', authMiddleware, dosenRoleMiddleware, multerSingleFieldFileHandler('/excel', 'file'), addMahasiswaByExcel)

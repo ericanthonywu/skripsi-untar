@@ -171,10 +171,10 @@ $(document).ready(function () {
                 orderable: true,
             },
             {
-                data: 'id', title: 'Aksi', orderable: false, searchable: false, render: (data, _type, row) => {
+                data: 'id', title: 'Aksi', orderable: false, searchable: false, render: (data) => {
                     return `
                          <a href="${base_url}penelitian/ubah/${data}"  class="btn btn-primary"> Ubah </a>
-                        <button data-id="${data}" class="btn btn-danger del" data-prefix-url="penelitian" data-datatable-id="penelitian-dataTable"> Hapus </button>`
+                        `
                 }
             }
         ]
@@ -257,7 +257,7 @@ $(document).ready(function () {
                     return `
                     <a href="${base_url}kategori/detail/${data}"  class="btn btn-primary"> Detail Subkategori </a>
                     <a href="${base_url}kategori/ubah/${data}"  class="btn btn-primary"> Ubah </a> 
-                     <button data-id="${data}" class="btn btn-danger del" data-prefix-url="kategori" data-datatable-id="kategori-dataTable"> Hapus </button>`
+                     `
                 }
             }
         ]
@@ -288,7 +288,7 @@ $(document).ready(function () {
                 data: 'id', title: 'Aksi', orderable: false, searchable: false, render: data => {
                     return `
                     <a href="${base_url}kategori/detail/${lastPart}/ubah/${data}"  class="btn btn-primary"> Ubah </a> 
-                     <button data-id="${data}" class="btn btn-danger del" data-prefix-url="subkategori" data-datatable-id="subkategori-dataTable"> Hapus </button>`
+                     `
                 }
             }
         ]
