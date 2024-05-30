@@ -262,7 +262,7 @@ exports.getTotalPenelitian = async (dosen_id, search) => {
     return data || 0
 }
 
-exports.getAnalyticPenelitian = async (year, dosen_id) => {
+exports.getAnalyticPenelitian = async (search, year, dosen_id) => {
     const query = db("penelitian")
         .whereRaw('EXTRACT(year FROM periode_awal) = ?', [year])
         .select(
@@ -272,6 +272,8 @@ exports.getAnalyticPenelitian = async (year, dosen_id) => {
         )
         .countDistinct("penelitian.id as total")
         .whereIn('status', ['Disetujui', 'Selesai'])
+        .join('master_subkategori_penelitian', 'master_subkategori_penelitian.id', 'penelitian.id_subkategori_penelitian')
+        .join('master_kategori_penelitian', 'master_kategori_penelitian.id', 'master_subkategori_penelitian.id_master_kategori_penelitian')
         .groupBy('status')
         .groupBy('month')
         .groupBy('year')
@@ -287,10 +289,19 @@ exports.getAnalyticPenelitian = async (year, dosen_id) => {
             )
     }
 
+
+    if (search.kategori !== "undefined" && search.kategori != "" && typeof search.kategori !== "undefined") {
+        query.where('master_kategori_penelitian.id', search.kategori)
+    }
+
+    if (search.subkategori !== "undefined" && search.subkategori != "" && typeof search.subkategori !== "undefined") {
+        query.where('master_subkategori_penelitian.id', search.subkategori)
+    }
+
     return query
 }
 
-exports.getBiayaPenelitian = async (year, dosen_id) => {
+exports.getBiayaPenelitian = async (search, year, dosen_id) => {
     const query = db("penelitian")
         .whereRaw('EXTRACT(year FROM periode_awal) = ?', [year])
         .select(
@@ -300,6 +311,8 @@ exports.getBiayaPenelitian = async (year, dosen_id) => {
         )
         .sumDistinct("biaya_yang_disetujui as total")
         .whereIn('status', ['Disetujui', 'Selesai'])
+        .join('master_subkategori_penelitian', 'master_subkategori_penelitian.id', 'penelitian.id_subkategori_penelitian')
+        .join('master_kategori_penelitian', 'master_kategori_penelitian.id', 'master_subkategori_penelitian.id_master_kategori_penelitian')
         .groupBy('status')
         .groupBy('month')
         .groupBy('year')
@@ -313,6 +326,14 @@ exports.getBiayaPenelitian = async (year, dosen_id) => {
                 q.where('ketua_dosen_penelitian', dosen_id)
                     .orWhere('anggota_penelitian.id_dosen', dosen_id)
             )
+    }
+
+    if (search.kategori !== "undefined" && search.kategori != "" && typeof search.kategori !== "undefined") {
+        query.where('master_kategori_penelitian.id', search.kategori)
+    }
+
+    if (search.subkategori !== "undefined" && search.subkategori != "" && typeof search.subkategori !== "undefined") {
+        query.where('master_subkategori_penelitian.id', search.subkategori)
     }
 
     return query
