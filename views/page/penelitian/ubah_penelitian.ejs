@@ -150,7 +150,7 @@
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" accept=".pdf, .doc, .docx"
                                    name="file_laporan_kemajuan" <%= data.status == "Batal" ? "readonly" : "" %>
-                                   id="file_laporan_kemajuan" <%= list_proposal.surat_perjanjian_kerjasama?.original_filename ? '' : 'disabled' %> <%= data.status == "Batal" ? "disabled" : "" %>>
+                                   id="file_laporan_kemajuan" <%= list_proposal.file_monef?.original_filename ? '' : 'disabled' %> <%= data.status == "Batal" ? "disabled" : "" %>>
                             <label class="custom-file-label"
                                    for="file_proposal"><%= list_proposal.file_laporan_kemajuan?.original_filename ?? 'Upload file' %></label>
                         </div>
