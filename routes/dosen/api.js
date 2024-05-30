@@ -25,10 +25,11 @@ const {
     addMahasiswaByExcel,
     updateMahasiswa,
     deleteMahasiswa,
-    checkNIMMahasiswaExists, checkNisnDosenExists, addPenelitianExcelController,
+    checkNIMMahasiswaExists, checkNisnDosenExists, addPenelitianExcelController, findDosenByNameAndNIDN,
+    findMahasiswaByNameAndNIDN,
 } = require("../../controller/api/ajaxApiController");
 const {multerMultipleFieldHandler, multerSingleFieldFileHandler} = require("../../middleware/fileMiddleware");
-const {authMiddleware, dosenRoleMiddleware} = require("../../middleware/authMiddleware");
+const {authMiddleware, dosenRoleMiddleware, adminRoleMiddleware} = require("../../middleware/authMiddleware");
 const {getPenelitian, getBiayaPenelitian} = require("../../controller/api/chartController");
 const router = express.Router();
 
@@ -115,6 +116,9 @@ router.post('/mahasiswa/excel', authMiddleware, dosenRoleMiddleware, multerSingl
 router.patch('/mahasiswa', authMiddleware, dosenRoleMiddleware, updateMahasiswa)
 router.delete('/mahasiswa/:id', authMiddleware, dosenRoleMiddleware, deleteMahasiswa)
 router.post('/mahasiswa/check', authMiddleware, dosenRoleMiddleware, checkNIMMahasiswaExists)
+router.get('/mahasiswa/search', authMiddleware, dosenRoleMiddleware, findMahasiswaByNameAndNIDN)
+
 router.post('/dosen/check', authMiddleware, dosenRoleMiddleware, checkNisnDosenExists)
+router.get('/dosen/search', authMiddleware, dosenRoleMiddleware, findDosenByNameAndNIDN)
 
 module.exports = router;

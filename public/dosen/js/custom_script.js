@@ -170,15 +170,49 @@ $(document).ready(function () {
 
     $('#add-dosen').click(function (e) {
         $('#list_dosen').append(`<div class="col-sm-12 row">
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control input-dosen" name="list_dosen[]" placeholder="Masukan NIDN Dosen" required>
+                                <div class="col-sm-11">
+                                    <select type="text" name="list_dosen[]" class="form-control input-dosen dosen-select-search">
+                                </select>
                                     <span></span>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-1">
                                     <button type="button" class="btn btn-outline-danger delete-dynamic-form">
                                     <i class="fa fa-trash"></i></button>
                                 </div>
                             </div>`)
+
+        $('.dosen-select-search').select2({
+            ajax: {
+                url: `${base_api_url}dosen/search`,
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    const values = [];
+                    values.push($('#ketua_penelitian').val())
+
+                    $('.dosen-select-search').each(function() {
+                        values.push($(this).val());
+                    });
+                    return {
+                        search: params.term, // search term
+                        exclude: values
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data.data, function(item) {
+                            return {
+                                text: item.nama_dosen,
+                                id: item.nomor_induk_dosen_nasional
+                            }
+                        }),
+                    };
+                },
+                cache: true
+            },
+            placeholder: 'Ketik untuk mencari dengan Nama atau NIDN Dosen',
+            minimumInputLength: 1,
+        })
     })
 
     $(document).on('click', '.delete-dynamic-form', function (e) {
@@ -187,16 +221,50 @@ $(document).ready(function () {
 
     $('#add-mahasiswa').click(function (e) {
         $('#list_mahasiswa').append(`<div class="col-sm-12 row">
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control input-mahasiswa" name="list_mahasiswa[]" placeholder="Masukan NIM Mahasiswa" required>
+                                <div class="col-sm-11">
+                                    <select type="text" name="list_mahasiswa[]" class="form-control input-mahasiswa mahasiswa-select-search">
+                                </select>
                                     <span></span>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-1">
                                     <button type="button" class="btn btn-outline-danger delete-dynamic-form">
                                         <i class="fa fa-trash"></i>
                                     </button>
                                 </div>
                             </div>`)
+
+        $('.mahasiswa-select-search').select2({
+            ajax: {
+                url: `${base_api_url}mahasiswa/search`,
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    const values = [];
+
+                    $('.mahasiswa-select-search').each(function() {
+                        values.push($(this).val());
+                    });
+                    return {
+                        search: params.term, // search term
+                        exclude: values
+                    };
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data.data, function(item) {
+                            return {
+                                text: item.nama_mahasiswa,
+                                id: item.nomor_induk_mahasiswa
+                            }
+                        }),
+                    };
+                },
+                cache: true
+            },
+            placeholder: 'Ketik untuk mencari dengan Nama atau NIM Mahasiswa',
+            escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+            minimumInputLength: 1,
+        })
     })
 
     $(document).on('click', '.delete-dosen', function (e) {

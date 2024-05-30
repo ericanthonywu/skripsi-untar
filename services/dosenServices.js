@@ -6,6 +6,9 @@ const {HTTP_STATUS} = require("../constant/httpStatusConstant");
 exports.checkNISNDosenExists = async nisn =>
     await dosenRepository.checkNISNDosenExists(nisn)
 
+exports.findDosenByNameAndNIDN = async (search, exclude) =>
+    await dosenRepository.findDosenByNameAndNIDN(search, exclude)
+
 exports.checkNIPDosenExists = async nip =>
     await dosenRepository.checkNIPDosenExists(nip)
 

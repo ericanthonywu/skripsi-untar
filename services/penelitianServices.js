@@ -7,7 +7,6 @@ const path = require("node:path");
 const _ = require("lodash");
 const ServiceError = require("../exception/errorException");
 const {HTTP_STATUS} = require("../constant/httpStatusConstant");
-const {del} = require("express/lib/application");
 
 exports.getTotalPenelitian = async (dosen_id, search) =>
     (await penelitianRepository.getTotalPenelitian(dosen_id, search)).total || 0
@@ -141,9 +140,9 @@ exports.getPenelitianById = async id => {
 }
 
 exports.addPenelitianServices = async (data, anggota, file) => {
-    if (await penelitianRepository.checkJudulPenelitian(data.nama_proposal)) {
-        throw new ServiceError('Judul proposal sudah pernah ditambahkan', HTTP_STATUS.BAD_REQUEST)
-    }
+    // if (await penelitianRepository.checkJudulPenelitian(data.nama_proposal)) {
+    //     throw new ServiceError('Judul proposal sudah pernah ditambahkan', HTTP_STATUS.BAD_REQUEST)
+    // }
     await penelitianRepository.addPenelitian(data, anggota, file)
 }
 
@@ -168,13 +167,13 @@ exports.addMultiplePenelitianServices = async (data, id_dosen) => {
             biaya_yang_disetujui
         };
 
-        if (!judul) {
-            errors.push(`judul kosong pada row ${i}`)
-        } else if (await penelitianRepository.checkJudulPenelitian(judul)) {
-            errors.push(`judul "${judul}" sudah pernah ditambahkan pada row ${i}`)
-        } else {
+        // if (!judul) {
+        //     errors.push(`judul kosong pada row ${i}`)
+        // } else if (await penelitianRepository.checkJudulPenelitian(judul)) {
+        //     errors.push(`judul "${judul}" sudah pernah ditambahkan pada row ${i}`)
+        // } else {
             objInserted.nama_proposal = judul
-        }
+        // }
 
         if (!tahun) {
             errors.push(`tahun kosong pada row ${i}`)

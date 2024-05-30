@@ -181,115 +181,122 @@
                 <div class="form-group row">
                     <label for="ketua_penelitian" class="col-sm-2 col-form-label">Ketua Penelitian: </label>
                     <div class="col-sm-10">
-                        <input id="ketua_penelitian" name="ketua_dosen_penelitian" type="text"
-                               class="form-control input-dosen"
-                               placeholder="Masukkan NIDN Dosen Ketua Penelitian" <%= data.status == "Batal" ? "disabled" : "" %>
+                        <select id="ketua_penelitian" name="ketua_dosen_penelitian" type="text"
+                                class="form-control input-dosen dosen-select-search"
+                                placeholder="Masukkan NIDN Dosen Ketua Penelitian"
                                 <%= ketua_dosen_penelitian ? "readonly" : "" %>
-                               required value="<%= data.ketua_dosen_penelitian %>">
-                        <span class="small text-success">NIDN milik <%= data.nama_ketua_dosen_penelitian %></span>
+                                required
+                        >
+                            <option value="<%= data.ketua_dosen_penelitian %>"
+                                    selected><%= data.nama_ketua_dosen_penelitian %></option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Anggota Penelitian: </label>
                 </div>
                 <div class="form-group row">
-                    <div class="col-sm-6" id="list_dosen">
+                    <div class="col-sm-5" id="list_dosen">
                         <label class="col-sm-12 col-form-label" for="list_dosen">Dosen:</label>
-                        <div class="col-sm-12 row">
-                            <%
-                            if (list_dosen.length === 0) {
-                            %>
-                                <div class="col-sm-10">
-                                    <input type="text" name="list_dosen[]" class="form-control input-dosen"
-                                           placeholder="Masukan NIDN Anggota Dosen"
-                                    >
-                                    <span></span>
+                        <%
+                        if (list_dosen.length === 0) {
+                        %>
+                            <div class="col-sm-12 row">
+                                <div class="col-sm-11">
+                                    <select type="text" name="list_dosen[]"
+                                            class="form-control input-dosen dosen-select-search">
+                                    </select>
                                 </div>
-                                <div class="col-sm-2">
-                                    <button type="button" class="btn btn-outline-primary" id="add-dosen">
-                                        <i class="fa fa-plus"></i>
+                                <div class="col-sm-1">
+                                    <button type="button" class="btn btn-outline-danger delete-dynamic-form">
+                                        <i class="fa fa-trash"></i>
                                     </button>
                                 </div>
-                            <%
-                            }
-                            let iDosen = 0;
-                                    for (const {nidn, nama_dosen} of list_dosen) {
-                            %>
-                                <div class="col-sm-10">
-                                    <input type="text" name="list_dosen[]" class="form-control input-dosen"
-                                           placeholder="Masukan NISN Dosen"
-                                           value="<%= nidn %>" <%= data.status == "Batal" ? "disabled" : "" %>
-                                    >
-                                    <span class="small text-success">NIDN milik <%= nama_dosen %></span>
+                            </div>
+                        <%
+                        }
+                        let iDosen = 0;
+                                for (const {nidn, nama_dosen} of list_dosen) {
+                        %>
+                            <div class="col-sm-12 row">
+                                <div class="col-sm-11">
+                                    <select type="text" name="list_dosen[]"
+                                            class="form-control input-dosen dosen-select-search">
+                                        <option value="<%= nidn %>" selected><%= nama_dosen %></option>
+                                    </select>
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm-1">
                                     <% if (data.status !== "Batal") { %>
-                                        <% if (iDosen === 0) { %>
-                                            <button type="button" class="btn btn-outline-primary" id="add-dosen">
-                                                <i class="fa fa-plus"></i>
-                                            </button>
-                                        <% } else { %>
-                                            <button type="button" class="btn btn-outline-danger delete-dynamic-form">
-                                                <i class="fa fa-trash"></i>
-                                            </button>
-                                        <% } %>
+                                        <button type="button" class="btn btn-outline-danger delete-dynamic-form">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
                                     <% } %>
                                 </div>
-                            <%
-                                iDosen++;
-                            }
-                            %>
+                            </div>
+                        <%
+                            iDosen++;
+                        }
+                        %>
+                    </div>
+                    <div class="col-sm-1">
+                        <label class="col-sm-12 col-form-label">&nbsp;</label>
+                        <div class="col-sm-12 row">
+                            <button type="button" class="btn btn-outline-primary" id="add-dosen">
+                                <i class="fa fa-plus"></i>
+                            </button>
                         </div>
                     </div>
-
-                    <div class="col-sm-6" id="list_mahasiswa">
+                    <div class="col-sm-5" id="list_mahasiswa">
                         <label class="col-sm-12 col-form-label">Mahasiswa:</label>
-                        <div class="col-sm-12 row">
-                            <%
-                            if (list_mahasiswa.length === 0) {
-                            %>
-                                <div class="col-sm-10">
-                                    <input type="text" name="list_mahasiswa[]" class="form-control input-mahasiswa"
-                                           placeholder="Masukan NIM Anggota Mahasiswa">
-                                    <span></span>
+                        <%
+                        if (list_mahasiswa.length === 0) {
+                        %>
+                            <div class="col-sm-12 row">
+                                <div class="col-sm-11">
+                                    <select type="text" name="list_mahasiswa[]"
+                                            class="form-control input-mahasiswa mahasiswa-select-search">
+
+                                    </select>
                                 </div>
-                                <div class="col-sm-2">
-                                    <button type="button" class="btn btn-outline-primary" id="add-mahasiswa">
-                                        <i class="fa fa-plus"></i>
+                                <div class="col-sm-1">
+                                    <button type="button"
+                                            class="btn btn-outline-danger delete-dynamic-form">
+                                        <i class="fa fa-trash"></i>
                                     </button>
                                 </div>
-                            <%
-                            }
-                            let iMahasiswa = 0;
-                                    for (const {nim, nama_mahasiswa} of list_mahasiswa) {
-                            %>
-                                <div class="col-sm-12 row">
-                                    <div class="col-sm-10">
-                                        <input type="text" name="list_mahasiswa[]"
-                                               class="form-control input-mahasiswa" <%= data.status == "Batal" ? "disabled" : "" %>
-                                               placeholder="Masukan NIM Mahasiswa" value="<%= nim %>">
-                                        <span class="small text-success">NIM milik <%= nama_mahasiswa %></span>
-                                    </div>
-                                    <div class="col-sm-2">
-                                        <% if (data.status !== "Batal") { %>
-                                            <% if (iMahasiswa === 0) { %>
-                                                <button type="button" class="btn btn-outline-primary"
-                                                        id="add-mahasiswa">
-                                                    <i class="fa fa-plus"></i>
-                                                </button>
-                                            <% } else { %>
-                                                <button type="button"
-                                                        class="btn btn-outline-danger delete-dynamic-form">
-                                                    <i class="fa fa-trash"></i>
-                                                </button>
-                                            <% } %>
-                                        <% } %>
-                                    </div>
+                            </div>
+                        <%
+                        }
+                        let iMahasiswa = 0;
+                                for (const {nim, nama_mahasiswa} of list_mahasiswa) {
+                        %>
+                            <div class="col-sm-12 row">
+                                <div class="col-sm-11">
+                                    <select type="text" name="list_mahasiswa[]"
+                                            class="form-control input-mahasiswa mahasiswa-select-search">
+                                        <option value="<%= nim %>" selected><%= nama_mahasiswa %></option>
+                                    </select>
                                 </div>
-                            <%
-                                iMahasiswa++;
-                            }
-                            %>
+                                <div class="col-sm-1">
+                                    <% if (data.status !== "Batal") { %>
+                                        <button type="button"
+                                                class="btn btn-outline-danger delete-dynamic-form">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    <% } %>
+                                </div>
+                            </div>
+                        <%
+                            iMahasiswa++;
+                        }
+                        %>
+                    </div>
+                    <div class="col-sm-1">
+                        <label class="col-sm-12 col-form-label">&nbsp;</label>
+                        <div class="col-sm-12 row">
+                            <button type="button" class="btn btn-outline-primary" id="add-mahasiswa">
+                                <i class="fa fa-plus"></i>
+                            </button>
                         </div>
                     </div>
                 </div>

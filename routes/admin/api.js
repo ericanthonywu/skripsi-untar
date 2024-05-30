@@ -23,7 +23,7 @@ const {
     deleteMahasiswa,
     checkNisnDosenExists,
     checkNIMMahasiswaExists, ubahPenelitianController, addDosenByExcel, addMahasiswaByExcel, cancelPenelitianController,
-    addAdmin, updateAdmin, deleteAdmin, addPenelitianExcelController
+    addAdmin, updateAdmin, deleteAdmin, addPenelitianExcelController, findMahasiswaByNameAndNIDN, findDosenByNameAndNIDN
 } = require("../../controller/api/ajaxApiController");
 const {multerMultipleFieldHandler, multerSingleFieldFileHandler} = require("../../middleware/fileMiddleware");
 const {authMiddleware, adminRoleMiddleware} = require("../../middleware/authMiddleware");
@@ -120,12 +120,14 @@ router.post('/dosen/excel', authMiddleware, adminRoleMiddleware, multerSingleFie
 router.patch('/dosen', authMiddleware, adminRoleMiddleware, updateDosen)
 router.delete('/dosen/:id', authMiddleware, adminRoleMiddleware, deleteDosen)
 router.post('/dosen/check', authMiddleware, adminRoleMiddleware, checkNisnDosenExists)
+router.get('/dosen/search', authMiddleware, adminRoleMiddleware, findDosenByNameAndNIDN)
 
 router.post('/mahasiswa', authMiddleware, adminRoleMiddleware, addMahasiswa)
 router.post('/mahasiswa/excel', authMiddleware, adminRoleMiddleware, multerSingleFieldFileHandler('/excel', 'file'), addMahasiswaByExcel)
 router.patch('/mahasiswa', authMiddleware, adminRoleMiddleware, updateMahasiswa)
 router.delete('/mahasiswa/:id', authMiddleware, adminRoleMiddleware, deleteMahasiswa)
 router.post('/mahasiswa/check', authMiddleware, adminRoleMiddleware, checkNIMMahasiswaExists)
+router.get('/mahasiswa/search', authMiddleware, adminRoleMiddleware, findMahasiswaByNameAndNIDN)
 
 router.post('/admin', authMiddleware, adminRoleMiddleware, addAdmin)
 router.patch('/admin', authMiddleware, adminRoleMiddleware, updateAdmin)

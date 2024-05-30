@@ -1,5 +1,71 @@
 $(document).ready(function () {
-    $('select').selectpicker();
+    $('form select:not(.dosen-select-search):not(.mahasiswa-select-search)').selectpicker();
+
+    $('.dosen-select-search').select2({
+        ajax: {
+            url: `${base_api_url}dosen/search`,
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                const values = [];
+                values.push($('#ketua_penelitian').val())
+
+                $('.dosen-select-search').each(function() {
+                    values.push($(this).val());
+                });
+                return {
+                    search: params.term, // search term
+                    exclude: values
+                };
+            },
+            processResults: function (data) {
+                return {
+                    results: $.map(data.data, function(item) {
+                        return {
+                            text: item.nama_dosen,
+                            id: item.nomor_induk_dosen_nasional
+                        }
+                    }),
+                };
+            },
+            cache: true
+        },
+        placeholder: 'Ketik untuk mencari dengan Nama atau NIDN Dosen',
+        minimumInputLength: 1,
+    })
+
+    $('.mahasiswa-select-search').select2({
+        ajax: {
+            url: `${base_api_url}mahasiswa/search`,
+            dataType: 'json',
+            delay: 250,
+            data: function (params) {
+                const values = [];
+
+                $('.mahasiswa-select-search').each(function() {
+                    values.push($(this).val());
+                });
+                return {
+                    search: params.term, // search term
+                    exclude: values
+                };
+            },
+            processResults: function (data) {
+                return {
+                    results: $.map(data.data, function(item) {
+                        return {
+                            text: item.nama_mahasiswa,
+                            id: item.nomor_induk_mahasiswa
+                        }
+                    }),
+                };
+            },
+            cache: true
+        },
+        placeholder: 'Ketik untuk mencari dengan Nama atau NIM Mahasiswa',
+        escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+        minimumInputLength: 1,
+    })
 
     $('.month-picker').datepicker({
         format: "MM yyyy",

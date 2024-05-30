@@ -1,9 +1,18 @@
 const db = require("../config/database/connection")
-const {checkExistsTable} = require("../util");
 const _ = require("lodash");
 
 exports.checkNimMahasiswaExists = async nim =>
     await db('mahasiswa').where({nomor_induk_mahasiswa: nim}).first('nama_mahasiswa')
+
+exports.findMahasiswaByNameAndNIDN = async (search, exclude) => {
+    const limit = 5
+    return db('mahasiswa')
+        .where(q => q.where('nama_mahasiswa', 'ILIKE', `%${search}%`)
+            .orWhere('nomor_induk_mahasiswa', 'ILIKE', `%${search}%`))
+        .whereNotIn('nomor_induk_mahasiswa', exclude ?? [])
+        .select('nama_mahasiswa', 'nomor_induk_mahasiswa')
+        .limit(limit)
+}
 
 exports.getAllMahasiswa = async () =>
     await db('mahasiswa').select("id", "nama_mahasiswa", "nomor_induk_mahasiswa")
@@ -32,16 +41,16 @@ exports.addMahasiswa = async (data) =>
     await db("mahasiswa").insert(data)
 
 exports.addMultipleMahasiswa = async (data) => {
-        const trx = await db.transaction()
-        try {
-                for (const chunk of _.chunk(data, 100)) {
-                        await trx('mahasiswa').insert(chunk);
-                }
-                await trx.commit()
-        } catch (e) {
-                await trx.rollback()
-                throw e
+    const trx = await db.transaction()
+    try {
+        for (const chunk of _.chunk(data, 100)) {
+            await trx('mahasiswa').insert(chunk);
         }
+        await trx.commit()
+    } catch (e) {
+        await trx.rollback()
+        throw e
+    }
 }
 
 exports.updateMahasiswa = async (data) =>

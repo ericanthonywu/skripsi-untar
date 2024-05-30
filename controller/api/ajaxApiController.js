@@ -367,11 +367,35 @@ exports.checkNisnDosenExists = async (req, res, next) => {
     }
 }
 
+exports.findDosenByNameAndNIDN = async (req, res, next) => {
+    try {
+        const {search, exclude} = req.query
+
+        const data = await dosenServices.findDosenByNameAndNIDN(search, exclude)
+
+        res.status(HTTP_STATUS.OK).json({data})
+    } catch (e) {
+        next(e)
+    }
+}
+
 exports.checkNIMMahasiswaExists = async (req, res, next) => {
     try {
         const {nim} = req.body
 
         const data = await mahasiswaServices.checkNIMMahasiswaExists(nim)
+
+        res.status(HTTP_STATUS.OK).json({data})
+    } catch (e) {
+        next(e)
+    }
+}
+
+exports.findMahasiswaByNameAndNIDN = async (req, res, next) => {
+    try {
+        const {search, exclude} = req.query
+
+        const data = await mahasiswaServices.findMahasiswaByNameAndNIDN(search, exclude)
 
         res.status(HTTP_STATUS.OK).json({data})
     } catch (e) {

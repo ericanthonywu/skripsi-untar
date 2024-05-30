@@ -2,8 +2,16 @@ const db = require("../config/database/connection")
 const {checkExistsTable} = require("../util");
 const _ = require('lodash')
 
-exports.checkNISNDosenExists = async nisn =>
-    await db('dosen').where({nomor_induk_dosen_nasional: nisn}).first('nama_dosen')
+exports.checkNISNDosenExists = async nidn =>
+    await db('dosen').where({nomor_induk_dosen_nasional: nidn}).first('nama_dosen')
+
+exports.findDosenByNameAndNIDN = async (search, exclude) =>
+    db('dosen')
+        .where(q => q.where('nama_dosen', 'ILIKE', `%${search}%`)
+            .orWhere('nomor_induk_dosen_nasional', 'ILIKE', `%${search}%`))
+        .whereNotIn('nomor_induk_dosen_nasional', exclude)
+        .select('nama_dosen', 'nomor_induk_dosen_nasional')
+        .limit(5)
 
 exports.checkEmailDosenExists = async email =>
     await checkExistsTable(db('dosen').where({email}))

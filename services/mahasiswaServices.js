@@ -5,6 +5,9 @@ const {HTTP_STATUS} = require("../constant/httpStatusConstant");
 exports.checkNIMMahasiswaExists = async nim =>
     await mahasiswaRepository.checkNimMahasiswaExists(nim)
 
+exports.findMahasiswaByNameAndNIDN = async (search,exclude) =>
+    await mahasiswaRepository.findMahasiswaByNameAndNIDN(search, exclude)
+
 exports.getAllMahasiswa = async () =>
     await mahasiswaRepository.getAllMahasiswa()
 
