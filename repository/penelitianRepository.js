@@ -422,21 +422,21 @@ exports.addPenelitian = async (data, anggota, dokumen) => {
 
         const [{id}] = await trx('penelitian').insert(data, 'id')
 
-        for (const nisn_dosen of anggota.list_dosen) {
+        for (const nisn_dosen of anggota.list_dosen ?? []) {
             await trx('anggota_penelitian').insert({
                 id_penelitian: id,
                 id_dosen: trx('dosen').where({nomor_induk_dosen_nasional: nisn_dosen}).first('id'),
             })
         }
 
-        for (const nim_mahasiswa of anggota.list_mahasiswa) {
+        for (const nim_mahasiswa of anggota.list_mahasiswa ?? []) {
             await trx('anggota_penelitian').insert({
                 id_penelitian: id,
                 id_mahasiswa: trx('mahasiswa').where({nomor_induk_mahasiswa: nim_mahasiswa}).first('id'),
             })
         }
 
-        for (const {fieldname, filename, originalname} of dokumen) {
+        for (const {fieldname, filename, originalname} of dokumen ?? []) {
             await trx('dokumen_penelitian').insert({
                 id_penelitian: id,
                 tipe_dokumen: trx('master_tipe_penelitian_dokumen').where({nama: fieldname}).first('id'),
@@ -505,14 +505,14 @@ exports.ubahPenelitian = async (id, data, anggota, dokumen) => {
             .where({id_penelitian: id})
             .del()
 
-        for (const nim_mahasiswa of anggota.list_mahasiswa) {
+        for (const nim_mahasiswa of anggota.list_mahasiswa ?? []) {
             await trx('anggota_penelitian').insert({
                 id_penelitian: id,
                 id_mahasiswa: trx('mahasiswa').where({nomor_induk_mahasiswa: nim_mahasiswa}).first('id'),
             })
         }
 
-        for (const nisn_dosen of anggota.list_dosen) {
+        for (const nisn_dosen of anggota.list_dosen ?? []) {
             await trx('anggota_penelitian').insert({
                 id_penelitian: id,
                 id_dosen: trx('dosen').where({nomor_induk_dosen_nasional: nisn_dosen}).first('id'),

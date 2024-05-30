@@ -35,6 +35,13 @@ $(document).ready(async function () {
         const tahun = $('#filter-tahun-rekap-penelitian').val()
         const kategori = $('#chart-filter-kategori').val()
         const subkategori = $('#chart-filter-subkategori').val()
+
+        let xAxisChart,
+            seriesChartSelesai,
+            seriesChartDisetujui,
+            xAxisBiayaChart,
+            seriesBiayaChartSelesai,
+            seriesBiayaChartDisetujui;
         await (async () => {
             let data = []
 
@@ -51,9 +58,8 @@ $(document).ready(async function () {
 
             let xhr = await am5.net.load(`${base_api_url}chart/penelitian/all/${tahun}?kategori=${kategori}&subkategori=${subkategori}`)
             data = JSON.parse(xhr.response)
-            root.container.children.clear()
 
-            const generateChart = (data, tahun) => {
+            const generateChart = (data) => {
                 const chart = root.container.children.push(am5xy.XYChart.new(root, {
                     panX: false,
                     panY: false,
@@ -64,7 +70,7 @@ $(document).ready(async function () {
                 }));
 
                 chart.children.unshift(am5.Label.new(root, {
-                    text: `Rekap Total Penelitian Tahun ${tahun}`,
+                    text: `Rekap Total Penelitian`,
                     fontSize: 25,
                     fontWeight: "500",
                     textAlign: "center",
@@ -80,7 +86,7 @@ $(document).ready(async function () {
                     minorGridEnabled: true
                 });
 
-                const xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+                xAxisChart = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
                     categoryField: "date",
                     renderer: xRenderer,
                     tooltip: am5.Tooltip.new(root, {})
@@ -90,7 +96,7 @@ $(document).ready(async function () {
                     location: 1
                 })
 
-                xAxis.data.setAll(data);
+                xAxisChart.data.setAll(data);
 
                 const yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
                     min: 0,
@@ -103,47 +109,74 @@ $(document).ready(async function () {
                     x: am5.p50
                 }));
 
-                const makeSeries = (name, fieldName, data, color) => {
-                    const series = chart.series.push(am5xy.ColumnSeries.new(root, {
-                        name: name,
-                        stacked: true,
-                        xAxis: xAxis,
-                        yAxis: yAxis,
-                        valueYField: fieldName,
-                        categoryXField: "date",
-                        fill: color,
-                    }));
+                seriesChartSelesai = chart.series.push(am5xy.ColumnSeries.new(root, {
+                    name: "Jumlah Penelitian yang Selesai",
+                    stacked: true,
+                    xAxis: xAxisChart,
+                    yAxis: yAxis,
+                    valueYField: "jumlah_penelitian_selesai",
+                    categoryXField: "date",
+                    fill: root.interfaceColors.get("positive"),
+                }));
 
-                    series.columns.template.setAll({
-                        tooltipText: "{name}, {categoryX}: {valueY}",
-                        tooltipY: am5.percent(10)
-                    });
+                seriesChartSelesai.columns.template.setAll({
+                    tooltipText: "{name}, {categoryX}: {valueY}",
+                    tooltipY: am5.percent(10)
+                });
 
-                    series.data.setAll(data);
-                    series.appear();
+                seriesChartSelesai.data.setAll(data);
+                seriesChartSelesai.appear();
 
-                    series.bullets.push(() => am5.Bullet.new(root, {
-                        sprite: am5.Label.new(root, {
-                            text: "{valueY}",
-                            fill: root.interfaceColors.get("alternativeText"),
-                            centerY: am5.p50,
-                            centerX: am5.p50,
-                            populateText: true
-                        })
-                    }));
+                seriesChartSelesai.bullets.push(() => am5.Bullet.new(root, {
+                    sprite: am5.Label.new(root, {
+                        text: "{valueY}",
+                        fill: root.interfaceColors.get("alternativeText"),
+                        centerY: am5.p50,
+                        centerX: am5.p50,
+                        populateText: true
+                    })
+                }));
 
-                    legend.data.push(series);
-                }
+                legend.data.push(seriesChartSelesai);
 
-                makeSeries("Jumlah Penelitian yang Selesai", "jumlah_penelitian_selesai", data, root.interfaceColors.get("positive"));
-                makeSeries("Jumlah Penelitian yang Disetujui", "jumlah_penelitian_yang_disetujui", data, root.interfaceColors.get("primaryButton"));
+                seriesChartDisetujui = chart.series.push(am5xy.ColumnSeries.new(root, {
+                    name: "Jumlah Penelitian yang Disetujui",
+                    stacked: true,
+                    xAxis: xAxisChart,
+                    yAxis: yAxis,
+                    valueYField: "jumlah_penelitian_yang_disetujui",
+                    categoryXField: "date",
+                    fill: root.interfaceColors.get("primaryButton"),
+                }));
+
+                seriesChartDisetujui.columns.template.setAll({
+                    tooltipText: "{name}, {categoryX}: {valueY}",
+                    tooltipY: am5.percent(10)
+                });
+
+                seriesChartDisetujui.data.setAll(data);
+                seriesChartDisetujui.appear();
+
+                seriesChartDisetujui.bullets.push(() => am5.Bullet.new(root, {
+                    sprite: am5.Label.new(root, {
+                        text: "{valueY}",
+                        fill: root.interfaceColors.get("alternativeText"),
+                        centerY: am5.p50,
+                        centerX: am5.p50,
+                        populateText: true
+                    })
+                }));
+
+                legend.data.push(seriesChartDisetujui);
             }
 
-            generateChart(data, tahun)
+            generateChart(data)
+
+
 
             let biayaData = []
 
-            const rootBiayaChart = am5.Root.new("chart_biaya_penelitian");
+            let rootBiayaChart = am5.Root.new("chart_biaya_penelitian");
 
             rootBiayaChart.setThemes([
                 am5themes_Animated.new(rootBiayaChart)
@@ -156,10 +189,9 @@ $(document).ready(async function () {
 
             let xhrBiaya = await am5.net.load(`${base_api_url}chart/penelitian/biaya/${tahun}?kategori=${kategori}&subkategori=${subkategori}`)
             biayaData = JSON.parse(xhrBiaya.response)
-            rootBiayaChart.container.children.clear()
 
-            const generateBiayaChart = (data, tahun) => {
-                const chart = rootBiayaChart.container.children.push(am5xy.XYChart.new(rootBiayaChart, {
+            const generateBiayaChart = (biayaData) => {
+                const biayaChart = rootBiayaChart.container.children.push(am5xy.XYChart.new(rootBiayaChart, {
                     paddingLeft: 0,
                     layout: rootBiayaChart.verticalLayout,
                     panX: false,
@@ -168,10 +200,10 @@ $(document).ready(async function () {
                     wheelY: "none",
                 }));
 
-                chart.zoomOutButton.set("forceHidden", true);
+                biayaChart.zoomOutButton.set("forceHidden", true);
 
-                chart.children.unshift(am5.Label.new(rootBiayaChart, {
-                    text: `Rekap Total Biaya Penelitian Tahun ${tahun}`,
+                biayaChart.children.unshift(am5.Label.new(rootBiayaChart, {
+                    text: `Rekap Total Biaya Penelitian`,
                     fontSize: 25,
                     fontWeight: "500",
                     textAlign: "center",
@@ -185,7 +217,7 @@ $(document).ready(async function () {
                     minorGridEnabled: true
                 });
 
-                const xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(rootBiayaChart, {
+                xAxisBiayaChart = biayaChart.xAxes.push(am5xy.CategoryAxis.new(rootBiayaChart, {
                     categoryField: "date",
                     renderer: xRenderer,
                     tooltip: am5.Tooltip.new(rootBiayaChart, {})
@@ -195,88 +227,119 @@ $(document).ready(async function () {
                     location: 1
                 })
 
-                xAxis.data.setAll(data);
+                xAxisBiayaChart.data.setAll(biayaData);
 
-                const yAxis = chart.yAxes.push(am5xy.ValueAxis.new(rootBiayaChart, {
+                const yAxis = biayaChart.yAxes.push(am5xy.ValueAxis.new(rootBiayaChart, {
                     min: 0,
                     renderer: am5xy.AxisRendererY.new(rootBiayaChart, {
                         strokeOpacity: 0.1
                     })
                 }));
-                const legend = chart.children.push(am5.Legend.new(rootBiayaChart, {
+                const legend = biayaChart.children.push(am5.Legend.new(rootBiayaChart, {
                     centerX: am5.p50,
                     x: am5.p50
                 }));
 
-                const makeSeries = (name, fieldName, data, color) => {
-                    const series = chart.series.push(am5xy.ColumnSeries.new(rootBiayaChart, {
-                        name: name,
-                        stacked: true,
-                        xAxis: xAxis,
-                        yAxis: yAxis,
-                        valueYField: fieldName,
-                        categoryXField: "date",
-                        fill: color,
-                    }));
+                seriesBiayaChartSelesai = biayaChart.series.push(am5xy.ColumnSeries.new(rootBiayaChart, {
+                    name: "Jumlah Penelitian yang Selesai",
+                    stacked: true,
+                    xAxis: xAxisBiayaChart,
+                    yAxis: yAxis,
+                    valueYField: "jumlah_penelitian_selesai",
+                    categoryXField: "date",
+                    fill: rootBiayaChart.interfaceColors.get("positive"),
+                }));
 
-                    series.columns.template.setAll({
-                        tooltipText: "{name}, {categoryX}: {valueY}",
-                        tooltipY: am5.percent(10)
-                    });
+                seriesBiayaChartSelesai.columns.template.setAll({
+                    tooltipText: "{name}, {categoryX}: {valueY}",
+                    tooltipY: am5.percent(10)
+                });
 
-                    series.data.setAll(data);
-                    series.appear();
+                seriesBiayaChartSelesai.data.setAll(biayaData);
+                seriesBiayaChartSelesai.appear();
 
-                    series.bullets.push(() => am5.Bullet.new(rootBiayaChart, {
-                        sprite: am5.Label.new(rootBiayaChart, {
-                            text: "{valueY}",
-                            fill: rootBiayaChart.interfaceColors.get("alternativeText"),
-                            centerY: am5.p50,
-                            centerX: am5.p50,
-                            populateText: true
-                        })
-                    }));
+                seriesBiayaChartSelesai.bullets.push(() => am5.Bullet.new(rootBiayaChart, {
+                    sprite: am5.Label.new(rootBiayaChart, {
+                        text: "{valueY}",
+                        fill: rootBiayaChart.interfaceColors.get("alternativeText"),
+                        centerY: am5.p50,
+                        centerX: am5.p50,
+                        populateText: true
+                    })
+                }));
 
-                    legend.data.push(series);
-                }
+                legend.data.push(seriesBiayaChartSelesai);
 
-                makeSeries("Jumlah Penelitian yang Selesai", "jumlah_penelitian_selesai", biayaData, rootBiayaChart.interfaceColors.get("positive"));
-                makeSeries("Jumlah Penelitian yang Sedang Disetujui", "jumlah_penelitian_yang_disetujui", biayaData, rootBiayaChart.interfaceColors.get("primaryButton"));
+                seriesBiayaChartDisetujui = biayaChart.series.push(am5xy.ColumnSeries.new(rootBiayaChart, {
+                    name: "Jumlah Penelitian yang Disetujui",
+                    stacked: true,
+                    xAxis: xAxisBiayaChart,
+                    yAxis: yAxis,
+                    valueYField: "jumlah_penelitian_yang_disetujui",
+                    categoryXField: "date",
+                    fill: rootBiayaChart.interfaceColors.get("primaryButton"),
+                }));
+
+                seriesBiayaChartDisetujui.columns.template.setAll({
+                    tooltipText: "{name}, {categoryX}: {valueY}",
+                    tooltipY: am5.percent(10)
+                });
+
+                seriesBiayaChartDisetujui.data.setAll(biayaData);
+                seriesBiayaChartDisetujui.appear();
+
+                seriesBiayaChartDisetujui.bullets.push(() => am5.Bullet.new(rootBiayaChart, {
+                    sprite: am5.Label.new(rootBiayaChart, {
+                        text: "{valueY}",
+                        fill: rootBiayaChart.interfaceColors.get("alternativeText"),
+                        centerY: am5.p50,
+                        centerX: am5.p50,
+                        populateText: true
+                    })
+                }));
+
+                legend.data.push(seriesBiayaChartDisetujui);
             }
-            generateBiayaChart(data, tahun)
+
+            generateBiayaChart(biayaData)
 
             $('#filter-tahun-rekap-penelitian').change(async function () {
                 const tahun = $(this).val()
                 const kategori = $('#chart-filter-kategori').val()
                 const subkategori = $('#chart-filter-subkategori').val()
 
-                rootBiayaChart.container.children.clear()
                 xhr = await am5.net.load(`${base_api_url}chart/penelitian/biaya/${tahun}?kategori=${kategori}&subkategori=${subkategori}`)
                 data = JSON.parse(xhr.response)
-                generateBiayaChart(data, tahun)
+                xAxisBiayaChart.data.setAll(data)
+                seriesBiayaChartSelesai.data.setAll(data)
+                seriesBiayaChartDisetujui.data.setAll(data)
 
-                root.container.children.clear()
                 xhr = await am5.net.load(`${base_api_url}chart/penelitian/all/${tahun}?kategori=${kategori}&subkategori=${subkategori}`)
                 data = JSON.parse(xhr.response)
-                generateChart(data, tahun)
+                xAxisChart.data.setAll(data)
+                seriesChartSelesai.data.setAll(data)
+                seriesChartDisetujui.data.setAll(data)
             })
 
             $('#chart-filter-kategori').on('change', async function () {
                 const val = $(this).val()
                 if (!val) {
+                    const tahun = $('#filter-tahun-rekap-penelitian').val()
                     $('#chart-filter-subkategori').html(`<option value="">Pilih Kategori Terlebih Dahulu</option>`)
                     $('#chart-filter-subkategori').selectpicker('destroy');
                     $('#chart-filter-subkategori').selectpicker();
 
-                    rootBiayaChart.container.children.clear()
-                    xhr = await am5.net.load(`${base_api_url}chart/penelitian/biaya/${tahun}?kategori=${kategori}&subkategori=${subkategori}`)
+                    xhr = await am5.net.load(`${base_api_url}chart/penelitian/biaya/${tahun}`)
                     data = JSON.parse(xhr.response)
-                    generateBiayaChart(data, tahun)
+                    xAxisBiayaChart.data.setAll(data)
+                    seriesBiayaChartSelesai.data.setAll(data)
+                    seriesBiayaChartDisetujui.data.setAll(data)
 
-                    root.container.children.clear()
-                    xhr = await am5.net.load(`${base_api_url}chart/penelitian/all/${tahun}?kategori=${kategori}&subkategori=${subkategori}`)
+                    xhr = await am5.net.load(`${base_api_url}chart/penelitian/all/${tahun}`)
                     data = JSON.parse(xhr.response)
-                    generateChart(data, tahun)
+                    xAxisChart.data.setAll(data)
+                    seriesChartSelesai.data.setAll(data)
+                    seriesChartDisetujui.data.setAll(data)
 
                     return
                 }
@@ -296,15 +359,17 @@ $(document).ready(async function () {
                         const kategori = $('#chart-filter-kategori').val()
                         const subkategori = $('#chart-filter-subkategori').val()
 
-                        rootBiayaChart.container.children.clear()
                         xhr = await am5.net.load(`${base_api_url}chart/penelitian/biaya/${tahun}?kategori=${kategori}&subkategori=${subkategori}`)
                         data = JSON.parse(xhr.response)
-                        generateBiayaChart(data, tahun)
+                        xAxisBiayaChart.data.setAll(data)
+                        seriesBiayaChartSelesai.data.setAll(data)
+                        seriesBiayaChartDisetujui.data.setAll(data)
 
-                        root.container.children.clear()
                         xhr = await am5.net.load(`${base_api_url}chart/penelitian/all/${tahun}?kategori=${kategori}&subkategori=${subkategori}`)
                         data = JSON.parse(xhr.response)
-                        generateChart(data, tahun)
+                        xAxisChart.data.setAll(data)
+                        seriesChartSelesai.data.setAll(data)
+                        seriesChartDisetujui.data.setAll(data)
                     }
                 })
             })
@@ -314,15 +379,17 @@ $(document).ready(async function () {
                 const kategori = $('#chart-filter-kategori').val()
                 const subkategori = $('#chart-filter-subkategori').val()
 
-                rootBiayaChart.container.children.clear()
                 xhr = await am5.net.load(`${base_api_url}chart/penelitian/biaya/${tahun}?kategori=${kategori}&subkategori=${subkategori}`)
                 data = JSON.parse(xhr.response)
-                generateBiayaChart(data, tahun)
+                xAxisBiayaChart.data.setAll(data)
+                seriesBiayaChartSelesai.data.setAll(data)
+                seriesBiayaChartDisetujui.data.setAll(data)
 
-                root.container.children.clear()
                 xhr = await am5.net.load(`${base_api_url}chart/penelitian/all/${tahun}?kategori=${kategori}&subkategori=${subkategori}`)
                 data = JSON.parse(xhr.response)
-                generateChart(data, tahun)
+                xAxisChart.data.setAll(data)
+                seriesChartSelesai.data.setAll(data)
+                seriesChartDisetujui.data.setAll(data)
             })
 
         })()
