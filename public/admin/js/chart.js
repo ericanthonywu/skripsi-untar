@@ -103,6 +103,7 @@ $(document).ready(async function () {
 
                 const yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
                     min: 0,
+                    extraMax: 0.1,
                     calculateTotals: true,
                     renderer: am5xy.AxisRendererY.new(root, {
                         strokeOpacity: 0.1
@@ -202,8 +203,6 @@ $(document).ready(async function () {
 
                 seriesChartTotal.data.setAll(data);
                 seriesChartTotal.appear();
-
-                legend.data.push(seriesChartTotal);
             }
 
             generateChart(data)
@@ -374,8 +373,6 @@ $(document).ready(async function () {
 
                 seriesBiayaChartTotal.data.setAll(biayaData);
                 seriesBiayaChartTotal.appear();
-
-                legend.data.push(seriesBiayaChartTotal);
             }
 
             generateBiayaChart(biayaData)
