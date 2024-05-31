@@ -112,7 +112,7 @@ exports.getPenelitian = (search, offset, limit, sort_column = 'created_at', sort
         }
     }
 
-    if (dosen_id) {
+    if (dosen_id !== 0) {
         query
             .where(q => {
                     switch (search.status_dosen) {
