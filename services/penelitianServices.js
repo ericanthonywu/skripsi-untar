@@ -55,7 +55,7 @@ exports.getPenelitianAnalytic = async (search, year, dosen_id) => {
                             delete obj[key];
                         }
                     });
-
+                    obj.none = 0
                     return obj;
                 }).value();
         })
@@ -104,6 +104,8 @@ exports.getBiayaPenelitianAnalytic = async (search, year, dosen_id) => {
                             delete obj[key];
                         }
                     });
+
+                    obj.none = 0
 
                     return obj;
                 }).value();

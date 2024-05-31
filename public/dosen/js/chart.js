@@ -39,9 +39,12 @@ $(document).ready(async function () {
         let xAxisChart,
             seriesChartSelesai,
             seriesChartDisetujui,
+            seriesChartTotal,
             xAxisBiayaChart,
             seriesBiayaChartSelesai,
-            seriesBiayaChartDisetujui;
+            seriesBiayaChartDisetujui,
+            seriesBiayaChartTotal
+        ;
         await (async () => {
             let data = []
 
@@ -100,6 +103,7 @@ $(document).ready(async function () {
 
                 const yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
                     min: 0,
+                    calculateTotals: true,
                     renderer: am5xy.AxisRendererY.new(root, {
                         strokeOpacity: 0.1
                     })
@@ -168,6 +172,38 @@ $(document).ready(async function () {
                 }));
 
                 legend.data.push(seriesChartDisetujui);
+
+                seriesChartTotal = chart.series.push(am5xy.ColumnSeries.new(root, {
+                    name: "",
+                    stacked: true,
+                    maskBullets: false,
+                    xAxis: xAxisChart,
+                    yAxis: yAxis,
+                    valueYField: "none",
+                    categoryXField: "date",
+                    fill: root.interfaceColors.get("primaryButton"),
+                }));
+
+                seriesChartTotal.columns.template.setAll({
+                    tooltipText: "{name}, {categoryX}: {valueY}",
+                    tooltipY: am5.percent(10)
+                });
+
+                seriesChartTotal.bullets.push(() => am5.Bullet.new(root, {
+                    locationY: 1,
+                    sprite: am5.Label.new(root, {
+                        text: "{valueYTotal}",
+                        fill: am5.color(0x000000),
+                        centerY: am5.p100,
+                        centerX: am5.p50,
+                        populateText: true
+                    })
+                }));
+
+                seriesChartTotal.data.setAll(data);
+                seriesChartTotal.appear();
+
+                legend.data.push(seriesChartTotal);
             }
 
             generateChart(data)
@@ -231,10 +267,12 @@ $(document).ready(async function () {
 
                 const yAxis = biayaChart.yAxes.push(am5xy.ValueAxis.new(rootBiayaChart, {
                     min: 0,
+                    calculateTotals: true,
                     renderer: am5xy.AxisRendererY.new(rootBiayaChart, {
                         strokeOpacity: 0.1
                     })
                 }));
+
                 const legend = biayaChart.children.push(am5.Legend.new(rootBiayaChart, {
                     centerX: am5.p50,
                     x: am5.p50
@@ -248,25 +286,29 @@ $(document).ready(async function () {
                     valueYField: "jumlah_penelitian_selesai",
                     categoryXField: "date",
                     fill: rootBiayaChart.interfaceColors.get("positive"),
+                    maskBullets: false
                 }));
 
                 seriesBiayaChartSelesai.columns.template.setAll({
                     tooltipText: "{name}, {categoryX}: {valueY}",
-                    tooltipY: am5.percent(10)
+                    tooltipY: am5.percent(10),
+                });
+
+                seriesBiayaChartSelesai.bullets.push(() => {
+                    return am5.Bullet.new(rootBiayaChart, {
+                        sprite: am5.Label.new(rootBiayaChart, {
+                            text: "{valueY}",
+                            fill: rootBiayaChart.interfaceColors.get("alternativeText"),
+                            centerY: am5.p50,
+                            centerX: am5.p50,
+                            populateText: true
+                        })
+                    })
                 });
 
                 seriesBiayaChartSelesai.data.setAll(biayaData);
                 seriesBiayaChartSelesai.appear();
 
-                seriesBiayaChartSelesai.bullets.push(() => am5.Bullet.new(rootBiayaChart, {
-                    sprite: am5.Label.new(rootBiayaChart, {
-                        text: "{valueY}",
-                        fill: rootBiayaChart.interfaceColors.get("alternativeText"),
-                        centerY: am5.p50,
-                        centerX: am5.p50,
-                        populateText: true
-                    })
-                }));
 
                 legend.data.push(seriesBiayaChartSelesai);
 
@@ -282,23 +324,58 @@ $(document).ready(async function () {
 
                 seriesBiayaChartDisetujui.columns.template.setAll({
                     tooltipText: "{name}, {categoryX}: {valueY}",
-                    tooltipY: am5.percent(10)
+                    tooltipY: am5.percent(10),
+                });
+
+                seriesBiayaChartDisetujui.bullets.push(() => {
+                    return am5.Bullet.new(rootBiayaChart, {
+                        sprite: am5.Label.new(rootBiayaChart, {
+                            text: "{valueY}",
+                            fill: rootBiayaChart.interfaceColors.get("alternativeText"),
+                            centerY: am5.p50,
+                            centerX: am5.p50,
+                            populateText: true
+                        })
+                    })
                 });
 
                 seriesBiayaChartDisetujui.data.setAll(biayaData);
                 seriesBiayaChartDisetujui.appear();
 
-                seriesBiayaChartDisetujui.bullets.push(() => am5.Bullet.new(rootBiayaChart, {
+
+                legend.data.push(seriesBiayaChartDisetujui);
+
+                seriesBiayaChartTotal = biayaChart.series.push(am5xy.ColumnSeries.new(rootBiayaChart, {
+                    name: "",
+                    stacked: true,
+                    maskBullets: false,
+                    xAxis: xAxisBiayaChart,
+                    yAxis: yAxis,
+                    valueYField: "none",
+                    categoryXField: "date",
+                    fill: rootBiayaChart.interfaceColors.get("primaryButton"),
+                }));
+
+                seriesBiayaChartTotal.columns.template.setAll({
+                    tooltipText: "{name}, {categoryX}: {valueY}",
+                    tooltipY: am5.percent(10)
+                });
+
+                seriesBiayaChartTotal.bullets.push(() => am5.Bullet.new(rootBiayaChart, {
+                    locationY: 1,
                     sprite: am5.Label.new(rootBiayaChart, {
-                        text: "{valueY}",
-                        fill: rootBiayaChart.interfaceColors.get("alternativeText"),
-                        centerY: am5.p50,
+                        text: "{valueYTotal}",
+                        fill: am5.color(0x000000),
+                        centerY: am5.p100,
                         centerX: am5.p50,
                         populateText: true
                     })
                 }));
 
-                legend.data.push(seriesBiayaChartDisetujui);
+                seriesBiayaChartTotal.data.setAll(biayaData);
+                seriesBiayaChartTotal.appear();
+
+                legend.data.push(seriesBiayaChartTotal);
             }
 
             generateBiayaChart(biayaData)
@@ -313,12 +390,14 @@ $(document).ready(async function () {
                 xAxisBiayaChart.data.setAll(data)
                 seriesBiayaChartSelesai.data.setAll(data)
                 seriesBiayaChartDisetujui.data.setAll(data)
+                seriesBiayaChartTotal.data.setAll(data)
 
                 xhr = await am5.net.load(`${base_api_url}chart/penelitian/all/${tahun}?kategori=${kategori}&subkategori=${subkategori}`)
                 data = JSON.parse(xhr.response)
                 xAxisChart.data.setAll(data)
                 seriesChartSelesai.data.setAll(data)
                 seriesChartDisetujui.data.setAll(data)
+                seriesChartTotal.data.setAll(data)
             })
 
             $('#chart-filter-kategori').on('change', async function () {
@@ -334,12 +413,14 @@ $(document).ready(async function () {
                     xAxisBiayaChart.data.setAll(data)
                     seriesBiayaChartSelesai.data.setAll(data)
                     seriesBiayaChartDisetujui.data.setAll(data)
+                    seriesBiayaChartTotal.data.setAll(data)
 
                     xhr = await am5.net.load(`${base_api_url}chart/penelitian/all/${tahun}`)
                     data = JSON.parse(xhr.response)
                     xAxisChart.data.setAll(data)
                     seriesChartSelesai.data.setAll(data)
                     seriesChartDisetujui.data.setAll(data)
+                    seriesChartTotal.data.setAll(data)
 
                     return
                 }
@@ -364,12 +445,14 @@ $(document).ready(async function () {
                         xAxisBiayaChart.data.setAll(data)
                         seriesBiayaChartSelesai.data.setAll(data)
                         seriesBiayaChartDisetujui.data.setAll(data)
+                        seriesBiayaChartTotal.data.setAll(data)
 
                         xhr = await am5.net.load(`${base_api_url}chart/penelitian/all/${tahun}?kategori=${kategori}&subkategori=${subkategori}`)
                         data = JSON.parse(xhr.response)
                         xAxisChart.data.setAll(data)
                         seriesChartSelesai.data.setAll(data)
                         seriesChartDisetujui.data.setAll(data)
+                        seriesChartTotal.data.setAll(data)
                     }
                 })
             })
@@ -384,12 +467,14 @@ $(document).ready(async function () {
                 xAxisBiayaChart.data.setAll(data)
                 seriesBiayaChartSelesai.data.setAll(data)
                 seriesBiayaChartDisetujui.data.setAll(data)
+                seriesBiayaChartTotal.data.setAll(data)
 
                 xhr = await am5.net.load(`${base_api_url}chart/penelitian/all/${tahun}?kategori=${kategori}&subkategori=${subkategori}`)
                 data = JSON.parse(xhr.response)
                 xAxisChart.data.setAll(data)
                 seriesChartSelesai.data.setAll(data)
                 seriesChartDisetujui.data.setAll(data)
+                seriesChartTotal.data.setAll(data)
             })
 
         })()
