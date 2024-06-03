@@ -107,21 +107,27 @@ exports.updateDosen = async data => {
 
     const dataDosen = await dosenRepository.getDosenById(data.id)
 
-    if (dataDosen.nomor_induk_dosen_nasional !== data.nomor_induk_dosen_nasional) {
-        if (await dosenRepository.checkNISNDosenExists(data.nomor_induk_dosen_nasional)) {
-            throw new ServiceError('NIDN Dosen sudah tersedia', HTTP_STATUS.BAD_REQUEST)
+    if (data.nomor_induk_dosen_nasional) {
+        if (dataDosen.nomor_induk_dosen_nasional !== data.nomor_induk_dosen_nasional) {
+            if (await dosenRepository.checkNISNDosenExists(data.nomor_induk_dosen_nasional)) {
+                throw new ServiceError('NIDN Dosen sudah tersedia', HTTP_STATUS.BAD_REQUEST)
+            }
         }
     }
 
-    if (dataDosen.nomor_induk_pegawai !== data.nomor_induk_pegawai) {
-        if (await dosenRepository.checkNIPDosenExists(data.nomor_induk_pegawai)) {
-            throw new ServiceError(`Nomor Induk Pegawai sudah tersedia`, HTTP_STATUS.BAD_REQUEST)
+    if (data.nomor_induk_pegawai) {
+        if (dataDosen.nomor_induk_pegawai !== data.nomor_induk_pegawai) {
+            if (await dosenRepository.checkNIPDosenExists(data.nomor_induk_pegawai)) {
+                throw new ServiceError(`Nomor Induk Pegawai sudah tersedia`, HTTP_STATUS.BAD_REQUEST)
+            }
         }
     }
 
-    if (dataDosen.email !== data.email) {
-        if (await dosenRepository.checkEmailDosenExists(data.email)) {
-            throw new ServiceError(`Email psudah tersedia`, HTTP_STATUS.BAD_REQUEST)
+    if (data.email) {
+        if (dataDosen.email !== data.email) {
+            if (await dosenRepository.checkEmailDosenExists(data.email)) {
+                throw new ServiceError(`Email psudah tersedia`, HTTP_STATUS.BAD_REQUEST)
+            }
         }
     }
 
