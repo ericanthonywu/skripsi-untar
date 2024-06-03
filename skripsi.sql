@@ -1322,13 +1322,6 @@ CREATE UNIQUE INDEX mahasiswa_nomor_induk_mahasiswa_uindex ON public.mahasiswa U
 
 
 --
--- Name: penelitian_nama_proposal_uindex; Type: INDEX; Schema: public; Owner: ericanthony
---
-
-CREATE UNIQUE INDEX penelitian_nama_proposal_uindex ON public.penelitian USING btree (nama_proposal);
-
-
---
 -- Name: session_table_expired_index; Type: INDEX; Schema: public; Owner: ericanthony
 --
 
