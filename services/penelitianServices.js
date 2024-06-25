@@ -28,7 +28,7 @@ exports.getPenelitianAnalytic = async (search, year, dosen_id) => {
                         jumlah_penelitian_yang_disetujui: 0
                     };
 
-                    for (let item of monthValue) {
+                    for (const item of monthValue) {
                         switch (item.status) {
                             case 'Selesai':
                                 obj.jumlah_penelitian_selesai += Number(item.total);
@@ -77,7 +77,7 @@ exports.getBiayaPenelitianAnalytic = async (search, year, dosen_id) => {
                         jumlah_penelitian_yang_disetujui: 0,
                     };
 
-                    for (let item of monthValue) {
+                    for (const item of monthValue) {
                         switch (item.status) {
                             case 'Selesai':
                                 obj.jumlah_penelitian_selesai += Number(item.total);
