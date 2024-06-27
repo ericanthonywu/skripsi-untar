@@ -35,6 +35,7 @@ $(document).ready(async function () {
         const tahun = $('#filter-tahun-rekap-penelitian').val()
         const kategori = $('#chart-filter-kategori').val()
         const subkategori = $('#chart-filter-subkategori').val()
+        const fakultas = $('#filter-fakultas').val()
 
         let xAxisChart,
             seriesChartSelesai,
@@ -59,7 +60,7 @@ $(document).ready(async function () {
                 filePrefix: "chart_rekap_total_penelitian"
             });
 
-            let xhr = await am5.net.load(`${base_api_url}chart/penelitian/all/${tahun}?kategori=${kategori}&subkategori=${subkategori}`)
+            let xhr = await am5.net.load(`${base_api_url}chart/penelitian/all/${tahun}?kategori=${kategori}&subkategori=${subkategori}&fakultas=${fakultas}`)
             data = JSON.parse(xhr.response)
 
             const generateChart = (data) => {
@@ -222,7 +223,7 @@ $(document).ready(async function () {
                 filePrefix: "chart_rekap_total_penelitian"
             });
 
-            let xhrBiaya = await am5.net.load(`${base_api_url}chart/penelitian/biaya/${tahun}?kategori=${kategori}&subkategori=${subkategori}`)
+            let xhrBiaya = await am5.net.load(`${base_api_url}chart/penelitian/biaya/${tahun}?kategori=${kategori}&subkategori=${subkategori}&fakultas=${fakultas}`)
             biayaData = JSON.parse(xhrBiaya.response)
 
             const generateBiayaChart = (biayaData) => {
@@ -377,19 +378,20 @@ $(document).ready(async function () {
 
             generateBiayaChart(biayaData)
 
-            $('#filter-tahun-rekap-penelitian').change(async function () {
-                const tahun = $(this).val()
+            $('#filter-tahun-rekap-penelitian, #filter-fakultas').change(async function () {
+                const tahun = $('#filter-tahun-rekap-penelitian').val()
                 const kategori = $('#chart-filter-kategori').val()
                 const subkategori = $('#chart-filter-subkategori').val()
+                const fakultas = $('#filter-fakultas').val()
 
-                xhr = await am5.net.load(`${base_api_url}chart/penelitian/biaya/${tahun}?kategori=${kategori}&subkategori=${subkategori}`)
+                xhr = await am5.net.load(`${base_api_url}chart/penelitian/biaya/${tahun}?kategori=${kategori}&subkategori=${subkategori}&fakultas=${fakultas}`)
                 data = JSON.parse(xhr.response)
                 xAxisBiayaChart.data.setAll(data)
                 seriesBiayaChartSelesai.data.setAll(data)
                 seriesBiayaChartDisetujui.data.setAll(data)
                 seriesBiayaChartTotal.data.setAll(data)
 
-                xhr = await am5.net.load(`${base_api_url}chart/penelitian/all/${tahun}?kategori=${kategori}&subkategori=${subkategori}`)
+                xhr = await am5.net.load(`${base_api_url}chart/penelitian/all/${tahun}?kategori=${kategori}&subkategori=${subkategori}&fakultas=${fakultas}`)
                 data = JSON.parse(xhr.response)
                 xAxisChart.data.setAll(data)
                 seriesChartSelesai.data.setAll(data)
@@ -401,18 +403,19 @@ $(document).ready(async function () {
                 const val = $(this).val()
                 if (!val) {
                     const tahun = $('#filter-tahun-rekap-penelitian').val()
+                    const fakultas = $('#filter-fakultas').val()
                     $('#chart-filter-subkategori').html(`<option value="">Pilih Kategori Terlebih Dahulu</option>`)
                     $('#chart-filter-subkategori').selectpicker('destroy');
                     $('#chart-filter-subkategori').selectpicker();
 
-                    xhr = await am5.net.load(`${base_api_url}chart/penelitian/biaya/${tahun}`)
+                    xhr = await am5.net.load(`${base_api_url}chart/penelitian/biaya/${tahun}&fakultas=${fakultas}`)
                     data = JSON.parse(xhr.response)
                     xAxisBiayaChart.data.setAll(data)
                     seriesBiayaChartSelesai.data.setAll(data)
                     seriesBiayaChartDisetujui.data.setAll(data)
                     seriesBiayaChartTotal.data.setAll(data)
 
-                    xhr = await am5.net.load(`${base_api_url}chart/penelitian/all/${tahun}`)
+                    xhr = await am5.net.load(`${base_api_url}chart/penelitian/all/${tahun}&fakultas=${fakultas}`)
                     data = JSON.parse(xhr.response)
                     xAxisChart.data.setAll(data)
                     seriesChartSelesai.data.setAll(data)
@@ -436,15 +439,16 @@ $(document).ready(async function () {
                         const tahun = $('#filter-tahun-rekap-penelitian').val()
                         const kategori = $('#chart-filter-kategori').val()
                         const subkategori = $('#chart-filter-subkategori').val()
+                        const fakultas = $('#filter-fakultas').val()
 
-                        xhr = await am5.net.load(`${base_api_url}chart/penelitian/biaya/${tahun}?kategori=${kategori}&subkategori=${subkategori}`)
+                        xhr = await am5.net.load(`${base_api_url}chart/penelitian/biaya/${tahun}?kategori=${kategori}&subkategori=${subkategori}&fakultas=${fakultas}`)
                         data = JSON.parse(xhr.response)
                         xAxisBiayaChart.data.setAll(data)
                         seriesBiayaChartSelesai.data.setAll(data)
                         seriesBiayaChartDisetujui.data.setAll(data)
                         seriesBiayaChartTotal.data.setAll(data)
 
-                        xhr = await am5.net.load(`${base_api_url}chart/penelitian/all/${tahun}?kategori=${kategori}&subkategori=${subkategori}`)
+                        xhr = await am5.net.load(`${base_api_url}chart/penelitian/all/${tahun}?kategori=${kategori}&subkategori=${subkategori}&fakultas=${fakultas}`)
                         data = JSON.parse(xhr.response)
                         xAxisChart.data.setAll(data)
                         seriesChartSelesai.data.setAll(data)
@@ -458,22 +462,22 @@ $(document).ready(async function () {
                 const tahun = $('#filter-tahun-rekap-penelitian').val()
                 const kategori = $('#chart-filter-kategori').val()
                 const subkategori = $('#chart-filter-subkategori').val()
+                const fakultas = $('#filter-fakultas').val()
 
-                xhr = await am5.net.load(`${base_api_url}chart/penelitian/biaya/${tahun}?kategori=${kategori}&subkategori=${subkategori}`)
+                xhr = await am5.net.load(`${base_api_url}chart/penelitian/biaya/${tahun}?kategori=${kategori}&subkategori=${subkategori}&fakultas=${fakultas}`)
                 data = JSON.parse(xhr.response)
                 xAxisBiayaChart.data.setAll(data)
                 seriesBiayaChartSelesai.data.setAll(data)
                 seriesBiayaChartDisetujui.data.setAll(data)
                 seriesBiayaChartTotal.data.setAll(data)
 
-                xhr = await am5.net.load(`${base_api_url}chart/penelitian/all/${tahun}?kategori=${kategori}&subkategori=${subkategori}`)
+                xhr = await am5.net.load(`${base_api_url}chart/penelitian/all/${tahun}?kategori=${kategori}&subkategori=${subkategori}&fakultas=${fakultas}`)
                 data = JSON.parse(xhr.response)
                 xAxisChart.data.setAll(data)
                 seriesChartSelesai.data.setAll(data)
                 seriesChartDisetujui.data.setAll(data)
                 seriesChartTotal.data.setAll(data)
             })
-
         })()
     });
 })

@@ -67,12 +67,13 @@ $(document).ready(function () {
             },
             {data: 'nomor_induk_pegawai', title: 'Nomor Induk Pegawai', searchable: true, orderable: true},
             {data: 'email', title: 'Email', searchable: true, orderable: true},
+            {data: 'fakultas', title: 'Fakultas', searchable: true, orderable: true},
             {
                 data: 'id', title: 'Aksi', orderable: false, searchable: false, render: data => {
                     return `<a href="${base_url}dosen/ubah/${data}"  class="btn btn-primary"> Ubah </a> 
                         <button data-id="${data}" class="btn btn-danger del" data-prefix-url="dosen" data-datatable-id="dosen-dataTable"> Hapus </button>`
                 }
-            }
+            },
         ]
     })
 

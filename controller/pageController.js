@@ -2,7 +2,7 @@ const {
     getAllKategoriData,
     getKategoriById, getSubKategoriById, getSubKategoriByKategoriId
 } = require("../services/kategoriPenelitianServices");
-const {getDosenById} = require("../services/dosenServices");
+const {getDosenById, getListProdiDosen} = require("../services/dosenServices");
 const {getMahasiswaById} = require("../services/mahasiswaServices");
 const {getPenelitianById, getTotalPenelitianSelesai, getTotalPenelitian, getTotalPenelitianBatal,
     getTotalPenelitianSedangBerlangsung, getMaxAndMinYearServices
@@ -28,6 +28,7 @@ exports.indexPage = async (req, res) => {
             total_penelitian_selesai: await getTotalPenelitianSelesai(dosen_id),
             total_penelitian_batal: await getTotalPenelitianBatal(dosen_id),
             total_penelitian_sedang_berlangsung: await getTotalPenelitianSedangBerlangsung(dosen_id),
+            list_prodi: await getListProdiDosen(),
             ...await getMaxAndMinYearServices(dosen_id)
         }
     })
@@ -37,14 +38,17 @@ exports.dosenPage = (req, res) => {
     res.render('page/dosen/view_dosen')
 }
 
-exports.tambahDosenPage = (req, res) => {
-    res.render('page/dosen/tambah_dosen')
+exports.tambahDosenPage = async (req, res) => {
+    res.render('page/dosen/tambah_dosen', {
+        list_prodi: await getListProdiDosen()
+    })
 }
 
 exports.ubahDosenPage = async (req, res) => {
     const {id} = req.params
     res.render('page/dosen/ubah_dosen', {
-        data: await getDosenById(id)
+        data: await getDosenById(id),
+        list_prodi: await getListProdiDosen()
     })
 }
 

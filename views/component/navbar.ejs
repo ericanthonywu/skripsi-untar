@@ -47,56 +47,48 @@
             </div>
         </li>
 
-        <!--        &lt;!&ndash; Nav Item - Alerts &ndash;&gt;-->
-        <!--        <li class="nav-item dropdown no-arrow mx-1">-->
-        <!--            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"-->
-        <!--               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
-        <!--                <i class="fas fa-bell fa-fw"></i>-->
-        <!--                &lt;!&ndash; Counter - Alerts &ndash;&gt;-->
-        <!--                <span class="badge badge-danger badge-counter">3+</span>-->
-        <!--            </a>-->
-        <!--            &lt;!&ndash; Dropdown - Alerts &ndash;&gt;-->
-        <!--            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated&#45;&#45;grow-in"-->
-        <!--                 aria-labelledby="alertsDropdown">-->
-        <!--                <h6 class="dropdown-header">-->
-        <!--                    Alerts Center-->
-        <!--                </h6>-->
-        <!--                <a class="dropdown-item d-flex align-items-center" href="#">-->
-        <!--                    <div class="mr-3">-->
-        <!--                        <div class="icon-circle bg-primary">-->
-        <!--                            <i class="fas fa-file-alt text-white"></i>-->
-        <!--                        </div>-->
-        <!--                    </div>-->
-        <!--                    <div>-->
-        <!--                        <div class="small text-gray-500">December 12, 2019</div>-->
-        <!--                        <span class="font-weight-bold">A new monthly report is ready to download!</span>-->
-        <!--                    </div>-->
-        <!--                </a>-->
-        <!--                <a class="dropdown-item d-flex align-items-center" href="#">-->
-        <!--                    <div class="mr-3">-->
-        <!--                        <div class="icon-circle bg-success">-->
-        <!--                            <i class="fas fa-donate text-white"></i>-->
-        <!--                        </div>-->
-        <!--                    </div>-->
-        <!--                    <div>-->
-        <!--                        <div class="small text-gray-500">December 7, 2019</div>-->
-        <!--                        $290.29 has been deposited into your account!-->
-        <!--                    </div>-->
-        <!--                </a>-->
-        <!--                <a class="dropdown-item d-flex align-items-center" href="#">-->
-        <!--                    <div class="mr-3">-->
-        <!--                        <div class="icon-circle bg-warning">-->
-        <!--                            <i class="fas fa-exclamation-triangle text-white"></i>-->
-        <!--                        </div>-->
-        <!--                    </div>-->
-        <!--                    <div>-->
-        <!--                        <div class="small text-gray-500">December 2, 2019</div>-->
-        <!--                        Spending Alert: We've noticed unusually high spending for your account.-->
-        <!--                    </div>-->
-        <!--                </a>-->
-        <!--                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>-->
-        <!--            </div>-->
-        <!--        </li>-->
+        <!-- Nav Item - Alerts -->
+        <li class="nav-item dropdown no-arrow mx-1">
+            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-bell fa-fw"></i>
+                <% if (notif.unread > 0) { %>
+                    <!-- Counter - Alerts -->
+                    <span class="badge badge-danger badge-counter"><%= notif.unread %></span>
+                <% } %>
+            </a>
+            <!-- Dropdown - Alerts -->
+            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                 aria-labelledby="alertsDropdown">
+                <h6 class="dropdown-header">
+                    Notifikasi
+                </h6>
+                <% if (notif.data.length == 0) { %>
+                    <div class="dropdown-item d-flex align-items-center" style="background: #b7b9cc">
+                        Tidak ada notif yang tersedia
+                    </div>
+                <% } %>
+                <% for (const notif_data of notif.data) { %>
+                    <a class="dropdown-item d-flex align-items-center"
+                       data-href="<%= APP_URL %>penelitian/ubah/<%= notif_data.penelitian_id %>"
+                            <%- notif_data.read === true ? `style="background: #eaecf4"` : null %>
+                    >
+                        <div class="mr-3">
+                            <div class="icon-circle bg-warning">
+                                <i class="fas fa-exclamation-triangle text-white"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="small text-gray-500"><%= notif_data.created_at %></div>
+                            <%= notif_data.message %>
+                        </div>
+                    </a>
+                <% } %>
+<!--                <button type="button" class="dropdown-item text-center small text-gray-500">Tampilkan Lebih banyak-->
+<!--                    notif-->
+<!--                </button>-->
+            </div>
+        </li>
 
         <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -168,7 +160,7 @@
                             <input type="password" name="password" class="form-control" id="password" autocomplete="off"
                                    style="border-bottom-right-radius: 0; border-top-right-radius: 0"
                                    placeholder="Masukkan password baru ..." required>
-                            <span class="input-group-text" id="password-eye"
+                            <span class="input-group-text password-eye"
                                   style="border-bottom-left-radius: 0; border-top-left-radius: 0">
                             <i class="fa fa-eye-slash" aria-hidden="true"></i>
                         </span>

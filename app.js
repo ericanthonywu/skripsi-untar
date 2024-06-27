@@ -14,6 +14,8 @@ const app = express();
 require('dotenv').config()
 
 const db = require('././config/database/sessionConnection')
+const {getNotifications} = require("./services/notificationServices");
+
 app.use(session({
     store: new KnexSessionStore({
         knex: db,
@@ -51,7 +53,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/templates', express.static(path.join(__dirname, 'templates')));
 
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
     const {user} = req.session
     res.locals.BASE_URL = req.protocol + '://' + req.get('host') + "/"
     res.locals.path = req.path;
@@ -67,6 +69,12 @@ app.use((req, res, next) => {
             res.locals.APP_URL = res.locals.BASE_URL
             break
     }
+
+    let dosen_id = null;
+    if (user.role === "dosen") {
+        dosen_id = user.id
+    }
+    res.locals.notif = (await getNotifications(dosen_id, 1)) ?? []
 
     res.locals.user = user
     res.sendResponse = (data = null, status = HTTP_STATUS.OK, error = null) =>

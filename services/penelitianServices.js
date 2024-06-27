@@ -14,8 +14,8 @@ exports.getTotalPenelitian = async (dosen_id, search) =>
 exports.getTotalPenelitianSelesai = async (dosen_id) =>
     (await penelitianRepository.getTotalPenelitianSelesai(dosen_id)).total || 0
 
-exports.getPenelitianAnalytic = async (search, year, dosen_id) => {
-    const data = await penelitianRepository.getAnalyticPenelitian(search, year, dosen_id)
+exports.getPenelitianAnalytic = async (search, year, dosen_id, fakultas) => {
+    const data = await penelitianRepository.getAnalyticPenelitian(search, year, dosen_id, fakultas)
 
     return _.chain(data)
         .groupBy('year')
@@ -63,8 +63,8 @@ exports.getPenelitianAnalytic = async (search, year, dosen_id) => {
         .value();
 }
 
-exports.getBiayaPenelitianAnalytic = async (search, year, dosen_id) => {
-    const data = await penelitianRepository.getBiayaPenelitian(search, year, dosen_id)
+exports.getBiayaPenelitianAnalytic = async (search, year, dosen_id, fakultas) => {
+    const data = await penelitianRepository.getBiayaPenelitian(search, year, dosen_id, fakultas)
 
     return _.chain(data)
         .groupBy('year')

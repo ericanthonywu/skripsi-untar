@@ -1,6 +1,7 @@
 const axios = require("axios");
 const fs = require("fs");
 const {addMultipleDosen} = require("../services/dosenServices");
+const {updateProdiByNidn} = require("../repository/dosenRepository");
 
 axios.interceptors.response.use(data => data.data)
 
@@ -30,12 +31,15 @@ exports.sync = async () => {
                         const list_data_search_dosen = await axios.get(`https://api-frontend.kemdikbud.go.id/hit/${encodeURI(searchParam)}`)
 
                         const nomor_induk_dosen_nasional = list_data_search_dosen.dosen[0].text.split(", ")[1].split(" : ")[1]
-                        data.push({
-                            nama_dosen,
-                            nomor_induk_dosen_nasional,
-                            nomor_induk_pegawai: "",
-                            email: await this.syncEmailDosen(nama_dosen)
-                        })
+
+                        await updateProdiByNidn(nomor_induk_dosen_nasional, namaprodi)
+                        console.log(`nidn: ${nomor_induk_dosen_nasional} milik ${nama_dosen} terupdate dengan prodi ${namaprodi}`)
+                        // data.push({
+                        //     nama_dosen,
+                        //     nomor_induk_dosen_nasional,
+                        //     nomor_induk_pegawai: "",
+                        //     email: await this.syncEmailDosen(nama_dosen)
+                        // })
                     }
                     console.log(`selesai data prodi ${i}/${list_data_prodi.length}, data dosen ${ia}/${list_dosen.datadosen.length}`)
                     ia++

@@ -2,6 +2,9 @@ const db = require("../config/database/connection")
 const {checkExistsTable} = require("../util");
 const _ = require('lodash')
 
+exports.getListProdiDosen = async () =>
+    await db('dosen').pluck('fakultas').distinct('fakultas')
+
 exports.checkNISNDosenExists = async nidn =>
     await db('dosen').where({nomor_induk_dosen_nasional: nidn}).first('nama_dosen')
 
@@ -29,12 +32,12 @@ exports.getAllDosen = async () =>
 
 exports.getDosenById = async (id) =>
     await db('dosen')
-        .first("id", "nama_dosen", "nomor_induk_dosen_nasional", 'nomor_induk_pegawai', 'email')
+        .first("id", "nama_dosen", "nomor_induk_dosen_nasional", 'nomor_induk_pegawai', 'email', 'fakultas')
         .where({id})
 
 exports.getDosen = async (search, offset, limit, sort_column, sort_direction) => {
     const query = db("dosen")
-        .select("id", "nama_dosen", "nomor_induk_dosen_nasional", 'nomor_induk_pegawai', 'email')
+        .select("id", "nama_dosen", "nomor_induk_dosen_nasional", 'nomor_induk_pegawai', 'email', 'fakultas')
         .orderBy(sort_column, sort_direction)
         .where(q => q.where('nama_dosen',
             'ILIKE', `%${search}%`)
@@ -44,13 +47,15 @@ exports.getDosen = async (search, offset, limit, sort_column, sort_direction) =>
                 `%${search}%`)
             .orWhere('email', 'ILIKE',
                 `%${search}%`)
+            .orWhere('fakultas', 'ILIKE',
+                `%${search}%`)
         )
     if (limit != "-1") {
         query.offset(offset)
             .limit(limit)
     }
 
-    return await query
+    return query;
 }
 
 exports.getTotalDosen = async (search) =>
@@ -81,6 +86,10 @@ exports.addBulkDosen = async data => {
 
 exports.updateDosen = async (id, data) =>
     await db('dosen').update(data).where({id})
+
+exports.updateProdiByNidn = async (nidn, prodi) => {
+    await db('dosen').update({fakultas: prodi}).where({nomor_induk_dosen_nasional: nidn})
+}
 
 exports.deleteDosen = async (id) =>
     await db('dosen').where({id}).del()

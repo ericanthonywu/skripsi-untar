@@ -102,10 +102,24 @@
                             <input type="text" class="form-control year-picker"
                                    data-max-year="<%= data.maxYear %>"
                                    data-min-year="<%= data.minYear %>"
-                                   value="<%= 2023 %>"
+                                   value="<%= new Date().getFullYear() %>"
                                    id="filter-tahun-rekap-penelitian">
                         </div>
                     </div>
+                    <% if (user?.role === "admin") { %>
+                        <div class="form-group row">
+                            <label for="filter-fakultas" class="col-sm-2 col-form-label">Fakultas:</label>
+                            <div class="col-sm-10">
+                                <select name="fakultas" class="form-control selectpicker" id="filter-fakultas"
+                                        data-live-search="true" required>
+                                    <option value="">- Pilih Prodi -</option>
+                                    <% for (const prodi of data.list_prodi) { %>
+                                        <option value="<%= prodi %>"><%= prodi %></option>
+                                    <% } %>
+                                </select>
+                            </div>
+                        </div>
+                    <% } %>
                 </div>
             </div>
         </div>

@@ -3,6 +3,9 @@ const bcrypt = require('bcrypt')
 const ServiceError = require("../exception/errorException");
 const {HTTP_STATUS} = require("../constant/httpStatusConstant");
 
+exports.getListProdiDosen = async () =>
+    await dosenRepository.getListProdiDosen()
+
 exports.checkNISNDosenExists = async nisn =>
     await dosenRepository.checkNISNDosenExists(nisn)
 
@@ -49,7 +52,9 @@ exports.addMultipleDosen = async data => {
     const nomorIndukPegawaiSet = new Set();
     const emailSet = new Set();
 
-    for (const {password, nama_dosen, nomor_induk_dosen_nasional, nomor_induk_pegawai, email} of data) {
+    const dataProdi = await this.getListProdiDosen()
+
+    for (const {password, nama_dosen, nomor_induk_dosen_nasional, nomor_induk_pegawai, email, fakultas} of data) {
         if (!password) {
             errorList.push(`password tidak terisi pada row ${i}`)
         } else {
@@ -89,6 +94,13 @@ exports.addMultipleDosen = async data => {
         } else {
             emailSet.add(nomor_induk_pegawai);
         }
+
+        if (!fakultas) {
+            errorList.push(`fakultas tidak terisi pada row ${i}`)
+        } else if (!dataProdi.includes(fakultas)) {
+            errorList.push(`fakultas tidak tersedia pada row ${i}`)
+        }
+
         i++
     }
 

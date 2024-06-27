@@ -327,9 +327,9 @@ $(document).ready(function () {
         $(this).parent().parent().remove()
     })
 
-    $('#password-eye').on('click', function () {
+    $('.password-eye').on('click', function () {
         $(this).find('i').toggleClass('fa-eye-slash fa-eye');
-        const passwordField = $("#password");
+        const passwordField = $(this).parent().find('input[type=password], input[type=text]');
         const passwordFieldType = passwordField.attr('type');
         if (passwordFieldType === 'password') {
             passwordField.attr('type', 'text');

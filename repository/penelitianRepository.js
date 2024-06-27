@@ -262,7 +262,7 @@ exports.getTotalPenelitian = async (dosen_id, search) => {
     return data || 0
 }
 
-exports.getAnalyticPenelitian = async (search, year, dosen_id) => {
+exports.getAnalyticPenelitian = async (search, year, dosen_id, fakultas) => {
     const query = db("penelitian")
         .whereRaw('EXTRACT(year FROM periode_awal) = ?', [year])
         .select(
@@ -289,6 +289,17 @@ exports.getAnalyticPenelitian = async (search, year, dosen_id) => {
             )
     }
 
+    if (fakultas) {
+        query
+            .leftJoin('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
+            .leftJoin('dosen as adp', 'adp.id', 'anggota_penelitian.id_dosen')
+            .leftJoin('dosen as kdp', 'kdp.id', 'penelitian.ketua_dosen_penelitian')
+            .where(q =>
+                q.where('adp.fakultas', fakultas)
+                    .orWhere('kdp.fakultas', fakultas)
+            )
+    }
+
 
     if (search.kategori !== "undefined" && search.kategori != "" && typeof search.kategori !== "undefined") {
         query.where('master_kategori_penelitian.id', search.kategori)
@@ -301,7 +312,7 @@ exports.getAnalyticPenelitian = async (search, year, dosen_id) => {
     return query
 }
 
-exports.getBiayaPenelitian = async (search, year, dosen_id) => {
+exports.getBiayaPenelitian = async (search, year, dosen_id, fakultas) => {
     const query = db("penelitian")
         .whereRaw('EXTRACT(year FROM periode_awal) = ?', [year])
         .select(
@@ -325,6 +336,17 @@ exports.getBiayaPenelitian = async (search, year, dosen_id) => {
             .where(q =>
                 q.where('ketua_dosen_penelitian', dosen_id)
                     .orWhere('anggota_penelitian.id_dosen', dosen_id)
+            )
+    }
+
+    if (fakultas) {
+        query
+            .leftJoin('anggota_penelitian', 'anggota_penelitian.id_penelitian', 'penelitian.id')
+            .leftJoin('dosen as adp', 'adp.id', 'anggota_penelitian.id_dosen')
+            .leftJoin('dosen as kdp', 'kdp.id', 'penelitian.ketua_dosen_penelitian')
+            .where(q =>
+                q.where('adp.fakultas', fakultas)
+                    .orWhere('kdp.fakultas', fakultas)
             )
     }
 
