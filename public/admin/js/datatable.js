@@ -97,6 +97,40 @@ $(document).ready(function () {
                 delete d.order;
             }
         },
+        dom: 'lBfrtip',
+        lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "All"]],
+        buttons: [
+            {
+                extend: 'excel',
+                exportOptions: {
+                    columns: ':not(:last)' // Exclude the last column
+                }
+            },
+            {
+                extend: 'copy',
+                exportOptions: {
+                    columns: ':not(:last)' // Exclude the last column
+                }
+            },
+            {
+                extend: 'csv',
+                exportOptions: {
+                    columns: ':not(:last)',
+                }
+            },
+            {
+                extend: 'pdf',
+                exportOptions: {
+                    columns: ':not(:last)',
+                }
+            },
+            {
+                extend: 'print',
+                exportOptions: {
+                    columns: ':not(:last)',
+                }
+            }
+        ],
         columns: [
             {
                 data: 'id', title: 'No', orderable: false, searchable: false, render: (data, type, row, meta) =>

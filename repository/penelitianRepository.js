@@ -4,7 +4,6 @@ const ServiceError = require("../exception/errorException");
 const {HTTP_STATUS} = require("../constant/httpStatusConstant");
 const fs = require("fs");
 const path = require("node:path");
-const sea = require("node:sea");
 
 exports.checkJudulPenelitian = async judul =>
     await checkExistsTable(db("penelitian").where({nama_proposal: judul}))
