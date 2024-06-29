@@ -54,7 +54,7 @@
                 <i class="fas fa-bell fa-fw"></i>
                 <% if (notif.unread > 0) { %>
                     <!-- Counter - Alerts -->
-                    <span class="badge badge-danger badge-counter"><%= notif.unread %></span>
+                    <span class="badge badge-danger badge-counter"><%= notif.unread > 5 ? "5+" : notif.unread %></span>
                 <% } %>
             </a>
             <!-- Dropdown - Alerts -->
