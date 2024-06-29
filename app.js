@@ -70,13 +70,16 @@ app.use(async (req, res, next) => {
             break
     }
 
-    let dosen_id = null;
-    if (user.role === "dosen") {
-        dosen_id = user.id
-    }
-    res.locals.notif = (await getNotifications(dosen_id, 1)) ?? []
+    if (user) {
+        let dosen_id = null;
+        if (user.role === "dosen") {
+            dosen_id = user.id
+        }
+        res.locals.notif = (await getNotifications(dosen_id, 1)) ?? []
 
-    res.locals.user = user
+        res.locals.user = user
+    }
+
     res.sendResponse = (data = null, status = HTTP_STATUS.OK, error = null) =>
         sendResponse(res, data, status, error)
     next()

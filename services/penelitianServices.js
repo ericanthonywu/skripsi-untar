@@ -7,6 +7,7 @@ const path = require("node:path");
 const _ = require("lodash");
 const ServiceError = require("../exception/errorException");
 const {HTTP_STATUS} = require("../constant/httpStatusConstant");
+const penelitianNotificationScheduler = require('../schedule/penelitianNotificationScheduler')
 
 exports.getTotalPenelitian = async (dosen_id, search) =>
     (await penelitianRepository.getTotalPenelitian(dosen_id, search)).total || 0
@@ -141,11 +142,16 @@ exports.getPenelitianById = async id => {
     }
 }
 
+exports.getDokumenPenelitianByPenelitianId = async penelitian_id => {
+    return penelitianRepository.getDokumenPenelitianByPenelitianId(penelitian_id)
+}
+
 exports.addPenelitianServices = async (data, anggota, file) => {
     // if (await penelitianRepository.checkJudulPenelitian(data.nama_proposal)) {
     //     throw new ServiceError('Judul proposal sudah pernah ditambahkan', HTTP_STATUS.BAD_REQUEST)
     // }
-    await penelitianRepository.addPenelitian(data, anggota, file)
+    const id = await penelitianRepository.addPenelitian(data, anggota, file);
+    await penelitianNotificationScheduler.setNotif(id)
 }
 
 exports.addMultiplePenelitianServices = async (data, id_dosen) => {
@@ -262,7 +268,7 @@ exports.addMultiplePenelitianServices = async (data, id_dosen) => {
         delete datas.anggota_dosen
         delete datas.anggota_mahasiswa
 
-        await penelitianRepository.addPenelitian(datas, anggota, [])
+        this.addPenelitianServices(datas, anggota, [])
     }
 }
 
@@ -296,3 +302,6 @@ exports.getMaxAndMinYearServices = async (dosen_id) => {
         minYear: minYear.min
     }
 }
+
+exports.getMasterTipePenelitianDokumen = async () =>
+    penelitianRepository.getMasterTipePenelitianDokumen()

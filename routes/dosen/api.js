@@ -1,22 +1,18 @@
 const express = require('express');
 const {
-    migrateController,
-    logoutController,
-    loginDosenController, changeDosenPassword
+    migrateController, logoutController, loginDosenController, changeDosenPassword
 } = require("../../controller/api/authController");
 const {
     penelitianDatatableController,
     kategoriDatatableController,
-    subkategoriDatatableController, mahasiswaDatatableController,
+    subkategoriDatatableController,
+    mahasiswaDatatableController,
 } = require("../../controller/api/datatableController");
 const {
     getSubKategoriByKategoriIdController,
     addPenelitianController,
-    deletePenelitianController,
     addKategoriController,
-    deleteKategoriController,
     addSubkategoriController,
-    deleteSubkategoriController,
     ubahKategoriController,
     updateSubkategoriController,
     ubahPenelitianController,
@@ -25,8 +21,12 @@ const {
     addMahasiswaByExcel,
     updateMahasiswa,
     deleteMahasiswa,
-    checkNIMMahasiswaExists, checkNisnDosenExists, addPenelitianExcelController, findDosenByNameAndNIDN,
+    checkNIMMahasiswaExists,
+    checkNisnDosenExists,
+    addPenelitianExcelController,
+    findDosenByNameAndNIDN,
     findMahasiswaByNameAndNIDN,
+    readNotif,
 } = require("../../controller/api/ajaxApiController");
 const {multerMultipleFieldHandler, multerSingleFieldFileHandler} = require("../../middleware/fileMiddleware");
 const {authMiddleware, dosenRoleMiddleware, adminRoleMiddleware} = require("../../middleware/authMiddleware");
@@ -49,59 +49,29 @@ router.get('/chart/penelitian/biaya/:year', authMiddleware, dosenRoleMiddleware,
 router.get('/subkategori/:kategoriId', authMiddleware, dosenRoleMiddleware, getSubKategoriByKategoriIdController)
 
 router.post('/penelitian/excel', authMiddleware, dosenRoleMiddleware, multerSingleFieldFileHandler('/excel', 'file'), addPenelitianExcelController);
-router.post('/penelitian', authMiddleware, dosenRoleMiddleware, multerMultipleFieldHandler([
-    {
-        name: 'file_proposal',
-        dest: 'file_proposal',
-        maxCount: 1
-    },
-    {
-        name: 'surat_perjanjian_kerjasama',
-        dest: 'surat_perjanjian_kerjasama',
-        maxCount: 1
-    },
-    {
-        name: 'file_monef',
-        dest: 'file_monef',
-        maxCount: 1
-    },
-    {
-        name: 'file_laporan_kemajuan',
-        dest: 'file_laporan_kemajuan',
-        maxCount: 1
-    },
-    {
-        name: 'file_laporan_akhir',
-        dest: 'file_laporan_akhir',
-        maxCount: 1
-    }]), addPenelitianController)
+router.post('/penelitian', authMiddleware, dosenRoleMiddleware, multerMultipleFieldHandler([{
+    name: 'file_proposal', dest: 'file_proposal', maxCount: 1
+}, {
+    name: 'surat_perjanjian_kerjasama', dest: 'surat_perjanjian_kerjasama', maxCount: 1
+}, {
+    name: 'file_monev', dest: 'file_monev', maxCount: 1
+}, {
+    name: 'file_laporan_kemajuan', dest: 'file_laporan_kemajuan', maxCount: 1
+}, {
+    name: 'file_laporan_akhir', dest: 'file_laporan_akhir', maxCount: 1
+}]), addPenelitianController)
 
-router.patch('/penelitian', authMiddleware, multerMultipleFieldHandler([
-    {
-        name: 'file_proposal',
-        dest: 'file_proposal',
-        maxCount: 1
-    },
-    {
-        name: 'surat_perjanjian_kerjasama',
-        dest: 'surat_perjanjian_kerjasama',
-        maxCount: 1
-    },
-    {
-        name: 'file_monef',
-        dest: 'file_monef',
-        maxCount: 1
-    },
-    {
-        name: 'file_laporan_kemajuan',
-        dest: 'file_laporan_kemajuan',
-        maxCount: 1
-    },
-    {
-        name: 'file_laporan_akhir',
-        dest: 'file_laporan_akhir',
-        maxCount: 1
-    }]), ubahPenelitianController)
+router.patch('/penelitian', authMiddleware, multerMultipleFieldHandler([{
+    name: 'file_proposal', dest: 'file_proposal', maxCount: 1
+}, {
+    name: 'surat_perjanjian_kerjasama', dest: 'surat_perjanjian_kerjasama', maxCount: 1
+}, {
+    name: 'file_monev', dest: 'file_monev', maxCount: 1
+}, {
+    name: 'file_laporan_kemajuan', dest: 'file_laporan_kemajuan', maxCount: 1
+}, {
+    name: 'file_laporan_akhir', dest: 'file_laporan_akhir', maxCount: 1
+}]), ubahPenelitianController)
 
 router.patch('/penelitian/cancel/:id', authMiddleware, dosenRoleMiddleware, cancelPenelitianController)
 
@@ -120,5 +90,7 @@ router.get('/mahasiswa/search', authMiddleware, dosenRoleMiddleware, findMahasis
 
 router.post('/dosen/check', authMiddleware, dosenRoleMiddleware, checkNisnDosenExists)
 router.get('/dosen/search', authMiddleware, dosenRoleMiddleware, findDosenByNameAndNIDN)
+
+router.post('/notif/read', authMiddleware, dosenRoleMiddleware, readNotif)
 
 module.exports = router;

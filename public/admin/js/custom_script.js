@@ -376,4 +376,16 @@ $(document).ready(function () {
             }
         })
     })
+
+    $('.read_notif').click(function() {
+        $.ajax({
+            method: 'POST',
+            url: `${base_api_url}notif/read`,
+            data: {
+                id: $(this).data('id')
+            },
+        }).done(() => {
+            location.href = $(this).data('href')
+        })
+    })
 })

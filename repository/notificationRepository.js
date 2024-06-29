@@ -4,7 +4,7 @@ exports.getNotificationsDosen = async (dosen_id, page) =>
     db('notification')
         .select('notification.id', 'message', 'penelitian_id', 'read_dosen as read', 'created_at')
         .where({dosen_id})
-        .orderByRaw('read_dosen = false')
+        .orderByRaw('read_dosen = false desc')
         .orderBy('created_at', 'desc')
         .limit(5)
         .offset(5 * (page - 1))
@@ -30,9 +30,10 @@ exports.readNotifications = async (notification_id, dosen_id) => {
         query.where({notification_id: id})
             .update({read_dosen: true})
     } else {
-        query.where({id: notification_id}).update({read_admin: false})
+        query.where({id: notification_id}).update({read_admin: true})
     }
 
+    console.log(query.toQuery())
     return query
 }
 
@@ -40,8 +41,8 @@ exports.getNotificationsAdmin = async (page) =>
     db('notification')
         .select('notification.id','message', 'penelitian_id', 'read_admin as read', 'created_at')
         .join('dosen', 'dosen.id', 'notification.dosen_id')
+        .orderByRaw('read_admin = false desc')
         .orderBy('created_at', 'desc')
-        .orderByRaw('read_admin = false')
         .limit(5)
         .offset(5 * (page - 1))
 

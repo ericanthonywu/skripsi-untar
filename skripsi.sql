@@ -570,12 +570,12 @@ COPY public.anggota_penelitian (id, id_penelitian, id_dosen, id_mahasiswa) FROM 
 
 COPY public.dokumen_penelitian (id, id_penelitian, tipe_dokumen, created_at, updated_at, file, original_filename) FROM stdin;
 52	44	2	2024-05-02 01:30:01.083551	\N	/uploads/surat_perjanjian_kerjasama/be64d373-b653-4604-8219-11e82f4daf10.pdf	2465-Article Text-13366-1-10-20231011.pdf
-53	44	3	2024-05-02 01:30:01.083551	\N	/uploads/file_monef/3971f3c7-dc99-46ed-9a2c-0761af497c16.pdf	2465-Article Text-13366-1-10-20231011.pdf
+53	44	3	2024-05-02 01:30:01.083551	\N	/uploads/file_monev/3971f3c7-dc99-46ed-9a2c-0761af497c16.pdf	2465-Article Text-13366-1-10-20231011.pdf
 55	45	1	2024-05-02 01:53:45.115044	\N	/uploads/file_proposal/b4845e71-8d8a-4e03-9ed5-8a0a1ba6c4d0.pdf	2465-Article Text-13366-1-10-20231011.pdf
 56	45	2	2024-05-02 01:53:45.115044	\N	/uploads/surat_perjanjian_kerjasama/cea61238-9e94-4587-8b4c-f2dde264ed62.PDF	10005438.PDF
 57	46	1	2024-05-02 01:54:59.400772	\N	/uploads/file_proposal/1a046229-d4b4-4da5-a2dc-f6eabb5226c8.pdf	825200057_Frencent Kinselton_Proposal_Skripsi 1.pdf
 58	46	2	2024-05-02 14:45:50.733609	\N	/uploads/surat_perjanjian_kerjasama/b8f37bff-a360-4b0d-be9e-3d349a198f6d.pdf	CV Eric Anthony 2023.pdf
-59	46	3	2024-05-02 14:45:58.203005	\N	/uploads/file_monef/5b3ba05e-29a9-400d-9093-dfc2f0746ef9.docx	Perancangan Aplikasi Manajemen Data Publikasi dan Penelitian.docx
+59	46	3	2024-05-02 14:45:58.203005	\N	/uploads/file_monev/5b3ba05e-29a9-400d-9093-dfc2f0746ef9.docx	Perancangan Aplikasi Manajemen Data Publikasi dan Penelitian.docx
 61	46	5	2024-05-02 14:46:59.477039	\N	/uploads/file_laporan_akhir/863f63f0-b748-4bd0-a9d6-3f8176c13f9b.pdf	2465-Article Text-13366-1-10-20231011.pdf
 60	46	4	2024-05-02 14:46:34.66961	\N	/uploads/file_laporan_kemajuan/0062afae-dfd0-4f5a-b767-50f3d8eb1ee6.pdf	825200057_Frencent Kinselton_Proposal_Skripsi 1.pdf
 51	44	1	2024-05-02 01:30:01.083551	\N	/uploads/file_proposal/121464fb-3d14-457a-adce-72fa6a445d9d.pdf	825200057_Frencent Kinselton_Proposal_Skripsi 1.pdf
@@ -588,7 +588,7 @@ COPY public.dokumen_penelitian (id, id_penelitian, tipe_dokumen, created_at, upd
 67	62	2	2024-05-17 15:50:14.862668	\N	/uploads/surat_perjanjian_kerjasama/56bc6605-a6a9-40d2-b10c-30d292939c32.pdf	CV Eric Anthony 2023.pdf
 68	57	1	2024-05-29 12:10:10.03867	\N	/uploads/file_proposal/7233aed9-ea54-4c82-8017-e03554a60d5e.pdf	825200050-Eric Anthony.pdf
 69	57	2	2024-05-29 12:10:10.03867	\N	/uploads/surat_perjanjian_kerjasama/6e2b27c3-7422-4d2d-bbb2-552302d23361.pdf	825200050-Eric Anthony.pdf
-70	57	3	2024-05-29 12:10:10.03867	\N	/uploads/file_monef/c89ea001-67bd-4456-8033-6097d4d46d9f.docx	Perancangan Aplikasi Manajemen Data Publikasi dan Penelitian.docx
+70	57	3	2024-05-29 12:10:10.03867	\N	/uploads/file_monev/c89ea001-67bd-4456-8033-6097d4d46d9f.docx	Perancangan Aplikasi Manajemen Data Publikasi dan Penelitian.docx
 71	57	4	2024-05-29 12:10:10.03867	\N	/uploads/file_laporan_kemajuan/bf477cd4-cc12-41b9-ba4d-0892d7f011e7.pdf	825200050-Eric Anthony.pdf
 72	57	5	2024-05-29 12:10:10.03867	\N	/uploads/file_laporan_akhir/c323c129-379f-4042-8c5a-7d602cd71e88.pdf	CV Eric Anthony 2024.pdf
 73	47	2	2024-05-29 15:15:53.971792	\N	/uploads/surat_perjanjian_kerjasama/2db8b731-f73c-40cb-a00c-4de9d9e778ce.docx	Perancangan Aplikasi Manajemen Data Publikasi dan Penelitian.docx
@@ -597,23 +597,23 @@ COPY public.dokumen_penelitian (id, id_penelitian, tipe_dokumen, created_at, upd
 76	61	2	2024-05-31 01:43:40.455976	\N	/uploads/surat_perjanjian_kerjasama/154bc49e-7e7e-4a9a-9477-d2aa5d3c679c.docx	User Acceptance Testing.docx
 77	60	1	2024-05-31 01:55:58.833005	\N	/uploads/file_proposal/8a9f63e1-6fc5-4945-852c-e4926bd2ab9c.pdf	CV Eric Anthony 2024.pdf
 78	60	2	2024-05-31 01:55:58.833005	\N	/uploads/surat_perjanjian_kerjasama/b7117820-52e3-4219-8351-4427d52583ae.pdf	825200050-Eric Anthony.pdf
-79	60	3	2024-05-31 01:55:58.833005	\N	/uploads/file_monef/01e4a811-48cd-4af4-819d-dcd17ea25c18.pdf	CV Eric Anthony 2024.pdf
+79	60	3	2024-05-31 01:55:58.833005	\N	/uploads/file_monev/01e4a811-48cd-4af4-819d-dcd17ea25c18.pdf	CV Eric Anthony 2024.pdf
 80	60	4	2024-05-31 01:55:58.833005	\N	/uploads/file_laporan_kemajuan/56a65b74-1f85-4ddb-91fa-a5f94fc8618c.pdf	825200050-Eric Anthony.pdf
 81	60	5	2024-05-31 01:55:58.833005	\N	/uploads/file_laporan_akhir/1a25cdf1-3812-4985-b14c-ca6da718217e.pdf	825200050-Eric Anthony.pdf
 82	58	1	2024-05-31 01:56:48.181972	\N	/uploads/file_proposal/260a9164-68a6-4c91-ba89-d2f1cb110d0f.docx	Perancangan Aplikasi Manajemen Data Publikasi dan Penelitian.docx
 83	58	2	2024-05-31 01:56:48.181972	\N	/uploads/surat_perjanjian_kerjasama/efa3d8ea-0577-4c18-83a2-cee9e087c50a.pdf	825200050-Eric Anthony.pdf
-84	58	3	2024-05-31 01:56:48.181972	\N	/uploads/file_monef/2947612a-9ed8-420c-9043-cd054ba1d648.pdf	CV Eric Anthony 2024.pdf
+84	58	3	2024-05-31 01:56:48.181972	\N	/uploads/file_monev/2947612a-9ed8-420c-9043-cd054ba1d648.pdf	CV Eric Anthony 2024.pdf
 85	58	4	2024-05-31 01:56:48.181972	\N	/uploads/file_laporan_kemajuan/f1372a33-708c-482e-b26f-b66eed9d890b.pdf	825200050-Eric Anthony.pdf
 86	58	5	2024-05-31 01:56:48.181972	\N	/uploads/file_laporan_akhir/58fc7dfb-93cc-4114-bd22-a9b42ae196c9.docx	Perancangan Aplikasi Manajemen Data Publikasi dan Penelitian.docx
 87	59	1	2024-05-31 01:57:19.420022	\N	/uploads/file_proposal/bbd49df7-a44b-4f61-babd-64768fe7270b.pdf	825200050-Eric Anthony.pdf
 88	59	2	2024-05-31 01:57:19.420022	\N	/uploads/surat_perjanjian_kerjasama/283569a9-11f1-4141-97a6-0cdc7b3a9bbd.pdf	CV Eric Anthony 2024.pdf
 89	64	1	2024-06-02 23:30:00.208514	\N	/uploads/file_proposal/32b3e99e-eb95-4786-9f37-82c6c3f032fd.pdf	825200050-Eric Anthony.pdf
 90	64	2	2024-06-02 23:30:00.208514	\N	/uploads/surat_perjanjian_kerjasama/88ced03f-cb9f-4cda-a2f4-7a11abff5568.docx	Perancangan Aplikasi Manajemen Data Publikasi dan Penelitian copy.docx
-91	64	3	2024-06-02 23:30:00.208514	\N	/uploads/file_monef/c8e5187e-456a-4719-bfcc-35bc57fa277d.docx	User Acceptance Testing.docx
+91	64	3	2024-06-02 23:30:00.208514	\N	/uploads/file_monev/c8e5187e-456a-4719-bfcc-35bc57fa277d.docx	User Acceptance Testing.docx
 92	64	4	2024-06-02 23:30:00.208514	\N	/uploads/file_laporan_kemajuan/46270244-47ed-424c-b372-1e5535e6c907.pdf	825200050-Eric Anthony.pdf
 93	64	5	2024-06-02 23:30:00.208514	\N	/uploads/file_laporan_akhir/e403327c-3ba1-4de8-8254-b70cde023cd3.pdf	CV Eric Anthony 2024.pdf
 95	50	2	2024-06-03 01:06:11.570369	\N	/uploads/surat_perjanjian_kerjasama/132e02b8-5d03-4191-aada-36095970fbc8.pdf	825200057_Frencent Kinselton_Proposal_Skripsi 1.pdf
-96	50	3	2024-06-03 01:06:11.570369	\N	/uploads/file_monef/6e976732-3d08-430a-8dfa-26f8d8f92c56.docx	46980194-4ab3-4355-86a9-2157a7e8bb09.docx
+96	50	3	2024-06-03 01:06:11.570369	\N	/uploads/file_monev/6e976732-3d08-430a-8dfa-26f8d8f92c56.docx	46980194-4ab3-4355-86a9-2157a7e8bb09.docx
 97	50	4	2024-06-03 01:06:11.570369	\N	/uploads/file_laporan_kemajuan/c9cdf12c-4af9-4799-b357-2677db1a9560.pdf	825200057_Frencent Kinselton_Proposal_Skripsi 1.pdf
 94	50	1	2024-06-03 01:06:11.570369	\N	/uploads/file_proposal/855e0266-7423-422a-85ff-ffa639552c54.PDF	10005438.PDF
 98	50	5	2024-06-03 01:07:18.414838	\N	/uploads/file_laporan_akhir/4e6a4e38-ed23-4f83-af8a-a2d54a7e6ddc.pdf	825200057_Frencent Kinselton_Proposal_Skripsi 1.pdf
@@ -1158,7 +1158,7 @@ COPY public.master_subkategori_penelitian (id, id_master_kategori_penelitian, na
 --
 
 COPY public.master_tipe_penelitian_dokumen (id, nama) FROM stdin;
-3	file_monef
+3	file_monev
 1	file_proposal
 2	surat_perjanjian_kerjasama
 4	file_laporan_kemajuan

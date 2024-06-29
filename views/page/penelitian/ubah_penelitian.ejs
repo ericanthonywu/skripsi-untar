@@ -130,16 +130,16 @@
                         <% } %>
                     </div>
                     <div class="col-sm-12 col-md-6 col-lg-2">
-                        <label for="file_monef">3. File Monev</label>
+                        <label for="file_monev">3. File Monev</label>
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" accept=".pdf, .doc, .docx"
-                                   name="file_monef" <%= data.status == "Batal" ? "disabled" : "" %>
-                                   id="file_monef" <%= !list_proposal.surat_perjanjian_kerjasama?.file ? 'disabled' : '' %>>
+                                   name="file_monev" <%= data.status == "Batal" ? "disabled" : "" %>
+                                   id="file_monev" <%= !list_proposal.surat_perjanjian_kerjasama?.file ? 'disabled' : '' %>>
                             <label class="custom-file-label"
-                                   for="file_proposal"><%= list_proposal.file_monef?.original_filename ?? 'Upload file' %></label>
+                                   for="file_proposal"><%= list_proposal.file_monev?.original_filename ?? 'Upload file' %></label>
                         </div>
-                        <% if (list_proposal.file_monef?.file) { %>
-                            <a href="<%= list_proposal.file_monef?.file %>" target="_blank"
+                        <% if (list_proposal.file_monev?.file) { %>
+                            <a href="<%= list_proposal.file_monev?.file %>" target="_blank"
                                class="small">Lihat File</a>
                         <% } else if (!list_proposal.surat_perjanjian_kerjasama?.file) { %>
                             <span class="text-danger small">Harus upload file sebelumnya terlebih dahulu</span>
@@ -150,14 +150,14 @@
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" accept=".pdf, .doc, .docx"
                                    name="file_laporan_kemajuan" <%= data.status == "Batal" ? "readonly" : "" %>
-                                   id="file_laporan_kemajuan" <%= list_proposal.file_monef?.original_filename ? '' : 'disabled' %> <%= data.status == "Batal" ? "disabled" : "" %>>
+                                   id="file_laporan_kemajuan" <%= list_proposal.file_monev?.original_filename ? '' : 'disabled' %> <%= data.status == "Batal" ? "disabled" : "" %>>
                             <label class="custom-file-label"
                                    for="file_proposal"><%= list_proposal.file_laporan_kemajuan?.original_filename ?? 'Upload file' %></label>
                         </div>
                         <% if (list_proposal.file_laporan_kemajuan?.file) { %>
                             <a href="<%= list_proposal.file_laporan_kemajuan?.file %>" target="_blank"
                                class="small">Lihat File</a>
-                        <% } else if (!list_proposal.file_monef?.file) { %>
+                        <% } else if (!list_proposal.file_monev?.file) { %>
                             <span class="text-danger small">Harus upload file sebelumnya terlebih dahulu</span>
                         <% } %>
                     </div>

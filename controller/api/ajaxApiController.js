@@ -3,6 +3,7 @@ const penelitianServices = require("../../services/penelitianServices");
 const dosenServices = require("../../services/dosenServices");
 const mahasiswaServices = require("../../services/mahasiswaServices");
 const adminServices = require("../../services/adminServices");
+const notificationServices = require("../../services/notificationServices")
 const XLSX = require('xlsx');
 const fs = require('fs');
 const {HTTP_STATUS} = require("../../constant/httpStatusConstant");
@@ -432,6 +433,23 @@ exports.deleteAdmin = async (req, res, next) => {
         const {id} = req.params
 
         await adminServices.deleteAdmin(id)
+
+        res.sendStatus(HTTP_STATUS.OK)
+    } catch (e) {
+        next(e)
+    }
+}
+
+exports.readNotif = async (req, res, next) => {
+    try {
+        const {id} = req.body
+
+        let dosen_id = 0
+        if (res.locals.user.role === "dosen") {
+            dosen_id = res.locals.user.id
+        }
+
+        await notificationServices.readNotification(id, dosen_id)
 
         res.sendStatus(HTTP_STATUS.OK)
     } catch (e) {

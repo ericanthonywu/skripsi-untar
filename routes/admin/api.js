@@ -23,7 +23,8 @@ const {
     deleteMahasiswa,
     checkNisnDosenExists,
     checkNIMMahasiswaExists, ubahPenelitianController, addDosenByExcel, addMahasiswaByExcel, cancelPenelitianController,
-    addAdmin, updateAdmin, deleteAdmin, addPenelitianExcelController, findMahasiswaByNameAndNIDN, findDosenByNameAndNIDN
+    addAdmin, updateAdmin, deleteAdmin, addPenelitianExcelController, findMahasiswaByNameAndNIDN, findDosenByNameAndNIDN,
+    readNotif
 } = require("../../controller/api/ajaxApiController");
 const {multerMultipleFieldHandler, multerSingleFieldFileHandler} = require("../../middleware/fileMiddleware");
 const {authMiddleware, adminRoleMiddleware} = require("../../middleware/authMiddleware");
@@ -60,8 +61,8 @@ router.post('/penelitian', authMiddleware, adminRoleMiddleware, multerMultipleFi
         maxCount: 1
     },
     {
-        name: 'file_monef',
-        dest: 'file_monef',
+        name: 'file_monev',
+        dest: 'file_monev',
         maxCount: 1
     },
     {
@@ -88,8 +89,8 @@ router.patch('/penelitian', authMiddleware, adminRoleMiddleware, multerMultipleF
         maxCount: 1
     },
     {
-        name: 'file_monef',
-        dest: 'file_monef',
+        name: 'file_monev',
+        dest: 'file_monev',
         maxCount: 1
     },
     {
@@ -132,5 +133,7 @@ router.get('/mahasiswa/search', authMiddleware, adminRoleMiddleware, findMahasis
 router.post('/admin', authMiddleware, adminRoleMiddleware, addAdmin)
 router.patch('/admin', authMiddleware, adminRoleMiddleware, updateAdmin)
 router.delete('/admin/:id', authMiddleware, adminRoleMiddleware, deleteAdmin)
+
+router.post('/notif/read', authMiddleware, adminRoleMiddleware, readNotif)
 
 module.exports = router;

@@ -467,6 +467,7 @@ exports.addPenelitian = async (data, anggota, dokumen) => {
         }
 
         await trx.commit()
+        return id;
     } catch (e) {
         trx.rollback()
         throw e
@@ -486,6 +487,7 @@ exports.getPenelitianById = async id =>
             'master_subkategori_penelitian.id as subkategori',
             'master_kategori_penelitian.id as kategori',
             'status',
+            'ketua_dosen_penelitian as id_ketua_dosen_penelitian',
             'dosen.nomor_induk_dosen_nasional as ketua_dosen_penelitian',
             'dosen.nama_dosen as nama_ketua_dosen_penelitian',
         )
@@ -497,7 +499,7 @@ exports.getPenelitianById = async id =>
 exports.getAnggotaDosenByPenelitianId = async id_penelitian =>
     await db('anggota_penelitian')
         .leftJoin('dosen', 'dosen.id', 'anggota_penelitian.id_dosen')
-        .select('dosen.nomor_induk_dosen_nasional as nidn', 'nama_dosen')
+        .select('dosen.id as dosen_id', 'dosen.nomor_induk_dosen_nasional as nidn', 'nama_dosen')
         .where({id_penelitian})
         .whereNotNull('dosen.nomor_induk_dosen_nasional')
 
@@ -643,3 +645,6 @@ exports.getMinYear = async (dosen_id) => {
 
     return query;
 }
+
+exports.getMasterTipePenelitianDokumen = () =>
+    db('master_tipe_penelitian_dokumen').pluck('nama')

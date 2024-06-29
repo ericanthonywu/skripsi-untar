@@ -59,7 +59,7 @@
             </a>
             <!-- Dropdown - Alerts -->
             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                 aria-labelledby="alertsDropdown">
+                 aria-labelledby="alertsDropdown" style="max-height: 500px;overflow-y: auto;">
                 <h6 class="dropdown-header">
                     Notifikasi
                 </h6>
@@ -69,8 +69,9 @@
                     </div>
                 <% } %>
                 <% for (const notif_data of notif.data) { %>
-                    <a class="dropdown-item d-flex align-items-center"
-                       data-href="<%= APP_URL %>penelitian/ubah/<%= notif_data.penelitian_id %>"
+                    <button class="dropdown-item d-flex align-items-center read_notif"
+                            data-id="<%= notif_data.id %>"
+                            data-href="<%= APP_URL %>penelitian/ubah/<%= notif_data.penelitian_id %>"
                             <%- notif_data.read === true ? `style="background: #eaecf4"` : null %>
                     >
                         <div class="mr-3">
@@ -82,11 +83,11 @@
                             <div class="small text-gray-500"><%= notif_data.created_at %></div>
                             <%= notif_data.message %>
                         </div>
-                    </a>
+                    </button>
                 <% } %>
-<!--                <button type="button" class="dropdown-item text-center small text-gray-500">Tampilkan Lebih banyak-->
-<!--                    notif-->
-<!--                </button>-->
+                <!--                <button type="button" class="dropdown-item text-center small text-gray-500">Tampilkan Lebih banyak-->
+                <!--                    notif-->
+                <!--                </button>-->
             </div>
         </li>
 
