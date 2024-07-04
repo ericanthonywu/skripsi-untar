@@ -4,6 +4,8 @@ const _ = require('lodash')
 
 exports.getListProdiDosen = async () =>
     await db('dosen').pluck('fakultas').distinct('fakultas')
+        .where('fakultas', 'Teknik Informatika')
+        .orWhere('fakultas', 'Sistem Informasi')
 
 exports.checkNISNDosenExists = async nidn =>
     await db('dosen').where({nomor_induk_dosen_nasional: nidn}).first('nama_dosen')

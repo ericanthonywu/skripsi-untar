@@ -54,7 +54,7 @@ exports.addMultipleDosen = async data => {
 
     const dataProdi = await this.getListProdiDosen()
 
-    for (const {password, nama_dosen, nomor_induk_dosen_nasional, nomor_induk_pegawai, email, fakultas} of data) {
+    for (const {password, nama_dosen, nomor_induk_dosen_nasional, nomor_induk_pegawai, email, prodi} of data) {
         if (!password) {
             errorList.push(`password tidak terisi pada row ${i}`)
         } else {
@@ -96,9 +96,9 @@ exports.addMultipleDosen = async data => {
             emailSet.add(nomor_induk_pegawai);
         }
 
-        const fakultasTrimmed = fakultas.trim()
-        data[i - 1].fakultas = fakultasTrimmed
-        if (!fakultas) {
+        const fakultasTrimmed = prodi.trim()
+        data[i - 1].prodi = fakultasTrimmed
+        if (!prodi) {
             errorList.push(`fakultas tidak terisi pada row ${i}`)
         } else if (!dataProdi.includes(fakultasTrimmed)) {
             errorList.push(`fakultas tidak tersedia pada row ${i}`)
