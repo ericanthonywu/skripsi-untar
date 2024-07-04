@@ -58,7 +58,8 @@ exports.addMultipleDosen = async data => {
         if (!password) {
             errorList.push(`password tidak terisi pada row ${i}`)
         } else {
-            data[i].password = await bcrypt.hash(password, await bcrypt.genSalt())
+            const hashedPassword = await bcrypt.hash(password, await bcrypt.genSalt());
+            data[i - 1].password = hashedPassword
         }
 
         if (!nama_dosen) {
@@ -95,9 +96,11 @@ exports.addMultipleDosen = async data => {
             emailSet.add(nomor_induk_pegawai);
         }
 
+        const fakultasTrimmed = fakultas.trim()
+        data[i - 1].fakultas = fakultasTrimmed
         if (!fakultas) {
             errorList.push(`fakultas tidak terisi pada row ${i}`)
-        } else if (!dataProdi.includes(fakultas)) {
+        } else if (!dataProdi.includes(fakultasTrimmed)) {
             errorList.push(`fakultas tidak tersedia pada row ${i}`)
         }
 
